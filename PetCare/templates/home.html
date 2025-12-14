@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pawsome Care</title>
+    <link rel="stylesheet" href="../static/css/home.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo-wrapper">
+            <img class="logo-img" src="{% static 'images/pawsomecare-logo.png' %}" alt="Pawsome Care Logo">
+            <h2 class="logo">Pawsome<span>Care</span></h2>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+        <div class="auth-buttons">
+            <a href="{% url 'signin' %}" class="btn-primary">Sign In</a>
+            <a href="{% url 'signup' %}" class="btn-secondary">Sign Up</a>
+        </div>
+    </nav>
+
+
+    <!-- HERO WITH SLIDER -->
+    <section class="hero">
+
+        <div class="slideshow-container">
+
+            <div class="slide active">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/050/051/069/small/a-siamese-kitten-with-vivid-blue-eyes-gazes-forward-against-a-soft-pink-background-displaying-a-calm-and-inquisitive-expression-photo.jpeg" alt="Slide 1">
+                <div class="overlay"></div>
+                <div class="caption">Moments in Silence</div>
+            </div>
+
+            <div class="slide">
+                <img src="https://media.istockphoto.com/id/1925414601/photo/head-shot-of-a-happy-panting-golden-retriever-dog-looking-at-camera-wearing-a-collar-and.jpg?s=612x612&w=0&k=20&c=M48uIc5c_dsqpHHbI5E2znZ2jObWbhHyIousbdf2Peo=" alt="Slide 2">
+                <div class="overlay"></div>
+                <div class="caption">Light Between Shadows</div>
+            </div>
+
+            <div class="slide">
+                <img src="https://png.pngtree.com/thumb_back/fh260/background/20250606/pngtree-a-studio-photography-of-cute-dogs-and-cats-with-pastel-colors-image_17396214.jpg" alt="Slide 3">
+                <div class="overlay"></div>
+                <div class="caption">Still Frames</div>
+            </div>
+
+            <!-- Navigation -->
+            <a class="prev">&#10094;</a>
+            <a class="next">&#10095;</a>
+
+            <!-- Dots -->
+            <div class="dots-container">
+                <div class="dot active" data-index="0"></div>
+                <div class="dot" data-index="1"></div>
+                <div class="dot" data-index="2"></div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1>Premium Care for Your<br><span class="highlight">Furry Friends</span></h1>
+            <p>Your one-stop solution for Pet Walking, Sitting, Grooming & more.</p>
+            <a href="{% url 'explore_services' %}"><button class="btn-secondary">Explore Services</button></a>
+        </div>
+
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="services">
+        <h2 class="section-title">Our Services</h2>
+        
+        <div class="service-container">
+
+            <div class="service-card">
+                <h3>🐕 Pet Walking</h3>
+                <p>Real-time tracking, photos & safe outdoor walks.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>🏡 Pet Sitting</h3>
+                <p>Home visits with feeding, cleaning & daily reports.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>✂️ Grooming</h3>
+                <p>Bathing, haircut, nail trimming & full grooming.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>🌞 Daycare</h3>
+                <p>Drop your pet for daytime play, feeding & activity logs.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>🏨 Boarding</h3>
+                <p>Overnight stays with rooms, meals & daily updates.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>🐶 Vet & Medical</h3>
+                <p>Book vet visits, symptoms upload & prescriptions.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>🎓 Training</h3>
+                <p>Obedience lessons with weekly progress tracking.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>🍗 Diet Plans</h3>
+                <p>Personalized nutrition and feeding schedules.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>🛒 Pet Store</h3>
+                <p>Food, toys, treats with cart, checkout & delivery.</p>
+            </div>
+
+        </div>
+    </section>
+    <!-- ABOUT -->
+    <section id="about" class="about">
+        <div class="about-container">
+
+            <div class="about-text">
+                <h2 class="section-title">About PawsomeCare</h2>
+                <p>
+                    At <strong>PawsomeCare</strong>, we believe every pet deserves love, comfort, safety,
+                    and a little extra pampering. Our platform connects pet parents with trusted
+                    walkers, sitters, groomers, trainers, and vets — all in one place.
+                </p>
+
+                <p>
+                    Whether it’s a daily walk, an overnight stay, grooming session, or even a vet
+                    checkup, our trained professionals ensure your furry friend is cared for like
+                    family. With real-time location tracking, instant updates, and verified experts,
+                    you can stay worry-free while we take care of the rest.
+                </p>
+
+                <p>
+                    Your pet’s happiness is our mission.  
+                    Their safety is our priority.  
+                    And your trust is our biggest reward.
+                </p>
+
+                <a href="{% url 'learnmore' %}"><button class="btn-secondary">Learn More</button></a>
+            </div>
+
+            <div class="about-image">
+                <img src="https://img.freepik.com/premium-vector/adorable-cartoon-animals-wide-angle-centered-composition_1323048-106077.jpg?semt=ais_se_enriched&w=740&q=80" alt="About Pawsome Care">
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2025 Pawsome Care. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JAVASCRIPT SLIDER -->
+    <script>
+        const slides = document.querySelectorAll(".slide");
+        const dots = document.querySelectorAll(".dot");
+        let index = 0;
+
+        function showSlide(n) {
+            slides[index].classList.remove("active");
+            dots[index].classList.remove("active");
+
+            index = (n + slides.length) % slides.length;
+
+            slides[index].classList.add("active");
+            dots[index].classList.add("active");
+        }
+
+        // auto-play every 6 sec
+        let slideInterval = setInterval(() => showSlide(index + 1), 6000);
+
+        // nav buttons
+        document.querySelector(".prev").addEventListener("click", () => showSlide(index - 1));
+        document.querySelector(".next").addEventListener("click", () => showSlide(index + 1));
+
+        // dots click
+        dots.forEach((dot) => {
+            dot.addEventListener("click", () => showSlide(parseInt(dot.dataset.index)));
+        });
+    </script>
+
+</body>
+</html>

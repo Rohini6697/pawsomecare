@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Explore Services | PawsomeCare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/explore_services.css' %}">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+        <div class="logo-wrapper">
+            <img class="logo-img" src="{% static 'images/pawsomecare-logo.png' %}" alt="Pawsome Care Logo">
+            <h2 class="logo">Pawsome<span>Care</span></h2>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+        <div class="auth-buttons">
+            <a href="#" class="btn-primary">Sign In</a>
+            <a href="#" class="btn-secondary">Sign Up</a>
+        </div>
+    </nav>
+
+<!-- HERO -->
+<section class="services-hero">
+    <h1>Explore Our Pet Care Services</h1>
+    <p>Everything your pet needs — in one trusted platform.</p>
+</section>
+
+<!-- SERVICES -->
+<section class="explore-services">
+
+    <!-- Pet Walking -->
+    <div class="explore-card">
+        <div class="explore-text">
+            <h2>🐕 Pet Walking</h2>
+            <p>Safe outdoor walks with live tracking.</p>
+            <ul>
+                <li>✔ Verified walkers</li>
+                <li>✔ Real-time GPS</li>
+                <li>✔ Walk photos</li>
+                <li>✔ Activity report</li>
+            </ul>
+            <button class="btn-secondary book-btn" data-service="Pet Walking">Book Walker</button>
+        </div>
+        <div class="explore-image">
+            <img src="https://www.theglobeandmail.com/resizer/v2/S2GH537G6BHCLMX32IFPXLDUCE?auth=ea5f2511da32b0b6239f549d217de5bfaca317ad4d26536ca73b5c761e559ebb&width=600&quality=80" alt="Pet Walking">
+        </div>
+    </div>
+
+    <!-- Pet Sitting -->
+    <div class="explore-card reverse">
+        <div class="explore-text">
+            <h2>🏡 Pet Sitting</h2>
+            <p>Home care while you’re away.</p>
+            <ul>
+                <li>✔ Feeding & medicine</li>
+                <li>✔ Litter cleaning</li>
+                <li>✔ Playtime</li>
+                <li>✔ Visit summary</li>
+            </ul>
+            <button class="btn-secondary book-btn" data-service="Pet Sitting">Book Sitter</button>
+        </div>
+        <div class="explore-image">
+            <img src="https://imagedelivery.net/oFFEDoHcGTJv79dAzs2bww/prod/journals/665be651b87f1d0012df9934/medium" alt="Pet Sitting">
+        </div>
+    </div>
+
+    <!-- Grooming -->
+    <div class="explore-card">
+        <div class="explore-text">
+            <h2>✂️ Grooming</h2>
+            <p>Professional grooming services.</p>
+            <ul>
+                <li>✔ Bath & dry</li>
+                <li>✔ Haircut</li>
+                <li>✔ Nail trimming</li>
+                <li>✔ Ear cleaning</li>
+            </ul>
+            <button class="btn-secondary book-btn" data-service="Grooming">Book Grooming</button>
+        </div>
+        <div class="explore-image">
+            <img src="https://petfolk.in/cdn/shop/files/2.jpg?v=1753626703" alt="Pet Grooming">
+        </div>
+    </div>
+
+    <!-- ADVANCED SERVICES TITLE -->
+    <h2 class="section-title" style="text-align:center; margin:80px 0 40px;">
+        Advanced Pet Services
+    </h2>
+
+    <!-- Pet Daycare -->
+    <div class="explore-card">
+        <div class="explore-text">
+            <h2>🌞 Pet Daycare</h2>
+            <p>Daytime care with supervised play and rest.</p>
+            <ul>
+                <li>✔ Feeding & nap schedules</li>
+                <li>✔ Safe group play</li>
+                <li>✔ Photo updates</li>
+                <li>✔ Daily activity report</li>
+            </ul>
+            <button class="btn-secondary book-btn" data-service="Pet Daycare">View Details</button>
+        </div>
+        <div class="explore-image">
+            <img src="https://luckydogpetlodge.com/wp-content/uploads/2020/03/dog-daycare.jpg" alt="Pet Daycare">
+        </div>
+    </div>
+
+    <!-- Pet Boarding -->
+    <div class="explore-card reverse">
+        <div class="explore-text">
+            <h2>🏨 Pet Boarding</h2>
+            <p>Comfortable overnight & multi-day stays.</p>
+            <ul>
+                <li>✔ AC & non-AC rooms</li>
+                <li>✔ Daily meals & hygiene</li>
+                <li>✔ Health monitoring</li>
+                <li>✔ Extra day billing</li>
+            </ul>
+            <button class="btn-secondary book-btn" data-service="Pet Boarding">View Details</button>
+        </div>
+        <div class="explore-image">
+            <img src="https://bestforpet.co.nz/wp-content/uploads/2023/11/Dog-cat-on-suitcase.jpg" alt="Pet Boarding">
+        </div>
+    </div>
+
+    <!-- Vet -->
+    <div class="explore-card">
+        <div class="explore-text">
+            <h2>🩺 Vet & Medical Care</h2>
+            <p>Professional veterinary consultations.</p>
+            <ul>
+                <li>✔ Online booking</li>
+                <li>✔ Prescription uploads</li>
+                <li>✔ Follow-up visits</li>
+                <li>✔ Medical history</li>
+            </ul>
+            <button class="btn-secondary book-btn" data-service="Vet Care">Book Vet</button>
+        </div>
+        <div class="explore-image">
+            <img src="https://img.freepik.com/free-photo/close-up-veterinary-doctor-taking-care-pet_23-2149267934.jpg?semt=ais_se_enriched&w=740&q=80" alt="Vet Care">
+        </div>
+    </div>
+
+    <!-- Training -->
+    <div class="explore-card reverse">
+        <div class="explore-text">
+            <h2>🎓 Pet Training</h2>
+            <p>Structured obedience & behavior training.</p>
+            <ul>
+                <li>✔ Basic to advanced levels</li>
+                <li>✔ Weekly sessions</li>
+                <li>✔ Progress tracking</li>
+                <li>✔ Certified trainers</li>
+            </ul>
+            <button class="btn-secondary book-btn" data-service="Pet Training">Start Training</button>
+        </div>
+        <div class="explore-image">
+            <img src="https://images.ctfassets.net/sfnkq8lmu5d7/7eVUaySTtKah3N7peEVOOC/423e1983e40b7705f656bb29e488b1a1/The-Wildest_Editorial_Eight_Basic_Training_Cues_to_Teach_Your_Dog_Hero.jpg?w=1000&h=750&fl=progressive&q=70&fm=jpg" alt="Pet Training">
+        </div>
+    </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2025 PawsomeCare. All Rights Reserved.</p>
+</footer>
+
+<!-- JS -->
+<script>
+    document.querySelectorAll(".book-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            alert(`For ${btn.dataset.service}\nLogin first`);
+        });
+    });
+</script>
+
+</body>
+</html>

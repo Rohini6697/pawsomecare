@@ -1,0 +1,240 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    background: #f7f5fa;
+    color: #2a2a42;
+    line-height: 1.6;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+    width: 100%;
+    padding: 20px 50px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* LOGO + TEXT WRAPPER */
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* LOGO IMAGE */
+.logo-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* LOGO TEXT */
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #9C84FF;
+}
+
+.logo span {
+    color: #FF8FB1;
+}
+
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #2A2A42;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #9C84FF;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: #8367FF;
+}
+
+/* ================= BUTTONS ================= */
+.btn-primary {
+    background: #9c84ff;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: #ff8fb1;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255,143,177,0.35);
+}
+
+/* ================= HERO ================= */
+.services-hero {
+    background: linear-gradient(135deg, #9c84ff, #ff8fb1);
+    color: white;
+    text-align: center;
+    padding: 90px 20px;
+}
+
+.services-hero h1 {
+    font-size: 42px;
+    font-weight: 800;
+}
+
+.services-hero p {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+/* ================= SERVICES ================= */
+.explore-services {
+    padding: 80px 8%;
+}
+
+.section-title {
+    font-size: 34px;
+    font-weight: 800;
+    color: #2a2a42;
+}
+
+/* CARD */
+.explore-card {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    background: #ffffff;
+    padding: 45px;
+    border-radius: 26px;
+    margin-bottom: 70px;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+}
+
+.explore-card.reverse {
+    flex-direction: row-reverse;
+}
+
+/* TEXT */
+.explore-text {
+    flex: 1;
+}
+
+.explore-text h2 {
+    font-size: 30px;
+    color: #9c84ff;
+    font-weight: 800;
+}
+
+.explore-text p {
+    margin: 12px 0;
+    color: #4c4c70;
+    font-size: 16px;
+}
+
+.explore-text ul {
+    list-style: none;
+    margin: 18px 0;
+}
+
+.explore-text li {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+/* IMAGE */
+.explore-image {
+    flex: 1;
+}
+
+.explore-image img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 22px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+/* ================= FOOTER ================= */
+footer {
+    background: #ffffff;
+    padding: 25px;
+    text-align: center;
+    margin-top: 40px;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.06);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+    .explore-card {
+        gap: 30px;
+        padding: 35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 20px 30px;
+    }
+
+    .explore-card,
+    .explore-card.reverse {
+        flex-direction: column;
+    }
+
+    .explore-image img {
+        height: 260px;
+    }
+
+    .services-hero h1 {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .services-hero h1 {
+        font-size: 26px;
+    }
+
+    .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+}

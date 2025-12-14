@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up | Pawsome Care</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+
+<div class="signup-wrapper">
+    <div class="signup-card">
+        <a href="javascript:history.back()" class="go-back">
+            ← Go Back
+        </a>
+
+
+        <h2 class="signup-title">
+            Join <span class="logo">Pawsome<span>Care</span></span>
+        </h2>
+
+
+
+        {% if form.errors %}
+            <div class="form-error">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- TWO COLUMN FORM -->
+            <div class="form-grid">
+                <div>
+                    <label>Username</label>
+                    {{ form.username }}
+                </div>
+
+                <div>
+                    <label>Email</label>
+                    {{ form.email }}
+                </div>
+
+                <div>
+                    <label>Password</label>
+                    {{ form.password }}
+                </div>
+
+                <div>
+                    <label>Confirm Password</label>
+                    {{ form.confirm_password }}
+                </div>
+            </div>
+
+            <!-- ROLE SELECTION -->
+            <label class="role-label">Select Your Department</label>
+            <div class="role-grid">
+                {% for value, label in form.role.field.choices %}
+                    <label class="role-box">
+                        <input type="radio" name="role" value="{{ value }}" required>
+                        <span>{{ label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="signup-btn">
+                Create Account
+            </button>
+        </form>
+
+        <div class="signup-footer">
+            Already have an account?
+            <a href="">Login</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

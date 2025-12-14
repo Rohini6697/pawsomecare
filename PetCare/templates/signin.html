@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In | Pawsome Care</title>
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}">
+</head>
+<body>
+
+<div class="signin-wrapper">
+    <div class="signin-card">
+
+        <h2 class="signin-title">
+            Welcome Back to
+            <span class="logo">Pawsome<span>Care</span></span>
+        </h2>
+
+        {% if error %}
+            <div class="form-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
+
+            <button type="submit" class="signin-btn">
+                Sign In
+            </button>
+        </form>
+
+        <div class="signin-footer">
+            Don’t have an account?
+            <a href="{% url 'signup' %}">Create one</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

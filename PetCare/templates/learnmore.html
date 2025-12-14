@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About • PawsomeCare</title>
+    <link rel="stylesheet" href="{% static 'css/learnmore.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- SVG SPRITE (PAW ICON DEFINITION) -->
+<svg id="svg-sprite" style="display:none">
+    <symbol id="paw" viewBox="0 0 249 209.32">
+        <ellipse cx="27.917" cy="106.333" rx="27.917" ry="35.833"/>
+        <ellipse cx="84.75" cy="47.749" rx="34.75" ry="47.751"/>
+        <ellipse cx="162" cy="47.749" rx="34.75" ry="47.751"/>
+        <ellipse cx="221.083" cy="106.333" rx="27.917" ry="35.833"/>
+        <path d="M43.98 165.39s9.76-63.072 76.838-64.574c0 0 71.082-6.758 83.096 70.33 0 0 2.586 19.855-12.54 31.855 
+        0 0-15.75 17.75-43.75-6.25 0 0-7.124-8.374-24.624-7.874 0 0-12.75-.125-21.5 6.625 
+        0 0-16.375 18.376-37.75 12.75 0 0-28.29-7.72-19.77-42.86z"/>
+    </symbol>
+</svg>
+
+<!-- PAW LOADER -->
+<div class="ajax-loader">
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+        <div class="logo-wrapper">
+            <img class="logo-img" src="{% static 'images/pawsomecare-logo.png' %}" alt="Pawsome Care Logo">
+            <h2 class="logo">Pawsome<span>Care</span></h2>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+        <div class="auth-buttons">
+            <a href="#" class="btn-primary">Sign In</a>
+            <a href="#" class="btn-secondary">Sign Up</a>
+        </div>
+    </nav>
+
+<!-- ABOUT HERO -->
+<section class="about-hero">
+    <div class="hero-text">
+        <h1>We Care Like You Do 🐾</h1>
+        <p>Your trusted partner for safe, reliable, and loving pet care services — anytime, anywhere.</p>
+    </div>
+</section>
+
+<!-- OUR STORY -->
+<section class="story">
+    <h2 class="section-title">Our Story</h2>
+    <p>
+        At <strong>PawsomeCare</strong>, we believe every pet deserves love, comfort, safety,
+        and a little extra pampering. Our platform connects pet parents with trusted
+        walkers, sitters, groomers, trainers, and vets — all in one place.
+    </p>
+
+    <p>
+        Whether it’s a daily walk, an overnight stay, grooming session, or even a vet
+        checkup, our trained professionals ensure your furry friend is cared for like
+        family. With real-time location tracking, instant updates, and verified experts,
+        you can stay worry-free while we take care of the rest.
+    </p>
+</section>
+
+<!-- MISSION & VALUES -->
+<section class="mission">
+    <div class="mission-container">
+        <div class="mission-text">
+            <h2 class="section-title">Our Mission</h2>
+            <p>
+                To provide safe, transparent, and professional pet care services that give you peace of mind.
+            </p>
+
+            <h3>Our Core Values</h3>
+            <ul>
+                <li>❤️ Love & empathy for all animals</li>
+                <li>🔒 Safety, trust & reliability</li>
+                <li>📍 Transparency with real-time tracking</li>
+                <li>🏆 Professional & certified caregivers</li>
+                <li>📸 Instant photo/video updates</li>
+            </ul>
+        </div>
+
+        <div class="mission-img">
+            <img src="https://t3.ftcdn.net/jpg/11/52/34/96/240_F_1152349639_ZET2pEPRpg4Fu7XXQF2olEQthbxn0uJP.jpg" alt="Mission">
+        </div>
+    </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="why">
+    <h2 class="section-title">Why Pet Parents Choose Us</h2>
+
+    <div class="why-grid">
+        <div class="why-card">
+            <h3>📍 Real-Time Tracking</h3>
+            <p>Track your pet's walk live on a map.</p>
+        </div>
+
+        <div class="why-card">
+            <h3>📝 Detailed Reports</h3>
+            <p>Each walk includes photos & notes.</p>
+        </div>
+
+        <div class="why-card">
+            <h3>🚀 Instant Booking</h3>
+            <p>Book instantly with verified professionals.</p>
+        </div>
+
+        <div class="why-card">
+            <h3>🏅 Certified Experts</h3>
+            <p>All caregivers are trained & verified.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+    <div class="stat-card"><h2>15k+</h2><p>Happy Pets Served</p></div>
+    <div class="stat-card"><h2>500+</h2><p>Certified Pet Professionals</p></div>
+    <div class="stat-card"><h2>98%</h2><p>Pet Parent Satisfaction</p></div>
+</section>
+
+<footer>
+    <p>© 2025 PawsomeCare. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

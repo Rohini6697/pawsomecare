@@ -1,0 +1,225 @@
+/* --------------------- GLOBAL --------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    background: #F7F5FA;
+    color: #2A2A42;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #9C84FF;
+}
+
+.logo span {
+    color: #FF8FB1;  /* Care color */
+}
+
+.signup-title {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+
+
+/* --------------------- WRAPPER --------------------- */
+.signup-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+}
+
+/* --------------------- CARD --------------------- */
+.signup-card {
+    width: 720px;
+    max-width: 95%;
+    padding: 30px 32px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    position: relative;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+}
+
+.signup-card::before {
+    content: "";
+    position: absolute;
+    /* inset: 0; */
+    border-radius: 22px;
+    padding: 2px;
+    background: linear-gradient(
+        135deg,
+        #9C84FF,
+        #FF8FB1,
+        #6FDDB3
+    );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+}
+
+/* --------------------- TITLE --------------------- */
+.signup-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+
+/* --------------------- FORM GRID --------------------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 20px;
+}
+
+.signup-card label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.signup-card input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.signup-card input:focus {
+    outline: none;
+    border-color: #9C84FF;
+    box-shadow: 0 0 0 3px rgba(156, 132, 255, 0.18);
+}
+
+.go-back {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #9C84FF;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.go-back:hover {
+    color: #FF8FB1;
+}
+
+
+/* --------------------- ROLE SECTION --------------------- */
+.role-label {
+    margin-top: 18px;
+    font-weight: 700;
+}
+
+.role-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.role-box {
+    position: relative;
+    padding: 14px 8px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    background: rgba(255,255,255,0.95);
+    border: 2px solid #ddd;
+    transition: 0.3s ease;
+}
+
+.role-box input {
+    display: none;
+}
+
+.role-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.role-box input:checked + span {
+    color: #9C84FF;
+}
+
+.role-box input:checked ~ span::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(
+        135deg,
+        #9C84FF,
+        #FF8FB1,
+        #6FDDB3
+    );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+}
+
+/* --------------------- BUTTON --------------------- */
+.signup-btn {
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, #9C84FF, #FF8FB1);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.signup-btn:hover {
+    box-shadow: 0 10px 25px rgba(156, 132, 255, 0.4);
+}
+
+/* --------------------- FOOTER --------------------- */
+.signup-footer {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.signup-footer a {
+    color: #9C84FF;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* --------------------- MOBILE --------------------- */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
