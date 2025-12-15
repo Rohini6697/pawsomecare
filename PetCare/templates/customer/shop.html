@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Shop | Pawsome Care</title>
+
+    <!-- COMMON DASHBOARD CSS -->
+    <link rel="stylesheet" href="{% static 'css/customer/customer_home.css' %}">
+
+    <!-- SHOP PAGE CSS -->
+    <link rel="stylesheet" href="{% static 'css/customer/shop.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo-wrapper">
+        <img src="{% static 'images/pawsomecare-logo.png' %}" class="logo-img">
+        <h2 class="logo">Pawsome<span>Care</span></h2>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="{% url 'customer_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'my_pets' %}">My Pets</a></li>
+        <li><a href="{% url 'bookings' %}">Bookings</a></li>
+        <li><a href="#" class="active">Shop</a></li>
+        <li><a href="#">Orders</a></li>
+    </ul>
+
+    <a href="#" class="btn-secondary">Logout</a>
+</nav>
+
+<!-- SHOP HEADER -->
+<section class="shop-header">
+    <h1>Pet Shop</h1>
+    <input type="text" placeholder="Search food, toys, treats..." class="search-box">
+</section>
+
+
+
+<!-- CATEGORY FILTER -->
+<section class="categories">
+    <button class="category active">All</button>
+    <a href="{% url 'pet_food' %}"><button class="category">Pet Food</button></a>
+    <button class="category">Toys</button>
+    <button class="category">Accessories</button>
+</section>
+
+<!-- PRODUCTS GRID -->
+<section class="products-container">
+
+    <!-- PRODUCT CARD -->
+    <div class="product-card">
+        <img src="{% static 'images/shop/dog-food.png' %}" alt="Dog Food">
+
+        <h3>Premium Dog Food</h3>
+        <p class="price">₹899</p>
+
+        <div class="product-actions">
+            <button class="add-cart-btn">Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- PRODUCT CARD -->
+    <div class="product-card">
+        <img src="{% static 'images/shop/cat-food.png' %}" alt="Cat Food">
+
+        <h3>Healthy Cat Food</h3>
+        <p class="price">₹749</p>
+
+        <div class="product-actions">
+            <button class="add-cart-btn">Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- PRODUCT CARD -->
+    <div class="product-card">
+        <img src="{% static 'images/shop/toy.png' %}" alt="Pet Toy">
+
+        <h3>Chew Toy</h3>
+        <p class="price">₹299</p>
+
+        <div class="product-actions">
+            <button class="add-cart-btn">Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>

@@ -15,8 +15,9 @@
             Customer Details
         </h2>
 
-        <form method="post">
-            {% csrf_token %}
+        <form method="post" action="{% url 'customer_details' customer.id %}">
+        {% csrf_token %}
+
 
             <div class="form-group">
                 <label>Full Name</label>

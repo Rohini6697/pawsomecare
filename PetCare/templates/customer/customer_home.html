@@ -1,11 +1,84 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pawsome Care | Customer Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'css/customer/customer_home.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <h1>sdfcbhjnmk,l.;</h1>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo-wrapper">
+        <img src="{% static 'images/pawsomecare-logo.png' %}" class="logo-img">
+        <h2 class="logo">Pawsome<span>Care</span></h2>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="{% url 'my_pets' %}">My Pets</a></li>
+        <li><a href="{% url 'bookings' %}">Bookings</a></li>
+        <li><a href="{% url 'shop' %}">Shop</a></li>
+        <li><a href="#">Orders</a></li>
+    </ul>
+
+    <a href="#" class="btn-secondary">Logout</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Everything Your Pet Needs<br>
+            <span class="highlight">One Trusted Platform</span>
+        </h1>
+        <p>Manage pets, book services, track orders & appointments — all in one place.</p>
+
+        <div class="hero-actions">
+            <button class="btn-primary">Book a Service</button>
+            <button class="btn-outline">Add a Pet</button>
+        </div>
+    </div>
+
+    <div class="hero-image">
+        <img src="https://t3.ftcdn.net/jpg/04/18/06/84/360_F_418068474_VIWD3loz21dusicbe43VnAsAc9uZudyF.jpg">
+    </div>
+</section>
+
+<!-- DASHBOARD ACTIONS -->
+<section class="dashboard-actions">
+    <div class="action-card">
+        <h3>🐾 My Pets</h3>
+        <p>Add & manage your pets, medical history, and diet plans.</p>
+    </div>
+
+    <div class="action-card">
+        <h3>📅 Bookings</h3>
+        <p>Track walking, sitting, grooming, training & vet appointments.</p>
+    </div>
+
+    <div class="action-card">
+        <h3>🛒 Orders</h3>
+        <p>View pet store orders, deliveries, and invoices.</p>
+    </div>
+
+    <div class="action-card">
+        <h3>📊 Reports</h3>
+        <p>Daily activity reports, photos, health & progress updates.</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2025 Pawsome Care. All Rights Reserved.</p>
+</footer>
+
 </body>
 </html>

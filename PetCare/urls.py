@@ -11,4 +11,9 @@ urlpatterns = [
     path('signin/',views.signin,name='signin'),
     path('customer_details/<int:customer_id>/',views.customer_details,name='customer_details'),
     path('customer_home/',views.customer_home,name='customer_home'),
+    path('my_pets/',views.my_pets,name='my_pets'),
+    path('add_pets/',views.add_pets,name='add_pets'),
+    path('bookings/',views.bookings,name='bookings'),
+    path('shop/',views.shop,name='shop'),
+    path('pet_food/',views.pet_food,name='pet_food'),
 ]

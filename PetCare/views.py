@@ -3,6 +3,8 @@ from django.shortcuts import redirect, render
 from .models import Customer, Profile
 from django.contrib.auth import authenticate,login as auth_login
 from .forms import UserForm
+from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 def home(request):
@@ -45,7 +47,7 @@ def signin(request):
             if role == 'customer':
                 try:
                     customer = user.profile.customer
-                    return redirect('customer/customer_home')
+                    return redirect('customer_home')
                 except Customer.DoesNotExist:
                     return redirect('customer_details',customer_id=user.profile.id)
 
@@ -61,6 +63,25 @@ def signin(request):
     return render(request, 'signin.html')  
 # =========================================== Customer ==================================================
 def customer_details(request,customer_id):
-    return render(request,'customer/customer_details.html')
+    profile = get_object_or_404(Profile,id = customer_id)
+    customer,created = Customer.objects.get_or_create(customer=profile)
+    if request.method == 'POST':
+        customer.fullname = request.POST.get('fullname')
+        customer.phone_number = request.POST.get('phone_number')
+        customer.city = request.POST.get('city')
+        customer.address = request.POST.get('address')
+        customer.save()
+        return redirect('customer_home')
+    return render(request,'customer/customer_details.html',{'customer':customer})
 def customer_home(request):
     return render(request,'customer/customer_home.html')
+def my_pets(request):
+    return render(request,'customer/my_pets.html')
+def add_pets(request):
+    return render(request,'customer/add_pets.html')
+def bookings(request):
+    return render(request,'customer/bookings.html')
+def shop(request):
+    return render(request,'customer/shop.html')
+def pet_food(request):
+    return render(request,'customer/pet_food.html')
