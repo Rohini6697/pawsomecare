@@ -11,7 +11,10 @@
     font-weight: 700;
     color: #2A2A42;
 }
-
+.nav-links .active {
+    color: #9C84FF;
+    font-weight: 700;
+}
 /* ---------------- BOOKINGS GRID ---------------- */
 .bookings-container {
     padding: 20px 50px 60px;

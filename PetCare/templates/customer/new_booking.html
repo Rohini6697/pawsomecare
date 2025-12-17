@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Booking | Pawsome Care</title>
+
+    <link rel="stylesheet" href="{% static 'css/customer/customer_home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/customer/new_booking.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <h2 class="logo">Pawsome<span>Care</span></h2>
+</nav>
+
+<!-- PAGE TITLE -->
+<section class="page-header">
+    <h1>Book a Service</h1>
+    <p>Select a service to see available pet care providers</p>
+</section>
+
+<!-- SERVICE SELECTION -->
+<section class="services-grid">
+    <div class="service-card active" onclick="showProviders('walker')">🐕 Pet Walker</div>
+    <div class="service-card" onclick="showProviders('sitter')">🏠 Pet Sitter</div>
+    <div class="service-card" onclick="showProviders('groomer')">✂️ Groomer</div>
+    <div class="service-card" onclick="showProviders('daycare')">🌞 Pet Daycare</div>
+    <div class="service-card" onclick="showProviders('boarding')">🏨 Pet Boarding</div>
+    <div class="service-card" onclick="showProviders('training')">🎓 Training</div>
+    <div class="service-card" onclick="showProviders('vet')">🩺 Vet Consultation</div>
+</section>
+
+<!-- SEARCH -->
+<section class="search-section">
+    <input type="text" id="searchInput" placeholder="Search by name or location..." onkeyup="searchProviders()">
+</section>
+
+<!-- PROVIDERS LIST -->
+<section class="providers-container">
+
+    <!-- PET WALKER -->
+    <div class="provider-list active" id="walker">
+        <div class="provider-card">
+            <h3>Arjun</h3>
+            <p>📍 Kochi</p>
+            <p>⭐ 4.8 (120 walks)</p>
+            <button>Book Walk</button>
+        </div>
+
+        <div class="provider-card">
+            <h3>Neha</h3>
+            <p>📍 Trivandrum</p>
+            <p>⭐ 4.6 (90 walks)</p>
+            <button>Book Walk</button>
+        </div>
+    </div>
+
+    <!-- PET SITTER -->
+    <div class="provider-list" id="sitter">
+        <div class="provider-card">
+            <h3>Rahul</h3>
+            <p>📍 Kochi</p>
+            <p>⭐ 4.9 (45 visits)</p>
+            <button>Book Visit</button>
+        </div>
+    </div>
+
+    <!-- GROOMER -->
+    <div class="provider-list" id="groomer">
+        <div class="provider-card">
+            <h3>Meera</h3>
+            <p>📍 Calicut</p>
+            <p>⭐ 4.7 (60 groomings)</p>
+            <button>Book Grooming</button>
+        </div>
+    </div>
+
+    <!-- EMPTY SERVICES -->
+    <div class="provider-list" id="daycare">
+        <p class="empty">No daycare centers available yet</p>
+    </div>
+
+    <div class="provider-list" id="boarding">
+        <p class="empty">No boarding facilities available yet</p>
+    </div>
+
+    <div class="provider-list" id="training">
+        <p class="empty">No trainers available yet</p>
+    </div>
+
+    <div class="provider-list" id="vet">
+        <p class="empty">No vets available yet</p>
+    </div>
+
+</section>
+
+<script src="{% static 'js/customer/new_booking.js' %}"></script>
+</body>
+</html>

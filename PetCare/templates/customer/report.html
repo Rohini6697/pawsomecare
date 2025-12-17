@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Reports | Pawsome Care</title>
+
+    <link rel="stylesheet" href="{% static 'css/customer/report.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<nav class="navbar">
+    <div class="logo-wrapper">
+        <img src="{% static 'images/pawsomecare-logo.png' %}" class="logo-img">
+        <h2 class="logo">Pawsome<span>Care</span></h2>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="{% url 'customer_home' %}">Home</a></li>
+        <li><a href="{% url 'my_pets' %}">My Pets</a></li>
+        <li><a href="{% url 'bookings' %}">Bookings</a></li>
+        <li><a href="{% url 'shop' %}">Shop</a></li>
+        <li><a href="{% url 'cart' %}">Cart</a></li>
+        <li><a href="{% url 'report' %}" class="active">report</a></li>
+    </ul>
+
+    <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
+</nav>
+
+<!-- ================= PET SELECTOR ================= -->
+<section class="pet-selector">
+    <div class="pet-box active" onclick="showPet('pet1', this)">
+        <h4>Buddy</h4>
+        <span>Dog</span>
+    </div>
+
+    <div class="pet-box" onclick="showPet('pet2', this)">
+        <h4>Misty</h4>
+        <span>Cat</span>
+    </div>
+
+    <div class="pet-box" onclick="showPet('pet3', this)">
+        <h4>Rocky</h4>
+        <span>Dog</span>
+    </div>
+</section>
+
+<!-- ================= REPORTS ================= -->
+<section class="reports-container">
+
+    <!-- ========== PET 1 REPORT ========== -->
+    <div class="pet-report active" id="pet1">
+
+        <!-- PET INFO -->
+        <div class="pet-info">
+            <img src="{% static 'images/dog.png' %}">
+            <div>
+                <h2>Buddy</h2>
+                <p>Dog • Labrador • 3 Years</p>
+            </div>
+        </div>
+
+        <!-- SERVICE DETAILS -->
+        <div class="report-box">
+            <h3>Service Details</h3>
+
+            <div class="detail-row">
+                <span>Service Type</span>
+                <span>Pet Walking</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Date</span>
+                <span>12 Aug 2025</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Time</span>
+                <span>6:00 AM – 6:45 AM</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Handled By</span>
+                <span>Arjun (Pet Walker)</span>
+            </div>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="report-box">
+            <h3>Activity Summary</h3>
+            <ul class="activity-list">
+                <li>🐾 Walked 2.4 km</li>
+                <li>💩 Toilet break done</li>
+                <li>🎾 Played for 10 minutes</li>
+                <li>💧 Water given</li>
+                <li>😊 Friendly & energetic</li>
+            </ul>
+        </div>
+
+        <!-- NOTES -->
+        <div class="report-box">
+            <h3>Care Notes</h3>
+            <p class="notes">
+                Buddy was very active today. No signs of discomfort.
+                Appetite and behavior were normal.
+            </p>
+        </div>
+
+        <!-- PHOTOS -->
+        <div class="report-box">
+            <h3>Photos</h3>
+            <div class="photo-grid">
+                <img src="{% static 'images/walk1.jpg' %}">
+                <img src="{% static 'images/walk2.jpg' %}">
+                <img src="{% static 'images/walk3.jpg' %}">
+            </div>
+        </div>
+
+        <!-- MEDICAL REPORT -->
+        <div class="report-box">
+            <h3>Medical Reports</h3>
+
+            <div class="medical-card">
+                <h4>🩺 Vet Consultation</h4>
+                <p>Date: 12 Feb 2025</p>
+                <p>Status: Healthy</p>
+            </div>
+
+            <div class="medical-card">
+                <h4>💉 Vaccination</h4>
+                <p>Date: 20 Jan 2025</p>
+                <p>Anti-Rabies</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PET 2 REPORT ========== -->
+    <div class="pet-report" id="pet2">
+        <h2>Misty's Medical Reports</h2>
+
+        <div class="medical-card">
+            <h4>🩺 Vet Checkup</h4>
+            <p>Date: 05 Feb 2025</p>
+            <p>Status: Under observation</p>
+        </div>
+    </div>
+
+    <!-- ========== PET 3 REPORT ========== -->
+    <div class="pet-report" id="pet3">
+        <h2>Rocky's Medical Reports</h2>
+
+        <div class="medical-card">
+            <h4>🦴 Injury Treatment</h4>
+            <p>Date: 10 Jan 2025</p>
+            <p>Status: Recovered</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+function showPet(id, element) {
+    document.querySelectorAll('.pet-box').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.pet-report').forEach(r => r.classList.remove('active'));
+
+    element.classList.add('active');
+    document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>

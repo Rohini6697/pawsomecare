@@ -126,61 +126,53 @@ body {
 
 /* --------------------- ROLE SECTION --------------------- */
 .role-label {
-    margin-top: 18px;
+    margin-top: 22px;
+    font-size: 15px;
     font-weight: 700;
 }
 
 .role-grid {
-    margin-top: 10px;
+    margin-top: 12px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
 }
 
+/* Role Card */
 .role-box {
-    position: relative;
-    padding: 14px 8px;
+    padding: 18px 10px;
     border-radius: 16px;
     text-align: center;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    background: rgba(255,255,255,0.95);
-    border: 2px solid #ddd;
-    transition: 0.3s ease;
+    background: white;
+    border: 2px solid #E2E2E8;
+    transition: all 0.25s ease;
 }
 
 .role-box input {
     display: none;
 }
 
+/* Hover (soft) */
 .role-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+    border-color: #9C84FF;
+    transform: translateY(-2px);
 }
 
+/* Selected */
 .role-box input:checked + span {
-    color: #9C84FF;
+    color: white;
 }
 
-.role-box input:checked ~ span::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    padding: 2px;
-    background: linear-gradient(
-        135deg,
-        #9C84FF,
-        #FF8FB1,
-        #6FDDB3
-    );
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-            mask-composite: exclude;
+.role-box input:checked ~ span {
+    background: linear-gradient(135deg, #9C84FF, #FF8FB1);
+    display: block;
+    padding: 18px 10px;
+    border-radius: 14px;
 }
+
 
 /* --------------------- BUTTON --------------------- */
 .signup-btn {

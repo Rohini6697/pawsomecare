@@ -24,11 +24,12 @@
     </div>
 
     <ul class="nav-links">
-        <li><a href="{% url 'customer_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'customer_home' %}">Home</a></li>
         <li><a href="{% url 'my_pets' %}">My Pets</a></li>
-        <li><a href="#" class="active">Bookings</a></li>
-        <li><a href="#">Shop</a></li>
-        <li><a href="#">Orders</a></li>
+        <li><a href="{% url 'bookings' %}" class="active">Bookings</a></li>
+        <li><a href="{% url 'shop' %}">Shop</a></li>
+        <li><a href="{% url 'cart' %}">Cart</a></li>
+        <li><a href="{% url 'report' %}">report</a></li>
     </ul>
 
     <a href="#" class="btn-secondary">Logout</a>
@@ -37,7 +38,7 @@
 <!-- BOOKINGS HEADER -->
 <section class="bookings-header">
     <h1>My Bookings</h1>
-    <button class="btn-primary">+ New Booking</button>
+    <a href="{% url 'new_booking' %}"><button class="btn-primary">+ New Booking</button></a>
 </section>
 
 <!-- BOOKINGS LIST -->

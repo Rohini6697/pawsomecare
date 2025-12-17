@@ -24,14 +24,15 @@
     </div>
 
     <ul class="nav-links">
-        <li><a href="{% url 'customer_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'customer_home' %}">Home</a></li>
         <li><a href="{% url 'my_pets' %}">My Pets</a></li>
         <li><a href="{% url 'bookings' %}">Bookings</a></li>
-        <li><a href="#" class="active">Shop</a></li>
-        <li><a href="#">Orders</a></li>
+        <li><a href="{% url 'shop' %}" class="active">Shop</a></li>
+        <li><a href="{% url 'cart' %}">Cart</a></li>
+        <li><a href="{% url 'report' %}">report</a></li>
     </ul>
 
-    <a href="#" class="btn-secondary">Logout</a>
+    <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
 </nav>
 
 <!-- SHOP HEADER -->
@@ -45,7 +46,7 @@
 <!-- CATEGORY FILTER -->
 <section class="categories">
     <button class="category active">All</button>
-    <a href="{% url 'pet_food' %}"><button class="category">Pet Food</button></a>
+    <button class="category">Pet Food</button>
     <button class="category">Toys</button>
     <button class="category">Accessories</button>
 </section>
@@ -93,6 +94,7 @@
     </div>
 
 </section>
+<script src="{% static 'js/customer/shop.js' %}"></script>
 
 </body>
 </html>

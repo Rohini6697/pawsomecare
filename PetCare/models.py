@@ -7,13 +7,14 @@ class Profile(models.Model):
     ROLE_CHOICES = (
         # ('admin','Admin'),
         ('customer','Customer'),
-        ('pet_walking','Petwalking'),
-        ('petsitting','Petsitting'),
-        ('petgrooming','Petgrooming'),
-        ('daycare','Daycare'),
-        ('boarding','Boarding'),
-        ('veterinary','Veterinary'),
-        ('training','Training')
+        ('service_providers','Service Providers')
+        # ('pet_walking','Petwalking'),
+        # ('petsitting','Petsitting'),
+        # ('petgrooming','Petgrooming'),
+        # ('daycare','Daycare'),
+        # ('boarding','Boarding'),
+        # ('veterinary','Veterinary'),
+        # ('training','Training')
     )
     role = models.CharField(max_length=50,choices=ROLE_CHOICES,default='customer')
 
@@ -29,3 +30,50 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"{self.fullname}"
+    
+
+
+class ServiceProvider(models.Model):
+    PROVIDER_TYPE = (
+        ('individual', 'Individual'),
+        ('organization', 'Organization / Company'),
+    )
+
+    ID_TYPE = (
+        ('aadhaar', 'Aadhaar'),
+        ('pan', 'PAN'),
+        ('passport', 'Passport'),
+    )
+
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
+    full_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    # profile_photo = models.ImageField(upload_to='providers/profile/', blank=True)
+
+    provider_type = models.CharField(max_length=20, choices=PROVIDER_TYPE)
+
+    bio = models.TextField()
+    city = models.CharField(max_length=50)
+    address = models.TextField()
+    pincode = models.CharField(max_length=10)
+
+    # latitude = models.CharField(max_length=50)
+    # longitude = models.CharField(max_length=50)
+
+    travel_distance = models.PositiveIntegerField()
+
+    services = models.JSONField()  # store selected services
+
+    id_type = models.CharField(max_length=20, choices=ID_TYPE)
+    id_proof = models.FileField(upload_to='providers/id/')
+
+    grooming_certificate = models.FileField(upload_to='providers/certificates/', blank=True)
+    vet_license = models.FileField(upload_to='providers/certificates/', blank=True)
+    training_certificate = models.FileField(upload_to='providers/certificates/', blank=True)
+    organization_registration = models.FileField(upload_to='providers/certificates/', blank=True)
+
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.full_name

@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Service Provider Details | Pawsome Care</title>
+    <link rel="stylesheet" href="{% static 'css/provider_details.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <div class="form-card">
+        <h1>Service Provider Profile</h1>
+        <p class="subtitle">Complete your profile to start offering services</p>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- BASIC DETAILS -->
+            <div class="section">
+                <h3>Basic Information</h3>
+
+                <div class="form-grid">
+                    <div>
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Enter full name" required>
+                    </div>
+
+                    <div>
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="Enter phone number" required>
+                    </div>
+
+                    <div>
+                        <label>Profile Photo</label>
+                        <input type="file" accept="image/*">
+                    </div>
+
+                    <div>
+                        <label>Provider Type</label>
+                        <select required>
+                            <option value="">Select</option>
+                            <option>Individual</option>
+                            <option>Organization / Company</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label>Short Bio / About</label>
+                <textarea placeholder="Briefly describe your experience and services"></textarea>
+            </div>
+
+            <!-- LOCATION -->
+            <div class="section">
+                <h3>Location Details</h3>
+
+                <div class="form-grid">
+                    <div>
+                        <label>Service Area / City</label>
+                        <input type="text" placeholder="City">
+                    </div>
+
+                    <div>
+                        <label>Pincode</label>
+                        <input type="text" placeholder="Pincode">
+                    </div>
+
+                    <div class="full">
+                        <label>Full Address</label>
+                        <input type="text" placeholder="Complete address">
+                    </div>
+
+                    <div>
+                        <label>Google Map Location (Lat, Long)</label>
+                        <input type="text" placeholder="e.g. 9.9312, 76.2673">
+                    </div>
+
+                    <div>
+                        <label>Distance Willing to Travel (km)</label>
+                        <input type="number" placeholder="e.g. 10">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICES -->
+            <div class="section">
+                <h3>Services Offered</h3>
+
+                <div class="checkbox-grid">
+                    <label><input type="checkbox"> Pet Walking</label>
+                    <label><input type="checkbox"> Pet Sitting</label>
+                    <label><input type="checkbox"> Grooming</label>
+                    <label><input type="checkbox"> Training</label>
+                    <label><input type="checkbox"> Daycare</label>
+                    <label><input type="checkbox"> Boarding</label>
+                    <label><input type="checkbox"> Vet Consultation</label>
+                </div>
+            </div>
+
+            <!-- IDENTITY -->
+            <div class="section">
+                <h3>Identity Verification</h3>
+
+                <div class="form-grid">
+                    <div>
+                        <label>Government ID Type</label>
+                        <select required>
+                            <option value="">Select</option>
+                            <option>Aadhaar</option>
+                            <option>PAN</option>
+                            <option>Passport</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Upload Government ID</label>
+                        <input type="file">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFESSIONAL PROOF -->
+            <div class="section">
+                <h3>Professional Proof (Optional)</h3>
+
+                <div class="form-grid">
+                    <div>
+                        <label>Grooming Certificate</label>
+                        <input type="file">
+                    </div>
+
+                    <div>
+                        <label>Vet License</label>
+                        <input type="file">
+                    </div>
+
+                    <div>
+                        <label>Training Certificate</label>
+                        <input type="file">
+                    </div>
+
+                    <div>
+                        <label>Organization Registration</label>
+                        <input type="file">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit for Approval</button>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

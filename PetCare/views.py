@@ -1,7 +1,9 @@
+from pyexpat.errors import messages
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 
-from .models import Customer, Profile
-from django.contrib.auth import authenticate,login as auth_login
+from .models import Customer, Profile, ServiceProvider
+from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
 
@@ -50,9 +52,15 @@ def signin(request):
                     return redirect('customer_home')
                 except Customer.DoesNotExist:
                     return redirect('customer_details',customer_id=user.profile.id)
-
+            elif role == 'service_provider':
+                try:
+                    provider = user.profile.serviceprovider
+                    return redirect('provider_home')
+                except ServiceProvider.DoesNotExist:
+                    return redirect('provider_details',provider_id=user.profile.id)
             # other roles can be handled later
-            return redirect('home')
+            else:
+                return redirect('home')
 
         # ❌ login failed
         return render(request, 'signin.html', {
@@ -61,6 +69,11 @@ def signin(request):
 
     # ✅ GET request (VERY IMPORTANT)
     return render(request, 'signin.html')  
+
+def goback(request):
+    logout(request)
+    return redirect('signin')
+
 # =========================================== Customer ==================================================
 def customer_details(request,customer_id):
     profile = get_object_or_404(Profile,id = customer_id)
@@ -83,5 +96,59 @@ def bookings(request):
     return render(request,'customer/bookings.html')
 def shop(request):
     return render(request,'customer/shop.html')
-def pet_food(request):
-    return render(request,'customer/pet_food.html')
+def cart(request):
+    return render(request,'customer/cart.html')
+def report(request):
+    return render(request,'customer/report.html')
+def new_booking(request):
+    return render(request,'customer/new_booking.html')
+@login_required
+def provider_details(request):
+    provider, created = ServiceProvider.objects.get_or_create(
+        user=request.user
+    )
+
+    if request.method == "POST":
+        provider.full_name = request.POST.get("full_name")
+        provider.phone_number = request.POST.get("phone_number")
+        provider.provider_type = request.POST.get("provider_type")
+        provider.bio = request.POST.get("bio")
+        provider.city = request.POST.get("city")
+        provider.address = request.POST.get("address")
+        provider.pincode = request.POST.get("pincode")
+        provider.travel_distance = request.POST.get("travel_distance")
+
+        # Multi-select services (checkbox)
+        provider.services = request.POST.getlist("services")
+
+        provider.id_type = request.POST.get("id_type")
+
+        # Files
+        if request.FILES.get("id_proof"):
+            provider.id_proof = request.FILES.get("id_proof")
+
+        if request.FILES.get("grooming_certificate"):
+            provider.grooming_certificate = request.FILES.get("grooming_certificate")
+
+        if request.FILES.get("vet_license"):
+            provider.vet_license = request.FILES.get("vet_license")
+
+        if request.FILES.get("training_certificate"):
+            provider.training_certificate = request.FILES.get("training_certificate")
+
+        if request.FILES.get("organization_registration"):
+            provider.organization_registration = request.FILES.get("organization_registration")
+
+        provider.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return redirect("provider_profile_view")
+
+    return render(
+        request,
+        "provider/provider_details.html",
+        {"provider": provider}
+    )
+
+def provider_home(request):
+    return render(request,'provider/provider_home.html')

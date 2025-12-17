@@ -1,0 +1,94 @@
+.page-header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.page-header h1 {
+    font-size: 32px;
+    color: #2A2A42;
+}
+
+.page-header p {
+    color: #6B6B8A;
+}
+
+/* SERVICES */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 0 40px;
+}
+
+.service-card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid #E6E3F7;
+    transition: 0.3s;
+}
+
+.service-card:hover,
+.service-card.active {
+    background: #9C84FF;
+    color: white;
+    border-color: #9C84FF;
+}
+
+/* SEARCH */
+.search-section {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.search-section input {
+    width: 360px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* PROVIDERS */
+.providers-container {
+    padding: 0 40px 60px;
+}
+
+.provider-list {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.provider-list.active {
+    display: grid;
+}
+
+.provider-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.provider-card h3 {
+    color: #2A2A42;
+}
+
+.provider-card button {
+    margin-top: 10px;
+    background: #FF8FB1;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.empty {
+    color: #777;
+    text-align: center;
+}

@@ -21,14 +21,15 @@
     </div>
 
     <ul class="nav-links">
-        <li><a href="{% url 'customer_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'customer_home' %}">Home</a></li>
         <li><a href="{% url 'my_pets' %}" class="active">My Pets</a></li>
-        <li><a href="#">Bookings</a></li>
-        <li><a href="#">Shop</a></li>
-        <li><a href="#">Orders</a></li>
+        <li><a href="{% url 'bookings' %}">Bookings</a></li>
+        <li><a href="{% url 'shop' %}">Shop</a></li>
+        <li><a href="{% url 'cart' %}">Cart</a></li>
+        <li><a href="{% url 'report' %}">report</a></li>
     </ul>
 
-    <a href="#" class="btn-secondary">Logout</a>
+    <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
 </nav>
 
 <!-- PAGE TITLE -->

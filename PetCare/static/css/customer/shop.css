@@ -1,4 +1,8 @@
 /* ---------------- SHOP HEADER ---------------- */
+.nav-links .active {
+    color: #9C84FF;
+    font-weight: 700;
+}
 .shop-header {
     padding: 40px 50px 20px;
     display: flex;

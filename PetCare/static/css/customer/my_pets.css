@@ -11,6 +11,54 @@ body {
     background: #F7F5FA;
     color: #2A2A42;
 }
+/* ---------------- NAVBAR ---------------- */
+.navbar {
+    padding: 20px 50px;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #9C84FF;
+}
+
+.logo span {
+    color: #FF8FB1;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #2A2A42;
+    font-weight: 600;
+}
+
+.nav-links .active {
+    color: #9C84FF;
+    font-weight: 700;
+}
 
 /* ---------------- PAGE HEADER (BELOW NAVBAR) ---------------- */
 .pets-header {
