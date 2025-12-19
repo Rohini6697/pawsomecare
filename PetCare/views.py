@@ -52,7 +52,7 @@ def signin(request):
                     return redirect('customer_home')
                 except Customer.DoesNotExist:
                     return redirect('customer_details',customer_id=user.profile.id)
-            elif role == 'service_providers':
+            elif role == 'service_provider':
                 try:
                     provider = user.profile.serviceprovider
                     # return redirect('provider_home')

@@ -47,7 +47,7 @@ class ServiceProvider(models.Model):
 
     user = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
-    full_name = models.CharField(max_length=100)
+    full_name = models.CharField(max_length=100,null=True,blank=True)
     phone_number = models.CharField(max_length=15)
     # profile_photo = models.ImageField(upload_to='providers/profile/', blank=True)
 
