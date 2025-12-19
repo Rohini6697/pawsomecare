@@ -66,12 +66,12 @@ class ServiceProvider(models.Model):
     services = models.JSONField(null=True,blank=True)  # store selected services
 
     id_type = models.CharField(max_length=20, choices=ID_TYPE)
-    id_proof = models.FileField(upload_to='providers/id/')
+    id_proof = models.FileField(upload_to='providers/id/',null=True,blank=True)
 
-    grooming_certificate = models.FileField(upload_to='providers/certificates/', blank=True)
-    vet_license = models.FileField(upload_to='providers/certificates/', blank=True)
-    training_certificate = models.FileField(upload_to='providers/certificates/', blank=True)
-    organization_registration = models.FileField(upload_to='providers/certificates/', blank=True)
+    grooming_certificate = models.FileField(upload_to='providers/certificates/',null=True,blank=True)
+    vet_license = models.FileField(upload_to='providers/certificates/',null=True,blank=True)
+    training_certificate = models.FileField(upload_to='providers/certificates/',null=True,blank=True)
+    organization_registration = models.FileField(upload_to='providers/certificates/',null=True,blank=True)
 
     is_verified = models.BooleanField(default=False)
 
