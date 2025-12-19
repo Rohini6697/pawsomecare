@@ -106,12 +106,21 @@ def report(request):
     return render(request,'customer/report.html')
 def new_booking(request):
     return render(request,'customer/new_booking.html')
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import ServiceProvider, Profile
+
 @login_required
 def provider_details(request, provider_id):
-    profile = get_object_or_404(Profile,id = provider_id)
-    provider,created = ServiceProvider.objects.get_or_create(user=profile)
+    profile = get_object_or_404(Profile, id=provider_id)
+
+    provider, created = ServiceProvider.objects.get_or_create(
+        user=profile
+    )
 
     if request.method == "POST":
+
         provider.full_name = request.POST.get("full_name")
         provider.phone_number = request.POST.get("phone_number")
         provider.provider_type = request.POST.get("provider_type")
@@ -121,7 +130,7 @@ def provider_details(request, provider_id):
         provider.pincode = request.POST.get("pincode")
         provider.travel_distance = request.POST.get("travel_distance")
 
-        # Multi-select services (checkbox)
+        # Services (checkboxes)
         provider.services = request.POST.getlist("services")
 
         provider.id_type = request.POST.get("id_type")
@@ -142,19 +151,17 @@ def provider_details(request, provider_id):
         if request.FILES.get("organization_registration"):
             provider.organization_registration = request.FILES.get("organization_registration")
 
-        file = request.FILES.get("id_proof")
-        if file:
-            if file.size > 2 * 1024 * 1024:
-                messages.error(request, "File size must be under 2MB")
-
         provider.save()
 
-        messages.success(request, "Profile updated successfully!")
+        messages.success(request, "Profile submitted successfully!")
+        return redirect("provider_pending")
+
     return render(
         request,
         "provider/provider_details.html",
         {"provider": provider}
     )
+
 
 def provider_home(request):
     return render(request,'provider/provider_home.html')

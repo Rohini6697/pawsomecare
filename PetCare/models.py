@@ -65,7 +65,7 @@ class ServiceProvider(models.Model):
 
     services = models.JSONField(null=True,blank=True)  # store selected services
 
-    id_type = models.CharField(max_length=20, choices=ID_TYPE)
+    id_type = models.CharField(max_length=20, choices=ID_TYPE,null=True,blank=True)
     id_proof = models.FileField(upload_to='providers/id/',null=True,blank=True)
 
     grooming_certificate = models.FileField(upload_to='providers/certificates/',null=True,blank=True)
