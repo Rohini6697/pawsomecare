@@ -48,18 +48,18 @@ class ServiceProvider(models.Model):
     user = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     full_name = models.CharField(max_length=100,null=True,blank=True)
-    phone_number = models.CharField(max_length=15)
+    phone_number = models.CharField(max_length=15,null=True,blank=True)
     # profile_photo = models.ImageField(upload_to='providers/profile/', blank=True)
 
     provider_type = models.CharField(max_length=20, choices=PROVIDER_TYPE)
 
-    bio = models.TextField()
-    city = models.CharField(max_length=50)
-    address = models.TextField()
-    pincode = models.CharField(max_length=10)
+    bio = models.TextField(null=True,blank=True)
+    city = models.CharField(max_length=50,null=True,blank=True)
+    address = models.TextField(null=True,blank=True)
+    pincode = models.CharField(max_length=10,null=True,blank=True)
 
-    latitude = models.CharField(max_length=50)
-    longitude = models.CharField(max_length=50)
+    latitude = models.CharField(max_length=50,null=True,blank=True)
+    longitude = models.CharField(max_length=50,null=True,blank=True)
 
     travel_distance = models.PositiveIntegerField(null=True,blank=True)
 
