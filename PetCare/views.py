@@ -42,7 +42,7 @@ def signin(request):
             auth_login(request, user)
 
             if user.is_superuser:
-                return redirect('admindashboard')
+                return redirect('admin_home')
 
             role = user.profile.role
 
@@ -52,12 +52,16 @@ def signin(request):
                     return redirect('customer_home')
                 except Customer.DoesNotExist:
                     return redirect('customer_details',customer_id=user.profile.id)
-            elif role == 'service_provider':
+            elif role == 'service_providers':
                 try:
                     provider = user.profile.serviceprovider
-                    return redirect('provider_home')
+                    # return redirect('provider_home')
                 except ServiceProvider.DoesNotExist:
                     return redirect('provider_details',provider_id=user.profile.id)
+                if not provider.is_verified:
+                    return redirect('provider_pending')
+                else:
+                    return redirect('provider_home')
             # other roles can be handled later
             else:
                 return redirect('home')
@@ -103,10 +107,9 @@ def report(request):
 def new_booking(request):
     return render(request,'customer/new_booking.html')
 @login_required
-def provider_details(request):
-    provider, created = ServiceProvider.objects.get_or_create(
-        user=request.user
-    )
+def provider_details(request, provider_id):
+    profile = get_object_or_404(Profile,id = provider_id)
+    provider,created = ServiceProvider.objects.get_or_create(user=profile)
 
     if request.method == "POST":
         provider.full_name = request.POST.get("full_name")
@@ -139,11 +142,14 @@ def provider_details(request):
         if request.FILES.get("organization_registration"):
             provider.organization_registration = request.FILES.get("organization_registration")
 
+        file = request.FILES.get("id_proof")
+        if file:
+            if file.size > 2 * 1024 * 1024:
+                messages.error(request, "File size must be under 2MB")
+
         provider.save()
 
         messages.success(request, "Profile updated successfully!")
-        return redirect("provider_profile_view")
-
     return render(
         request,
         "provider/provider_details.html",
@@ -152,3 +158,9 @@ def provider_details(request):
 
 def provider_home(request):
     return render(request,'provider/provider_home.html')
+def provider_pending(request):
+    return render(request,'provider/provider_pending.html')
+
+# =========================================== Admin ==================================================
+def admin_home(request):
+    return render(request,'admin/admin_home.html')

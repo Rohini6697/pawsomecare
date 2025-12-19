@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Service Provider Details | Pawsome Care</title>
-    <link rel="stylesheet" href="{% static 'css/provider_details.css' %}">
+    <link rel="stylesheet" href="{% static 'css/provider/provider_details.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -85,19 +85,45 @@
             </div>
 
             <!-- SERVICES -->
-            <div class="section">
-                <h3>Services Offered</h3>
+            <div class="service-box-grid">
 
-                <div class="checkbox-grid">
-                    <label><input type="checkbox"> Pet Walking</label>
-                    <label><input type="checkbox"> Pet Sitting</label>
-                    <label><input type="checkbox"> Grooming</label>
-                    <label><input type="checkbox"> Training</label>
-                    <label><input type="checkbox"> Daycare</label>
-                    <label><input type="checkbox"> Boarding</label>
-                    <label><input type="checkbox"> Vet Consultation</label>
-                </div>
+                <label class="service-box">
+                    <input type="checkbox" name="services" value="walking">
+                    <span>🐕 Pet Walking</span>
+                </label>
+
+                <label class="service-box">
+                    <input type="checkbox" name="services" value="sitting">
+                    <span>🏠 Pet Sitting</span>
+                </label>
+
+                <label class="service-box">
+                    <input type="checkbox" name="services" value="grooming">
+                    <span>✂️ Grooming</span>
+                </label>
+
+                <label class="service-box">
+                    <input type="checkbox" name="services" value="training">
+                    <span>🎓 Training</span>
+                </label>
+
+                <label class="service-box">
+                    <input type="checkbox" name="services" value="daycare">
+                    <span>🧸 Daycare</span>
+                </label>
+
+                <label class="service-box">
+                    <input type="checkbox" name="services" value="boarding">
+                    <span>🏨 Boarding</span>
+                </label>
+
+                <label class="service-box">
+                    <input type="checkbox" name="services" value="vet">
+                    <span>🩺 Vet Consultation</span>
+                </label>
+
             </div>
+
 
             <!-- IDENTITY -->
             <div class="section">
@@ -115,8 +141,8 @@
                     </div>
 
                     <div>
-                        <label>Upload Government ID</label>
-                        <input type="file">
+                        <label>ID Proof</label>
+                        <input type="file" name="id_proof" required>
                     </div>
                 </div>
             </div>
@@ -128,22 +154,23 @@
                 <div class="form-grid">
                     <div>
                         <label>Grooming Certificate</label>
-                        <input type="file">
+                        <input type="file" name="grooming_certificate">
+
                     </div>
 
                     <div>
                         <label>Vet License</label>
-                        <input type="file">
+                        <input type="file" name="vet_license">
                     </div>
 
                     <div>
                         <label>Training Certificate</label>
-                        <input type="file">
+                        <input type="file" name="training_certificate">
                     </div>
 
                     <div>
                         <label>Organization Registration</label>
-                        <input type="file">
+                        <input type="file" name="organization_registration">
                     </div>
                 </div>
             </div>

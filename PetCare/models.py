@@ -58,12 +58,12 @@ class ServiceProvider(models.Model):
     address = models.TextField()
     pincode = models.CharField(max_length=10)
 
-    # latitude = models.CharField(max_length=50)
-    # longitude = models.CharField(max_length=50)
+    latitude = models.CharField(max_length=50)
+    longitude = models.CharField(max_length=50)
 
-    travel_distance = models.PositiveIntegerField()
+    travel_distance = models.PositiveIntegerField(null=True,blank=True)
 
-    services = models.JSONField()  # store selected services
+    services = models.JSONField(null=True,blank=True)  # store selected services
 
     id_type = models.CharField(max_length=20, choices=ID_TYPE)
     id_proof = models.FileField(upload_to='providers/id/')
