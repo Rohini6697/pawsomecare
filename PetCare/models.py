@@ -51,7 +51,7 @@ class ServiceProvider(models.Model):
     phone_number = models.CharField(max_length=15,null=True,blank=True)
     # profile_photo = models.ImageField(upload_to='providers/profile/', blank=True)
 
-    provider_type = models.CharField(max_length=20, choices=PROVIDER_TYPE)
+    provider_type = models.CharField(max_length=20, choices=PROVIDER_TYPE,null=True,blank=True)
 
     bio = models.TextField(null=True,blank=True)
     city = models.CharField(max_length=50,null=True,blank=True)
