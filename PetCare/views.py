@@ -171,3 +171,5 @@ def provider_pending(request):
 # =========================================== Admin ==================================================
 def admin_home(request):
     return render(request,'admin/admin_home.html')
+def verify_providers(request):
+    return render(request,'admin/verify_providers.html')

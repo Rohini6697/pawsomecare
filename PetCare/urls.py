@@ -23,4 +23,5 @@ urlpatterns = [
     path('provider_home/',views.provider_home,name='provider_home'),
     path('provider_pending/',views.provider_pending,name='provider_pending'),
     path('admin_home/',views.admin_home,name='admin_home'),
+    path('verify_providers/',views.verify_providers,name='verify_providers'),
 ]

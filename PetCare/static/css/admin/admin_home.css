@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: #F6F5FF;
+    color: #2A2A42;
+}
+
+/* NAVBAR */
+.admin-navbar {
+    background: linear-gradient(135deg, #9C84FF, #FF8FB1);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo span {
+    color: #FFE1EC;
+}
+
+.logout-btn {
+    background: white;
+    color: #9C84FF;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* DASHBOARD */
+.dashboard {
+    padding: 30px;
+}
+
+/* STATS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 24px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+}
+
+.stat-card h3 {
+    font-size: 36px;
+    color: #9C84FF;
+}
+
+.stat-card p {
+    font-weight: 600;
+}
+
+.stat-card.highlight {
+    border: 2px solid #FF8FB1;
+}
+
+/* ACTIONS */
+.actions {
+    margin-top: 40px;
+}
+
+.actions h2 {
+    margin-bottom: 16px;
+}
+
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.action-card {
+    background: linear-gradient(135deg, #9C84FF, #FF8FB1);
+    padding: 18px;
+    border-radius: 16px;
+    color: white;
+    text-align: center;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.action-card:hover {
+    transform: translateY(-4px);
+}
+
+/* ACTIVITY */
+.activity {
+    margin-top: 40px;
+}
+
+.activity table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.activity th, .activity td {
+    padding: 14px;
+    text-align: left;
+}
+
+.activity th {
+    background: #EEE9FF;
+}
+
+.verified {
+    color: green;
+    font-weight: 700;
+}
+
+.pending {
+    color: orange;
+    font-weight: 700;
+}

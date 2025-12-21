@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | Pawsome Care</title>
+
+    <link rel="stylesheet" href="{% static 'css/admin/admin_home.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="admin-navbar">
+    <h2 class="logo">Pawsome<span>Care</span> Admin</h2>
+    <a href="{% url 'goback' %}" class="logout-btn">Logout</a>
+</nav>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+
+    <!-- STATS -->
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <h3>{{ total_customers }}</h3>
+            <p>Customers</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_providers }}</h3>
+            <p>Service Providers</p>
+        </div>
+
+        <div class="stat-card highlight">
+            <h3>{{ pending_providers }}</h3>
+            <p>Pending Verifications</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_bookings }}</h3>
+            <p>Bookings</p>
+        </div>
+
+    </section>
+
+    <!-- QUICK ACTIONS -->
+    <section class="actions">
+        <h2>Quick Actions</h2>
+
+        <div class="action-grid">
+            <a href="{% url 'verify_providers' %}" class="action-card">Verify Providers</a>
+            <a href="#" class="action-card">View Bookings</a>
+            <a href="#" class="action-card">Manage Services</a>
+            <a href="#" class="action-card">Reports</a>
+        </div>
+    </section>
+
+    <!-- RECENT ACTIVITY -->
+    <section class="activity">
+        <h2>Recent Provider Registrations</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for provider in recent_providers %}
+                <tr>
+                    <td>{{ provider.full_name }}</td>
+                    <td>{{ provider.city }}</td>
+                    <td>
+                        {% if provider.is_verified %}
+                            <span class="verified">Verified</span>
+                        {% else %}
+                            <span class="pending">Pending</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No recent registrations</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+</body>
+</html>
