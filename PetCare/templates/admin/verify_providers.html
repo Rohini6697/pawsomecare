@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Providers</title>
+    <link rel="stylesheet" href="{% static 'css/admin/verify_providers.css' %}">
+</head>
+<body>
+
+<h2>Service Provider Verification</h2>
+<button onclick="history.back()" class="back-btn">← Back</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Provider Type</th>
+            <th>ID Proof</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for provider in providers %}
+        <tr>
+            <td>{{ provider.full_name }}</td>
+            <td>{{ provider.city }}</td>
+            <td>{{ provider.provider_type }}</td>
+
+            <td>
+                {% if provider.id_proof %}
+                    <a href="{{ provider.id_proof.url }}" target="_blank">View</a>
+                {% else %}
+                    Not Uploaded
+                {% endif %}
+            </td>
+
+            <td>
+                {% if provider.is_verified %}
+                    <span class="verified">Verified</span>
+                {% else %}
+                    <span class="pending">Pending</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if provider.is_verified %}
+                    <a href="{% url 'unverify_provider' provider.id %}" class="btn unverify">Unverify</a>
+                {% else %}
+                    <a href="#" class="btn verify">Verify</a>
+                    <a href="#" class="btn reject">Reject</a>
+                {% endif %}
+            </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No providers found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

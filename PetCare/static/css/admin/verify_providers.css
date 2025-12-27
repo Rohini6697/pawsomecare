@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6fb;
+    padding: 30px;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #9C84FF;
+    color: white;
+}
+
+.verified {
+    color: green;
+    font-weight: bold;
+}
+
+.pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.verify {
+    background-color: #28a745;
+    color: white;
+}
+
+.reject {
+    background-color: #dc3545;
+    color: white;
+}
+/* Center Action column */
+table th:last-child,
+table td:last-child {
+    text-align: center;
+}
+table td:last-child .btn {
+    margin: 4px;
+}
+
+.unverify {
+    background-color: #ffc107;
+    color: black;
+}
+
+.verify:hover {
+    background-color: #218838;
+}
+
+.reject:hover {
+    background-color: #c82333;
+}
+
+.unverify:hover {
+    background-color: #e0a800;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background: #6c63ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #574bdb;
+}

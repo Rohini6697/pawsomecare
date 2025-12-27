@@ -172,4 +172,5 @@ def provider_pending(request):
 def admin_home(request):
     return render(request,'admin/admin_home.html')
 def verify_providers(request):
-    return render(request,'admin/verify_providers.html')
+    provider = ServiceProvider.objects.all()
+    return render(request,'admin/verify_providers.html',{'providers':provider})
