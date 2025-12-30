@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blacklist Provider | Pawsome Care</title>
+    <link rel="stylesheet" href="{% static 'css/admin/blacklisted_provider.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="card">
+
+        <h1>⚠️ Blacklist Service Provider</h1>
+        <p class="subtitle">
+            This action is permanent. The provider will not be able to access the platform again.
+        </p>
+
+        <!-- PROVIDER DETAILS -->
+        <div class="details-box">
+            <div><strong>Name:</strong> {{ provider.full_name }}</div>
+            <div><strong>Email:</strong> {{ provider.user.user.email }}</div>
+            <div><strong>Phone:</strong> {{ provider.phone_number }}</div>
+            <div><strong>ID Type:</strong> {{ provider.id_type|upper }}</div>
+            <div><strong>ID Number:</strong> {{ provider.id_number|slice:":2" }}******{{ provider.id_number|slice:"-2:" }}</div>
+        </div>
+
+        <!-- BLACKLIST FORM -->
+        <form method="post">
+            {% csrf_token %}
+
+            <label>Reason for Blacklisting</label>
+            <textarea 
+                name="reason" 
+                placeholder="Enter clear reason (policy violation, fake documents, misconduct, etc.)"
+                required
+            ></textarea>
+
+            <div class="btn-group">
+                <a href="{% url 'verify_providers' %}" class="btn cancel">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn danger">
+                    Confirm Blacklist
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+/* ------------------ BASE ------------------ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0F1020, #1A1B2E);
+    color: #E6E6F0;
+}
+
+/* ------------------ LAYOUT ------------------ */
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.card {
+    width: 100%;
+    max-width: 650px;
+    background: #1A1B2E;
+    border-radius: 22px;
+    padding: 36px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ------------------ HEADER ------------------ */
+.card h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #FF6B6B;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #B8B8D4;
+    margin-bottom: 24px;
+}
+
+/* ------------------ DETAILS ------------------ */
+.details-box {
+    background: rgba(255, 107, 107, 0.08);
+    border-left: 4px solid #FF6B6B;
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.details-box div {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #EAEAFF;
+}
+
+/* ------------------ FORM ------------------ */
+label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: #D6D6F0;
+}
+
+textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1.5px solid #2E2F55;
+    background: #12132A;
+    color: #E6E6F0;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 26px;
+}
+
+textarea::placeholder {
+    color: #8E8EB5;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #FF6B6B;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.25);
+}
+
+/* ------------------ BUTTONS ------------------ */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 14px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: 0.25s ease;
+}
+
+/* Cancel */
+.btn.cancel {
+    background: #2A2B4A;
+    color: #CFCFFF;
+}
+
+.btn.cancel:hover {
+    background: #343566;
+}
+
+/* Danger */
+.btn.danger {
+    background: linear-gradient(135deg, #FF5C5C, #FF8585);
+    color: white;
+}
+
+.btn.danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(255, 92, 92, 0.55);
+}
+
+/* ------------------ RESPONSIVE ------------------ */
+@media (max-width: 600px) {
+    .btn-group {
+        flex-direction: column;
+    }
+}

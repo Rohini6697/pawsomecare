@@ -24,4 +24,9 @@ urlpatterns = [
     path('provider_pending/',views.provider_pending,name='provider_pending'),
     path('admin_home/',views.admin_home,name='admin_home'),
     path('verify_providers/',views.verify_providers,name='verify_providers'),
+    path('accept_providers/<int:provider_id>',views.accept_providers,name='accept_providers'),
+    path('reject_providers/<int:provider_id>',views.reject_providers,name='reject_providers'),
+    path('blacklisted_provider/<int:provider_id>',views.blacklisted_provider,name='blacklisted_provider'),
+    path('fire_provider/<int:provider_id>',views.fire_provider,name='fire_provider'),
+
 ]

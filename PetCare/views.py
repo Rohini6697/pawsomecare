@@ -1,11 +1,12 @@
 from pyexpat.errors import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-
-from .models import Customer, Profile, ServiceProvider
+from django.core.mail import send_mail
+from .models import BlacklistedProvider, Customer, Profile, ServiceProvider
 from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
@@ -52,10 +53,9 @@ def signin(request):
                     return redirect('customer_home')
                 except Customer.DoesNotExist:
                     return redirect('customer_details',customer_id=user.profile.id)
-            elif role == 'service_provider':
+            elif role == 'service_providers':
                 try:
                     provider = user.profile.serviceprovider
-                    # return redirect('provider_home')
                 except ServiceProvider.DoesNotExist:
                     return redirect('provider_details',provider_id=user.profile.id)
                 if not provider.is_verified:
@@ -132,8 +132,8 @@ def provider_details(request, provider_id):
 
         # Services (checkboxes)
         provider.services = request.POST.getlist("services")
-
         provider.id_type = request.POST.get("id_type")
+        provider.id_number = request.POST.get('id_number')
 
         # Files
         if request.FILES.get("id_proof"):
@@ -174,3 +174,74 @@ def admin_home(request):
 def verify_providers(request):
     provider = ServiceProvider.objects.all()
     return render(request,'admin/verify_providers.html',{'providers':provider})
+def accept_providers(request,provider_id):
+    provider = ServiceProvider.objects.get(id = provider_id)
+    provider.is_verified =True
+    provider.save()
+      # 📧 Send email
+    subject = 'Your Service Provider Account Has Been Verified'
+    message = f"""
+    Hello {provider.full_name},
+
+    Congratulations! 🎉
+
+    Your service provider account has been successfully verified.
+    You can now log in and start using our platform.
+
+    Best regards,
+    Pawsome Care Team
+    """
+    send_mail(
+        subject,
+        message,
+        None,  # uses DEFAULT_FROM_EMAIL
+        [provider.user.user.email],
+        fail_silently=False,
+    )
+    return redirect('verify_providers')
+def reject_providers(request,provider_id):
+    provider = ServiceProvider.objects.get(id = provider_id)
+    # 📧 Email before deleting
+    subject = 'Service Provider Application Rejected'
+    message = f"""
+    Hello {provider.full_name},
+
+    We regret to inform you that your service provider application
+    has been rejected.
+
+    For further details, please contact support.
+
+    Regards,
+    Pawsome Care Team
+    """
+    send_mail(
+        subject,
+        message,
+        None,
+        [provider.user.user.email],
+        fail_silently=False,
+    )
+
+    provider.user.user.delete()  # deletes everything
+    provider.delete()
+    return redirect('verify_providers')
+
+def fire_provider(request,provider_id):
+    provider = ServiceProvider.objects.get(id = provider_id)
+    BlacklistedProvider.objects.create(
+        full_name=provider.full_name,
+        id_type=provider.id_type,
+        id_number=provider.id_number,
+        phone_number=provider.phone_number,
+        email=provider.user.user.email,
+        reason="Violation of platform policies"  
+    )
+
+    # Disable provider
+    provider.is_verified = False
+    provider.save()
+    return render('verify_providers')
+def blacklisted_provider(request,provider_id):
+    provider = ServiceProvider.objects.get(id = provider_id)
+
+    return render(request,'admin/blacklisted_provider.html',{'provider':provider})

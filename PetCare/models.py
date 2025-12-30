@@ -66,6 +66,8 @@ class ServiceProvider(models.Model):
     services = models.JSONField(null=True,blank=True)  # store selected services
 
     id_type = models.CharField(max_length=20, choices=ID_TYPE,null=True,blank=True)
+    id_number = models.CharField(max_length=50,unique=True,null=True,blank=True,help_text="Government ID number")
+
     id_proof = models.FileField(upload_to='providers/id/',null=True,blank=True)
 
     grooming_certificate = models.FileField(upload_to='providers/certificates/',null=True,blank=True)
@@ -77,3 +79,17 @@ class ServiceProvider(models.Model):
 
     def __str__(self):
         return self.full_name
+class BlacklistedProvider(models.Model):
+    full_name = models.CharField(max_length=100)
+
+    id_type = models.CharField(max_length=20)
+    id_number = models.CharField(max_length=50, unique=True)
+
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+
+    reason = models.TextField()
+    blacklisted_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.full_name} - BLACKLISTED"

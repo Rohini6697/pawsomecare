@@ -117,26 +117,40 @@
             </div>
 
             <!-- IDENTITY -->
-            <div class="section">
-                <h3>Identity Verification</h3>
+<div class="section">
+    <h3>Identity Verification</h3>
 
-                <div class="form-grid">
-                    <div>
-                        <label>ID Type</label>
-                        <select name="id_type" required>
-                            <option value="">Select</option>
-                            <option value="aadhaar">Aadhaar</option>
-                            <option value="pan">PAN</option>
-                            <option value="passport">Passport</option>
-                        </select>
-                    </div>
+    <div class="form-grid">
+        <div>
+            <label>ID Type</label>
+            <select name="id_type" required>
+                <option value="">Select</option>
+                <option value="aadhaar">Aadhaar</option>
+                <option value="pan">PAN</option>
+                <option value="passport">Passport</option>
+            </select>
+        </div>
 
-                    <div>
-                        <label>ID Proof</label>
-                        <input type="file" name="id_proof" required>
-                    </div>
+        <div>
+            <label>ID Number</label>
+                    <input 
+                        type="text" 
+                        name="id_number" 
+                        placeholder="Enter ID number exactly as on document"
+                        required
+                    >
+                    <small class="hint-text">
+                        This will be used for verification and security purposes.
+                    </small>
+                </div>
+
+                <div class="full">
+                    <label>ID Proof (Upload)</label>
+                    <input type="file" name="id_proof" required>
                 </div>
             </div>
+        </div>
+
 
             <!-- PROFESSIONAL PROOF -->
             <div class="section">

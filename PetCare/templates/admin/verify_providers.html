@@ -1,13 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Verify Providers</title>
+    <meta charset="UTF-8">
+    <title>Verify Service Providers</title>
     <link rel="stylesheet" href="{% static 'css/admin/verify_providers.css' %}">
 </head>
 <body>
 
 <h2>Service Provider Verification</h2>
+
 <button onclick="history.back()" class="back-btn">← Back</button>
 
 <table>
@@ -17,6 +19,7 @@
             <th>City</th>
             <th>Provider Type</th>
             <th>ID Proof</th>
+            <th>Certificates</th>
             <th>Status</th>
             <th>Action</th>
         </tr>
@@ -27,16 +30,39 @@
         <tr>
             <td>{{ provider.full_name }}</td>
             <td>{{ provider.city }}</td>
-            <td>{{ provider.provider_type }}</td>
+            <td>{{ provider.provider_type|title }}</td>
 
+            <!-- ID PROOF -->
             <td>
                 {% if provider.id_proof %}
-                    <a href="{{ provider.id_proof.url }}" target="_blank">View</a>
+                    
+                    <a href="{{ provider.id_proof.url }}" target="_blank"><strong>{{ provider.id_type|upper }}</strong><br></a>
                 {% else %}
-                    Not Uploaded
+                    <span class="not-uploaded">Not Uploaded</span>
                 {% endif %}
             </td>
 
+            <!-- CERTIFICATES -->
+            <td>
+                {% if provider.grooming_certificate %}
+                    <a href="{{ provider.grooming_certificate.url }}" target="_blank">Grooming</a><br>
+                {% endif %}
+                {% if provider.vet_license %}
+                    <a href="{{ provider.vet_license.url }}" target="_blank">Vet License</a><br>
+                {% endif %}
+                {% if provider.training_certificate %}
+                    <a href="{{ provider.training_certificate.url }}" target="_blank">Training</a><br>
+                {% endif %}
+                {% if provider.organization_registration %}
+                    <a href="{{ provider.organization_registration.url }}" target="_blank">Organization</a>
+                {% endif %}
+
+                {% if not provider.grooming_certificate and not provider.vet_license and not provider.training_certificate and not provider.organization_registration %}
+                    <span class="not-uploaded">None</span>
+                {% endif %}
+            </td>
+
+            <!-- STATUS -->
             <td>
                 {% if provider.is_verified %}
                     <span class="verified">Verified</span>
@@ -45,19 +71,34 @@
                 {% endif %}
             </td>
 
+            <!-- ACTIONS -->
             <td>
                 {% if provider.is_verified %}
-                    <a href="{% url 'unverify_provider' provider.id %}" class="btn unverify">Unverify</a>
+                    <!-- FIRE PROVIDER -->
+                    <form method="post"
+                          action="#"
+                          onsubmit="return confirm('Are you sure you want to remove this provider?');">
+                        {% csrf_token %}
+                        <a href="{% url 'blacklisted_provider' provider.id %}" class="btn fire">Fire</a>
+                    </form>
                 {% else %}
-                    <a href="#" class="btn verify">Verify</a>
-                    <a href="#" class="btn reject">Reject</a>
+                    <!-- VERIFY / REJECT -->
+                    <a href="{% url 'accept_providers' provider.id %}" class="btn verify">
+                        Verify
+                    </a>
+
+                    <a href="{% url 'reject_providers' provider.id %}"
+                       class="btn reject"
+                       onclick="return confirm('Are you sure you want to reject this provider?');">
+                        Reject
+                    </a>
                 {% endif %}
             </td>
-
         </tr>
+
         {% empty %}
         <tr>
-            <td colspan="6">No providers found</td>
+            <td colspan="7">No service providers found.</td>
         </tr>
         {% endfor %}
     </tbody>
