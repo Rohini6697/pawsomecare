@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blacklisted Providers | Pawsome Care</title>
+
+    <link rel="stylesheet" href="{% static 'css/admin/blacklist.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="admin-navbar">
+    <h2 class="logo">Pawsome<span>Care</span> Admin</h2>
+    <a href="{% url 'provider_manage' %}" class="back-btn">⬅ Back</a>
+</nav>
+
+<!-- PAGE -->
+<div class="container">
+
+    <h1>🚫 Blacklisted Service Providers</h1>
+    <p class="subtitle">These providers are permanently restricted from the platform</p>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID Type</th>
+                    <th>ID Number</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Reason</th>
+                    <th>Blacklisted On</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for provider in providers %}
+                <tr>
+                    <td>{{ provider.full_name }}</td>
+                    <td>{{ provider.id_type|upper }}</td>
+                    <td>
+                        {{ provider.id_number }}
+                    </td>
+                    <td>{{ provider.email }}</td>
+                    <td>{{ provider.phone_number }}</td>
+                    <td class="reason">{{ provider.reason }}</td>
+                    <td>{{ provider.blacklisted_on|date:"d M Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty">
+                        🎉 No blacklisted providers found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

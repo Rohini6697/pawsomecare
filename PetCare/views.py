@@ -243,8 +243,15 @@ def fire_provider(request,provider_id):
     # Disable provider
     provider.is_verified = False
     provider.save()
-    return render('verify_providers')
+    provider.delete()
+    return render('provider_manage')
 def blacklisted_provider(request,provider_id):
     provider = ServiceProvider.objects.get(id = provider_id)
 
     return render(request,'admin/blacklisted_provider.html',{'provider':provider})
+def provider_manage(request):
+    providers = ServiceProvider.objects.filter(is_verified = True)
+    return render(request,'admin/provider_manage.html',{'providers':providers})
+def blacklist(request):
+    providers = BlacklistedProvider.objects.all()
+    return render(request,'admin/blacklist.html',{'providers':providers})

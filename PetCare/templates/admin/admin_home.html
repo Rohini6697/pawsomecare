@@ -49,12 +49,24 @@
         <h2>Quick Actions</h2>
 
         <div class="action-grid">
-            <a href="{% url 'verify_providers' %}" class="action-card">Verify Providers</a>
-            <a href="#" class="action-card">View Bookings</a>
-            <a href="#" class="action-card">Manage Services</a>
-            <a href="#" class="action-card">Reports</a>
+            <a href="{% url 'verify_providers' %}" class="action-card">
+                Verify Providers
+            </a>
+
+            <a href="{% url 'provider_manage' %}" class="action-card">
+                Manage Service Providers
+            </a>
+
+            <a href="#" class="action-card">
+                View Bookings
+            </a>
+
+            <a href="#" class="action-card">
+                Reports
+            </a>
         </div>
     </section>
+
 
     <!-- RECENT ACTIVITY -->
     <section class="activity">

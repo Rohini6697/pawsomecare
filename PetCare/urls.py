@@ -28,5 +28,7 @@ urlpatterns = [
     path('reject_providers/<int:provider_id>',views.reject_providers,name='reject_providers'),
     path('blacklisted_provider/<int:provider_id>',views.blacklisted_provider,name='blacklisted_provider'),
     path('fire_provider/<int:provider_id>',views.fire_provider,name='fire_provider'),
+    path('provider_manage/',views.provider_manage,name='provider_manage'),
+    path('blacklist/',views.blacklist,name='blacklist'),
 
 ]

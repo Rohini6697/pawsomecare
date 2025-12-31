@@ -1,0 +1,166 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: #F6F5FF;
+    color: #2A2A42;
+}
+
+/* NAVBAR */
+.admin-navbar {
+    background: linear-gradient(135deg, #9C84FF, #FF8FB1);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo span {
+    color: #FFE1EC;
+}
+
+.back-btn {
+    background: white;
+    color: #9C84FF;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: #FFE1EC;
+}
+
+/* PAGE */
+.container {
+    padding: 30px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    font-weight: 500;
+    color: #6b6b8a;
+    margin-bottom: 24px;
+}
+
+/* TABLE CARD */
+.table-wrapper {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #EEE9FF;
+}
+
+th, td {
+    padding: 14px 16px;
+    text-align: left;
+}
+
+th {
+    font-weight: 700;
+    color: #5c5c8a;
+}
+
+tbody tr:not(:last-child) {
+    border-bottom: 1px solid #f0f0f5;
+}
+
+/* STATUS BADGES */
+.status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.status.verified {
+    background: #E7FAF1;
+    color: #1c7c54;
+}
+
+.status.pending {
+    background: #FFF3CD;
+    color: #856404;
+}
+
+.status.blacklisted {
+    background: #FDE2E4;
+    color: #842029;
+}
+
+/* ACTION BUTTONS */
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+    color: white;
+}
+
+/* BUTTON COLORS */
+.btn.view {
+    background: #9C84FF;
+}
+
+.btn.view:hover {
+    background: #8a70ff;
+}
+
+.btn.approve {
+    background: #3CB371;
+}
+
+.btn.approve:hover {
+    background: #34a566;
+}
+
+.btn.danger {
+    background: #020846;
+}
+
+.btn.danger:hover {
+    background: #ff5252;
+}
+
+/* EMPTY STATE */
+.empty {
+    text-align: center;
+    padding: 24px;
+    font-weight: 600;
+    color: #8a8aa8;
+}
+.top-actions {
+    margin: 16px 0 24px;
+}
+
+.top-actions .btn {
+    display: inline-block;
+}

@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Service Providers | Pawsome Care</title>
+
+    <link rel="stylesheet" href="{% static 'css/admin/provider_manage.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="admin-navbar">
+    <h2 class="logo">Pawsome<span>Care</span> Admin</h2>
+    <a href="{% url 'admin_home' %}" class="back-btn">⬅ Back</a>
+</nav>
+
+<!-- PAGE -->
+<div class="container">
+
+    <h1>Manage Service Providers</h1>
+    <p class="subtitle">View, verify, deactivate, or blacklist providers</p>
+
+    <div class="top-actions">
+        <a href="{% url 'blacklist' %}" class="btn danger">
+            🚫 View Blacklisted Providers
+        </a>
+    </div>
+
+
+    <!-- PROVIDERS TABLE -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for provider in providers %}
+                <tr>
+                    <td>{{ provider.full_name }}</td>
+                    <td>{{ provider.user.user.email }}</td>
+                    <td>{{ provider.phone_number }}</td>
+
+                    <td>
+                        {% if provider.is_blacklisted %}
+                            <span class="status blacklisted">Blacklisted</span>
+                        {% elif provider.is_verified %}
+                            <span class="status verified">Verified</span>
+                        {% else %}
+                            <span class="status pending">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="actions">
+                        <a href="#" class="btn view">
+                            View
+                        </a>
+
+                        {% if not provider.is_verified %}
+                        <a href="{% url 'accept_providers' provider.id %}" class="btn approve">
+                            Verify
+                        </a>
+                        {% endif %}
+
+                        <a href="{% url 'blacklisted_provider' provider.id %}" class="btn danger">
+                            Blacklist
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="empty">No service providers found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
