@@ -227,15 +227,18 @@ def reject_providers(request,provider_id):
     return redirect('verify_providers')
 
 def fire_provider(request,provider_id):
-    provider = ServiceProvider.objects.get(id = provider_id)
-    BlacklistedProvider.objects.create(
-        full_name=provider.full_name,
-        id_type=provider.id_type,
-        id_number=provider.id_number,
-        phone_number=provider.phone_number,
-        email=provider.user.user.email,
-        reason="Violation of platform policies"  
-    )
+    provider = get_object_or_404(ServiceProvider,id = provider_id)
+    if request.method == 'POST':
+        BlacklistedProvider.objects.create(
+            full_name=provider.full_name,
+            id_type=provider.id_type,
+            id_number=provider.id_number,
+            phone_number=provider.phone_number,
+            email=provider.user.user.email,
+            # reason="Violation of platform policies"  
+            reason = request.POST.get('reason')
+            
+        )
 
     # Disable provider
     provider.is_verified = False

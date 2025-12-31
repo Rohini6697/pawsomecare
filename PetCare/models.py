@@ -88,7 +88,7 @@ class BlacklistedProvider(models.Model):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
 
-    reason = models.TextField()
+    reason = models.TextField(default="Violation of platform policies")
     blacklisted_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
