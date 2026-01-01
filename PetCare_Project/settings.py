@@ -9,12 +9,13 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-from dotenv import load_dotenv
+
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / '.env')
+load_dotenv() 
 
 
 
@@ -133,3 +134,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = f"Pawsome Care <{EMAIL_HOST_USER}>"
+
+
+print("EMAIL USER:", os.getenv("EMAIL_HOST_USER"))
+print("EMAIL PASS:", os.getenv("EMAIL_HOST_PASSWORD"))

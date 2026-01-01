@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
+from django.conf import settings
 
 
 # Create your views here.
@@ -110,7 +111,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import ServiceProvider, Profile
-
+# ====================================== Provider ======================================
 @login_required
 def provider_details(request, provider_id):
     profile = get_object_or_404(Profile, id=provider_id)
@@ -164,16 +165,23 @@ def provider_details(request, provider_id):
 
 
 def provider_home(request):
-    return render(request,'provider/provider_home.html')
+    provider = request.user.profile.serviceprovider
+    return render(request,'provider/provider_home.html',{'provider':provider})
 def provider_pending(request):
     return render(request,'provider/provider_pending.html')
+def edit_provider_profile(request):
+    return render(request,'provider/edit_provider_profile.html')
 
 # =========================================== Admin ==================================================
 def admin_home(request):
     return render(request,'admin/admin_home.html')
 def verify_providers(request):
     provider = ServiceProvider.objects.all()
-    return render(request,'admin/verify_providers.html',{'providers':provider})
+    blacklisted = list(
+        BlacklistedProvider.objects.values('id_number', 'email', 'phone_number')
+    )
+    return render(request,'admin/verify_providers.html',{'providers':provider,
+                                                         'blacklisted':blacklisted})
 def accept_providers(request,provider_id):
     provider = ServiceProvider.objects.get(id = provider_id)
     provider.is_verified =True
@@ -192,12 +200,12 @@ def accept_providers(request,provider_id):
     Pawsome Care Team
     """
     send_mail(
-        subject,
-        message,
-        None,  # uses DEFAULT_FROM_EMAIL
-        [provider.user.user.email],
-        fail_silently=False,
-    )
+    subject,
+    message,
+    settings.EMAIL_HOST_USER,
+    [provider.user.user.email],
+    fail_silently=False,
+)
     return redirect('verify_providers')
 def reject_providers(request,provider_id):
     provider = ServiceProvider.objects.get(id = provider_id)
@@ -215,37 +223,79 @@ def reject_providers(request,provider_id):
     Pawsome Care Team
     """
     send_mail(
-        subject,
-        message,
-        None,
-        [provider.user.user.email],
-        fail_silently=False,
-    )
+    subject,
+    message,
+    settings.EMAIL_HOST_USER,
+    [provider.user.user.email],
+    fail_silently=False,
+)
 
     provider.user.user.delete()  # deletes everything
     provider.delete()
     return redirect('verify_providers')
 
-def fire_provider(request,provider_id):
-    provider = get_object_or_404(ServiceProvider,id = provider_id)
+from django.conf import settings
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+
+def fire_provider(request, provider_id):
+    provider = get_object_or_404(ServiceProvider, id=provider_id)
+
     if request.method == 'POST':
+        reason = request.POST.get('reason') or "Violation of platform policies"
+
+        provider_email = provider.user.user.email
+        provider_name = provider.full_name
+
+        # ⛔ Prevent duplicate blacklist
+        if BlacklistedProvider.objects.filter(id_number=provider.id_number).exists():
+            messages.error(request, "This provider is already blacklisted.")
+            return redirect('provider_manage')
+
+        # Add to blacklist
         BlacklistedProvider.objects.create(
             full_name=provider.full_name,
             id_type=provider.id_type,
             id_number=provider.id_number,
             phone_number=provider.phone_number,
-            email=provider.user.user.email,
-            # reason="Violation of platform policies"  
-            reason = request.POST.get('reason')
-            
+            email=provider_email,
+            reason=reason
         )
 
-    # Disable provider
-    provider.is_verified = False
-    provider.save()
-    provider.delete()
-    return render('provider_manage')
-def blacklisted_provider(request,provider_id):
+        # Disable & delete
+        provider.is_verified = False
+        provider.save()
+        provider.user.delete()
+
+        # Email
+        subject = "Account Deactivation – Pawsome Care"
+        message = f"""
+Dear {provider_name},
+
+Your service provider account on Pawsome Care has been deactivated.
+
+Reason:
+{reason}
+
+If you believe this action was taken in error, please contact our support team.
+
+Regards,
+Pawsome Care Admin Team
+"""
+
+        send_mail(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [provider_email],
+            fail_silently=False,
+        )
+
+    return redirect('provider_manage')
+
+
+def blacklist_provider(request,provider_id):
     provider = ServiceProvider.objects.get(id = provider_id)
 
     return render(request,'admin/blacklisted_provider.html',{'provider':provider})

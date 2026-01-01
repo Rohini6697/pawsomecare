@@ -27,12 +27,12 @@
         </div>
 
         <!-- BLACKLIST FORM -->
-        <form method="post">
+        <form method="post" action="{% url 'fire_provider' provider.id %}">
             {% csrf_token %}
 
             <label>Reason for Blacklisting</label>
             <textarea 
-                name="reason" 
+                name="reason"
                 placeholder="Enter clear reason (policy violation, fake documents, misconduct, etc.)"
                 required
             ></textarea>
@@ -47,6 +47,7 @@
                 </button>
             </div>
         </form>
+
 
 
     </div>

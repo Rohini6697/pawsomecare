@@ -10,6 +10,8 @@ urlpatterns = [
     path('signup/',views.register,name='signup'),
     path('signin/',views.signin,name='signin'),
     path('goback/',views.goback,name='goback'),
+
+
     path('customer_details/<int:customer_id>/',views.customer_details,name='customer_details'),
     path('customer_home/',views.customer_home,name='customer_home'),
     path('my_pets/',views.my_pets,name='my_pets'),
@@ -19,16 +21,23 @@ urlpatterns = [
     path('cart/',views.cart,name='cart'),
     path('report/',views.report,name='report'),
     path('new_booking/',views.new_booking,name='new_booking'),
+
+
     path('provider_details/<int:provider_id>/',views.provider_details,name='provider_details'),
     path('provider_home/',views.provider_home,name='provider_home'),
     path('provider_pending/',views.provider_pending,name='provider_pending'),
+    path('edit_provider_profile/',views.edit_provider_profile,name='edit_provider_profile'),
+    
+
+
     path('admin_home/',views.admin_home,name='admin_home'),
     path('verify_providers/',views.verify_providers,name='verify_providers'),
     path('accept_providers/<int:provider_id>',views.accept_providers,name='accept_providers'),
     path('reject_providers/<int:provider_id>',views.reject_providers,name='reject_providers'),
-    path('blacklisted_provider/<int:provider_id>',views.blacklisted_provider,name='blacklisted_provider'),
+    path('blacklist_provider/<int:provider_id>',views.blacklist_provider,name='blacklist_provider'),
     path('fire_provider/<int:provider_id>',views.fire_provider,name='fire_provider'),
     path('provider_manage/',views.provider_manage,name='provider_manage'),
     path('blacklist/',views.blacklist,name='blacklist'),
 
 ]
+edit_provider_profile

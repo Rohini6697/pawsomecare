@@ -3,14 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Verify Service Providers</title>
+    <title>Verify Service Providers | Pawsome Care</title>
+
     <link rel="stylesheet" href="{% static 'css/admin/verify_providers.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <h2>Service Provider Verification</h2>
 
-<button onclick="history.back()" class="back-btn">← Back</button>
+<button class="back-btn">
+    <a href="{% url 'admin_home' %}">Back</a>
+</button>
 
 <table>
     <thead>
@@ -27,7 +31,12 @@
 
     <tbody>
         {% for provider in providers %}
-        <tr>
+        <tr
+            data-id-number="{{ provider.id_number }}"
+            data-email="{{ provider.email }}"
+            data-phone="{{ provider.phone_number }}"
+            >
+
             <td>{{ provider.full_name }}</td>
             <td>{{ provider.city }}</td>
             <td>{{ provider.provider_type|title }}</td>
@@ -35,8 +44,9 @@
             <!-- ID PROOF -->
             <td>
                 {% if provider.id_proof %}
-                    
-                    <a href="{{ provider.id_proof.url }}" target="_blank"><strong>{{ provider.id_type|upper }}</strong><br></a>
+                    <a href="{{ provider.id_proof.url }}" target="_blank">
+                        <strong>{{ provider.id_type|upper }}</strong>
+                    </a>
                 {% else %}
                     <span class="not-uploaded">Not Uploaded</span>
                 {% endif %}
@@ -71,19 +81,11 @@
                 {% endif %}
             </td>
 
-            <!-- ACTIONS -->
+            <!-- ACTION -->
             <td>
-                {% if provider.is_verified %}
-                    <!-- FIRE PROVIDER -->
-                    <form method="post"
-                          action="#"
-                          onsubmit="return confirm('Are you sure you want to remove this provider?');">
-                        {% csrf_token %}
-                        <a href="{% url 'blacklisted_provider' provider.id %}" class="btn fire">Fire</a>
-                    </form>
-                {% else %}
-                    <!-- VERIFY / REJECT -->
-                    <a href="{% url 'accept_providers' provider.id %}" class="btn verify">
+                {% if not provider.is_verified %}
+                    <a href="{% url 'accept_providers' provider.id %}"
+                       class="btn verify">
                         Verify
                     </a>
 
@@ -92,6 +94,8 @@
                        onclick="return confirm('Are you sure you want to reject this provider?');">
                         Reject
                     </a>
+                {% else %}
+                    <span class="verified">Completed</span>
                 {% endif %}
             </td>
         </tr>
@@ -105,4 +109,32 @@
 </table>
 
 </body>
+{{ blacklisted|json_script:"blacklisted-data" }}
+
+<script>
+    const blacklisted = JSON.parse(
+        document.getElementById("blacklisted-data").textContent
+    );
+
+    console.log("Blacklisted:", blacklisted);
+
+
+    document.querySelectorAll("tbody tr").forEach(row => {
+        const idNumber = row.dataset.idNumber;
+        const email = row.dataset.email;
+        const phone = row.dataset.phone;
+
+        const isBlacklisted = blacklisted.some(b =>
+            (b.id_number && b.id_number === idNumber) ||
+            (b.email && b.email === email) ||
+            (b.phone_number && b.phone_number === phone)
+        );
+
+        if (isBlacklisted) {
+            const actionCell = row.querySelector("td:last-child");
+            actionCell.innerHTML = `<span class="blacklisted">BLACKLISTED</span>`;
+        }
+    });
+</script>
+
 </html>
