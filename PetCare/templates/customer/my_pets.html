@@ -36,39 +36,34 @@
 <section class="pets-header">
     <h1>My Pets</h1>
     <a href="{% url 'add_pets' %}">
-        <button class="add-pet-btn">+ Add Pet</button>
-    </a>
+    <button class="add-pet-btn">+ Add Pet</button>
+</a>
+
 </section>
 
 <!-- PET LIST -->
 <section class="pets-container">
 
-    <div class="pet-card">
-        <img src="{% static 'images/dog.png' %}">
-        <h3>Buddy</h3>
-        <p><strong>Type:</strong> Dog</p>
-        <p><strong>Breed:</strong> Labrador</p>
-        <p><strong>Age:</strong> 3 years</p>
+    {% for p in pets %}
+        <div class="pet-card">
+            <!-- <img src="{% static 'images/dog.png' %}"> -->
+            {% if p.pet_photo %}
+                <img src="{{ p.pet_photo.url }}">
+            {% endif %}
+            <h3>{{p.pet_name}}</h3>
+            <p><strong>Type:</strong> {{p.pet_type}}</p>
+            <p><strong>Breed:</strong>{{p.breed}}</p>
+            <p><strong>Age:</strong> {{p.age}}</p>
 
-        <div class="pet-actions">
-            <button class="view-btn">View</button>
-            <button class="book-btn">Book Service</button>
+            <div class="pet-actions">
+                <a href="{% url 'update_pet' %}"
+                <button class="view-btn">View</button>
+                <button class="book-btn">Book Service</button>
+            </div>
         </div>
-    </div>
+    {% endfor %}
 
-    <div class="pet-card">
-        <img src="{% static 'images/cat.png' %}">
-        <h3>Misty</h3>
-        <p><strong>Type:</strong> Cat</p>
-        <p><strong>Breed:</strong> Persian</p>
-        <p><strong>Age:</strong> 2 years</p>
-
-        <div class="pet-actions">
-            <button class="view-btn">View</button>
-            <button class="book-btn">Book Service</button>
-        </div>
-    </div>
-
+    
 </section>
 
 </body>

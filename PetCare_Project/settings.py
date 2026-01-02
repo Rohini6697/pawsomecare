@@ -136,5 +136,6 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = f"Pawsome Care <{EMAIL_HOST_USER}>"
 
 
-print("EMAIL USER:", os.getenv("EMAIL_HOST_USER"))
-print("EMAIL PASS:", os.getenv("EMAIL_HOST_PASSWORD"))
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

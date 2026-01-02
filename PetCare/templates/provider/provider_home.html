@@ -10,13 +10,21 @@
 
 <div class="dashboard">
 
-    <!-- HEADER -->
+    <!-- NAVBAR / HEADER -->
     <div class="dashboard-header">
-        <div>
+        <div class="header-left">
             <h2>Welcome, {{ request.user.username }} 🐾</h2>
-            <p class="status">Status:
-                <span class="verified">Verified</span>
+            <p class="status">
+                Status: <span class="verified">Verified</span>
             </p>
+        </div>
+
+        <!-- QUICK ACTIONS NAVBAR -->
+        <div class="quick-actions">
+            <a href="{% url 'bookings' provider.id %}" class="nav-link">📅 Bookings</a>
+            <a href="#" class="nav-link">💰 Earnings</a>
+            <a href="#" class="nav-link">🔔 Alerts</a>
+            <a href="#" class="nav-link">⭐ Service History</a>
         </div>
 
         <a href="{% url 'goback' %}" class="logout-btn">Logout</a>
@@ -29,7 +37,9 @@
         <p><strong>Services:</strong> {{ provider.services|join:", " }}</p>
         <p><strong>Travel Distance:</strong> {{ provider.travel_distance }} km</p>
 
-        <a href="#" class="btn">Edit Profile</a>
+        <a href="{% url 'edit_provider_profile' provider.id %}" class="btn">
+            Edit Profile
+        </a>
     </div>
 
     <!-- STATS -->
@@ -62,14 +72,6 @@
             <li>🐕 Walk Bruno – 6:00 PM</li>
             <li>✂️ Groom Bella – 7:30 PM</li>
         </ul>
-    </div>
-
-    <!-- QUICK ACTIONS -->
-    <div class="action-grid">
-        <a href="#" class="action-card">📅 View Bookings</a>
-        <a href="#" class="action-card">💰 Earnings</a>
-        <a href="#" class="action-card">🔔 Notifications</a>
-        <a href="#" class="action-card">⭐ Reviews</a>
     </div>
 
 </div>

@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Bookings | Pawsome Care</title>
+    <link rel="stylesheet" href="{% static 'css/provider/bookings.css' %}">
+</head>
+<body>
+
+<div class="booking-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2>My Bookings 📅</h2>
+        <a href="{% url 'provider_home' %}" class="back-btn">← Back to Dashboard</a>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+        <button class="filter active">Upcoming</button>
+        <button class="filter">Completed</button>
+        <button class="filter">Cancelled</button>
+    </div>
+
+    <!-- BOOKINGS LIST -->
+    <div class="booking-list">
+
+        <!-- CARD -->
+        <div class="booking-card">
+            <div class="booking-info">
+                <h4>🐕 Dog Walking</h4>
+                <p><strong>Pet:</strong> Bruno</p>
+                <p><strong>Date:</strong> 10 Jan 2026</p>
+                <p><strong>Time:</strong> 6:00 PM</p>
+                <p><strong>Location:</strong> Kochi</p>
+            </div>
+
+            <div class="booking-status upcoming">
+                Upcoming
+            </div>
+        </div>
+
+        <div class="booking-card">
+            <div class="booking-info">
+                <h4>✂️ Grooming</h4>
+                <p><strong>Pet:</strong> Bella</p>
+                <p><strong>Date:</strong> 05 Jan 2026</p>
+                <p><strong>Time:</strong> 7:30 PM</p>
+                <p><strong>Location:</strong> Ernakulam</p>
+            </div>
+
+            <div class="booking-status completed">
+                Completed
+            </div>
+        </div>
+
+        <div class="booking-card">
+            <div class="booking-info">
+                <h4>🏠 Pet Sitting</h4>
+                <p><strong>Pet:</strong> Milo</p>
+                <p><strong>Date:</strong> 01 Jan 2026</p>
+                <p><strong>Time:</strong> 4:00 PM</p>
+                <p><strong>Location:</strong> Kakkanad</p>
+            </div>
+
+            <div class="booking-status cancelled">
+                Cancelled
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

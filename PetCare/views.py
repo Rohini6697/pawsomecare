@@ -2,7 +2,7 @@ from pyexpat.errors import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import BlacklistedProvider, Customer, Profile, ServiceProvider
+from .models import BlacklistedProvider, Customer, MyPet, Profile, ServiceProvider
 from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
@@ -40,48 +40,49 @@ def signin(request):
 
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user:
             auth_login(request, user)
 
             if user.is_superuser:
                 return redirect('admin_home')
 
-            role = user.profile.role
+            # Always get the profile FIRST
+            profile, created = Profile.objects.get_or_create(user=user)
+
+            role = profile.role
 
             if role == 'customer':
                 try:
-                    customer = user.profile.customer
+                    customer = profile.customer  # OneToOne access
                     return redirect('customer_home')
                 except Customer.DoesNotExist:
-                    return redirect('customer_details',customer_id=user.profile.id)
+                    return redirect('customer_details', profile_id=profile.id)
+
             elif role == 'service_providers':
                 try:
-                    provider = user.profile.serviceprovider
+                    provider = profile.serviceprovider
                 except ServiceProvider.DoesNotExist:
-                    return redirect('provider_details',provider_id=user.profile.id)
+                    return redirect('provider_details', provider_id=profile.id)
+
                 if not provider.is_verified:
                     return redirect('provider_pending')
-                else:
-                    return redirect('provider_home')
-            # other roles can be handled later
-            else:
-                return redirect('home')
 
-        # ❌ login failed
-        return render(request, 'signin.html', {
-            'error': 'Invalid username or password'
-        })
+                return redirect('provider_home')
 
-    # ✅ GET request (VERY IMPORTANT)
-    return render(request, 'signin.html')  
+            return redirect('home')
+
+        return render(request, 'signin.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'signin.html')
+
 
 def goback(request):
     logout(request)
     return redirect('signin')
 
 # =========================================== Customer ==================================================
-def customer_details(request,customer_id):
-    profile = get_object_or_404(Profile,id = customer_id)
+def customer_details(request,profile_id):
+    profile = get_object_or_404(Profile,id = profile_id)
     customer,created = Customer.objects.get_or_create(customer=profile)
     if request.method == 'POST':
         customer.fullname = request.POST.get('fullname')
@@ -90,13 +91,41 @@ def customer_details(request,customer_id):
         customer.address = request.POST.get('address')
         customer.save()
         return redirect('customer_home')
-    return render(request,'customer/customer_details.html',{'customer':customer})
+    return render(
+        request,
+        'customer/customer_details.html',
+        {
+            'profile': profile,     # ✅ REQUIRED
+            'customer': customer
+        }
+    )
 def customer_home(request):
+    
     return render(request,'customer/customer_home.html')
 def my_pets(request):
-    return render(request,'customer/my_pets.html')
+    profile = request.user.profile
+    customer = get_object_or_404(Customer, customer=profile)
+
+    pets = MyPet.objects.filter(customer=customer)  
+    return render(request,'customer/my_pets.html',{'pets':pets})
 def add_pets(request):
-    return render(request,'customer/add_pets.html')
+    customer = get_object_or_404(Customer, customer=request.user.profile)
+
+    if request.method == 'POST':
+        MyPet.objects.create(
+            customer=customer,
+            pet_type=request.POST.get('pet_type'),
+            pet_name=request.POST.get('pet_name'),
+            breed=request.POST.get('pet_breed'),
+            age=request.POST.get('age') or None,
+            weight=request.POST.get('weight') or None,
+            pet_photo=request.FILES.get('photo')
+        )
+
+        return redirect('my_pets')
+
+    return render(request, 'customer/add_pets.html')
+
 def bookings(request):
     return render(request,'customer/bookings.html')
 def shop(request):
@@ -107,6 +136,11 @@ def report(request):
     return render(request,'customer/report.html')
 def new_booking(request):
     return render(request,'customer/new_booking.html')
+def update_pet(request):
+    return render(request,'customer/update_pet.html')
+
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -169,8 +203,16 @@ def provider_home(request):
     return render(request,'provider/provider_home.html',{'provider':provider})
 def provider_pending(request):
     return render(request,'provider/provider_pending.html')
-def edit_provider_profile(request):
-    return render(request,'provider/edit_provider_profile.html')
+def edit_provider_profile(request,provider_id):
+    provider = get_object_or_404(ServiceProvider, id=provider_id)
+
+    return render(request,'provider/edit_provider_profile.html',{'provider':provider})
+def bookings(request,provider_id):
+    return render(request,'provider/bookings.html')
+
+
+
+
 
 # =========================================== Admin ==================================================
 def admin_home(request):

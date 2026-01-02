@@ -5,16 +5,8 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     ROLE_CHOICES = (
-        # ('admin','Admin'),
         ('customer','Customer'),
         ('service_providers','Service Providers')
-        # ('pet_walking','Petwalking'),
-        # ('petsitting','Petsitting'),
-        # ('petgrooming','Petgrooming'),
-        # ('daycare','Daycare'),
-        # ('boarding','Boarding'),
-        # ('veterinary','Veterinary'),
-        # ('training','Training')
     )
     role = models.CharField(max_length=50,choices=ROLE_CHOICES,default='customer')
 
@@ -93,3 +85,15 @@ class BlacklistedProvider(models.Model):
 
     def __str__(self):
         return f"{self.full_name} - BLACKLISTED"
+
+class MyPet(models.Model):
+    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    pet_type = models.CharField(max_length=30,null=False,blank=False)
+    pet_name = models.CharField(max_length=30,null=False,blank=False)
+    breed = models.CharField(max_length=50,null=False,blank=False)
+    age = models.PositiveIntegerField(null=False,blank=False)
+    weight = models.PositiveIntegerField(null=False,blank=False)
+    pet_photo = models.ImageField(upload_to='customers/pets/',null=True,blank=True)
+
+    def __str__(self):
+        return f"{self.customer}-{self.pet_name}"
