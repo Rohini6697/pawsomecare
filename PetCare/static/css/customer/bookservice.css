@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(120deg, #6a11cb, #2575fc);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* MAIN CONTAINER */
+.container {
+    width: 80%;
+    max-width: 1100px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 50px;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    animation: slideUp 0.8s ease;
+}
+
+/* ANIMATION */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* TITLE */
+.container h1 {
+    text-align: center;
+    margin-bottom: 35px;
+    font-size: 32px;
+    color: #333;
+}
+
+/* FORM GRID */
+.booking-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+/* FULL WIDTH FIELDS */
+.booking-form .form-group:nth-last-child(2),
+.booking-form button {
+    grid-column: span 2;
+}
+
+/* FORM GROUP */
+.form-group {
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* INPUTS */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 14px 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    transition: 0.3s ease;
+    background: #f9f9f9;
+}
+
+/* FOCUS EFFECT */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #6a11cb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.15);
+}
+
+/* TEXTAREA */
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+/* BUTTON */
+button {
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(120deg, #6a11cb, #2575fc);
+    transition: all 0.3s ease;
+}
+
+/* BUTTON HOVER */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(106,17,203,0.4);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .container {
+        width: 95%;
+        padding: 30px;
+    }
+
+    .booking-form {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-form button {
+        grid-column: span 1;
+    }
+}

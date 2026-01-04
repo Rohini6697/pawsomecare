@@ -1,0 +1,187 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f9fafb, #eef2f7);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* Go Back Button */
+.go-back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #444;
+    font-weight: 600;
+}
+
+.go-back-btn:hover {
+    color: #000;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+.form-wrapper h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #1f2937;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+/* Form Grid */
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Full width fields */
+.form-group.full {
+    grid-column: span 2;
+}
+
+/* Labels */
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #374151;
+}
+
+/* Inputs */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Pet Type Cards */
+.pet-type-container {
+    display: flex;
+    gap: 15px;
+}
+
+.pet-type-card {
+    flex: 1;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 18px 0;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+.pet-type-card input {
+    display: none;
+}
+
+.pet-type-card .emoji {
+    font-size: 34px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.pet-type-card .text {
+    font-weight: 700;
+    color: #374151;
+}
+
+/* Checked state */
+.pet-type-card input:checked + .emoji,
+.pet-type-card input:checked + .emoji + .text {
+    color: #6366f1;
+}
+
+.pet-type-card input:checked ~ .emoji,
+.pet-type-card input:checked ~ .text {
+    color: #6366f1;
+}
+
+.pet-type-card input:checked ~ * {
+    color: #6366f1;
+}
+
+.pet-type-card input:checked ~ .emoji {
+    transform: scale(1.1);
+}
+
+.pet-type-card input:checked {
+    border-color: #6366f1;
+}
+
+.pet-type-card:has(input:checked) {
+    border-color: #6366f1;
+    background: #eef2ff;
+}
+
+/* Image Preview */
+.form-group img {
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Submit Button */
+.submit-btn {
+    grid-column: span 2;
+    margin-top: 10px;
+    padding: 14px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(79, 70, 229, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full,
+    .submit-btn {
+        grid-column: span 1;
+    }
+}

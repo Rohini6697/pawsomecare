@@ -126,8 +126,8 @@ def add_pets(request):
 
     return render(request, 'customer/add_pets.html')
 
-def bookings(request):
-    return render(request,'customer/bookings.html')
+def service_bookings(request):
+    return render(request,'customer/service_bookings.html')
 def shop(request):
     return render(request,'customer/shop.html')
 def cart(request):
@@ -136,8 +136,34 @@ def report(request):
     return render(request,'customer/report.html')
 def new_booking(request):
     return render(request,'customer/new_booking.html')
-def update_pet(request):
-    return render(request,'customer/update_pet.html')
+@login_required
+def update_pet(request, pet_id):
+    profile = request.user.profile
+
+    # ✅ get Customer from profile
+    customer = get_object_or_404(Customer, customer=profile)
+
+    # ✅ now query pet correctly
+    pet = get_object_or_404(MyPet, id=pet_id, customer=customer)
+
+    if request.method == 'POST':
+        pet.pet_type = request.POST.get('pet_type')
+        pet.pet_name = request.POST.get('pet_name')
+        pet.breed = request.POST.get('pet_breed')
+        pet.age = request.POST.get('age')
+        pet.weight = request.POST.get('weight')
+
+        if request.FILES.get('pet_photo'):
+            pet.pet_photo = request.FILES.get('pet_photo')
+
+        pet.save()
+        return redirect('my_pets')
+
+    return render(request, 'customer/update_pet.html', {'pet': pet})
+
+def bookservice(request):
+    return render(request,'customer/bookservice.html')
+
 
 
 

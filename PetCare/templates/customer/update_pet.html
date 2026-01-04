@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Pet | Pawsome Care</title>
+
+    <link rel="stylesheet" href="{% static 'css/customer/add_pets.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- GO BACK BUTTON -->
+<a href="javascript:history.back()" class="go-back-btn">← Go Back</a>
+
+<div class="form-wrapper">
+
+    <h1>Update Pet</h1>
+    <p class="subtitle">Edit your pet’s details</p>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Pet Type -->
+        <div class="form-group full">
+            <label>Pet Type</label>
+
+            <div class="pet-type-container">
+                <label class="pet-type-card">
+                    <input type="radio" name="pet_type" value="dog"
+                           {% if pet.pet_type == "dog" %}checked{% endif %}>
+                    <span class="emoji">🐶</span>
+                    <span class="text">Dog</span>
+                </label>
+
+                <label class="pet-type-card">
+                    <input type="radio" name="pet_type" value="cat"
+                           {% if pet.pet_type == "cat" %}checked{% endif %}>
+                    <span class="emoji">🐱</span>
+                    <span class="text">Cat</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Pet Name -->
+        <div class="form-group full">
+            <label>Pet Name</label>
+            <input type="text" name="pet_name" value="{{ pet.pet_name }}" required>
+        </div>
+
+        <!-- Breed -->
+        <div class="form-group">
+            <label>Breed</label>
+            <input type="text" name="pet_breed" value="{{ pet.breed }}">
+        </div>
+
+        <!-- Age -->
+        <div class="form-group">
+            <label>Age (Years)</label>
+            <input type="number" name="age" min="0" value="{{ pet.age }}">
+        </div>
+
+        <!-- Weight -->
+        <div class="form-group">
+            <label>Weight (Kg)</label>
+            <input type="number" step="0.1" name="weight" value="{{ pet.weight }}">
+        </div>
+
+        <!-- Current Image -->
+        {% if pet.photo %}
+        <div class="form-group full">
+            <label>Current Image</label><br>
+            <img src="{{ pet.pet_photo.url }}" alt="Pet Image" style="max-width:150px; border-radius:10px;">
+        </div>
+        {% endif %}
+
+        <!-- New Image -->
+        <div class="form-group">
+            <label>Change Pet Image</label>
+            <input type="file" name="photo">
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="submit-btn">Update Pet</button>
+    </form>
+
+</div>
+
+</body>
+</html>

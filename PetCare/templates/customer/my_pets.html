@@ -23,7 +23,7 @@
     <ul class="nav-links">
         <li><a href="{% url 'customer_home' %}">Home</a></li>
         <li><a href="{% url 'my_pets' %}" class="active">My Pets</a></li>
-        <li><a href="{% url 'bookings' %}">Bookings</a></li>
+        <li><a href="{% url 'service_bookings' %}">Bookings</a></li>
         <li><a href="{% url 'shop' %}">Shop</a></li>
         <li><a href="{% url 'cart' %}">Cart</a></li>
         <li><a href="{% url 'report' %}">report</a></li>
@@ -56,9 +56,10 @@
             <p><strong>Age:</strong> {{p.age}}</p>
 
             <div class="pet-actions">
-                <a href="{% url 'update_pet' %}">
+                <a href="{% url 'update_pet' p.id %}">
                 <button class="view-btn">View</button></a>
-                <button class="book-btn">Book Service</button>
+                <a href="{% url 'bookservice' %}">
+                <button class="book-btn">Book Service</button></a>
             </div>
         </div>
     {% endfor %}

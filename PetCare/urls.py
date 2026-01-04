@@ -17,12 +17,13 @@ urlpatterns = [
     path('customer_home/',views.customer_home,name='customer_home'),
     path('my_pets/',views.my_pets,name='my_pets'),
     path('add_pets/',views.add_pets,name='add_pets'),
-    path('bookings/',views.bookings,name='bookings'),
+    path('service_bookings/',views.service_bookings,name='service_bookings'),
     path('shop/',views.shop,name='shop'),
     path('cart/',views.cart,name='cart'),
     path('report/',views.report,name='report'),
     path('new_booking/',views.new_booking,name='new_booking'),
-    path('update_pet/',views.update_pet,name='update_pet'),
+    path('update_pet/<int:pet_id>/',views.update_pet,name='update_pet'),
+    path('bookservice/',views.bookservice,name='bookservice'),
 
 
 

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/customer/customer_home.css' %}">
 
     <!-- BOOKINGS PAGE CSS -->
-    <link rel="stylesheet" href="{% static 'css/customer/bookings.css' %}">
+    <link rel="stylesheet" href="{% static 'css/customer/service_bookings.css' %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -26,7 +26,7 @@
     <ul class="nav-links">
         <li><a href="{% url 'customer_home' %}">Home</a></li>
         <li><a href="{% url 'my_pets' %}">My Pets</a></li>
-        <li><a href="{% url 'bookings' %}" class="active">Bookings</a></li>
+        <li><a href="{% url 'service_bookings' %}" class="active">Bookings</a></li>
         <li><a href="{% url 'shop' %}">Shop</a></li>
         <li><a href="{% url 'cart' %}">Cart</a></li>
         <li><a href="{% url 'report' %}">report</a></li>
