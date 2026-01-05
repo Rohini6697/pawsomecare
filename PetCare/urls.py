@@ -44,6 +44,10 @@ urlpatterns = [
     path('fire_provider/<int:provider_id>',views.fire_provider,name='fire_provider'),
     path('provider_manage/',views.provider_manage,name='provider_manage'),
     path('blacklist/',views.blacklist,name='blacklist'),
+    path('add_product/',views.add_product,name='add_product'),
+    path('view_products/',views.view_products,name='view_products'),
+
+    
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

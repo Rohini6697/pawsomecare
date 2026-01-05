@@ -2,7 +2,7 @@ from pyexpat.errors import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import BlacklistedProvider, Customer, MyPet, Profile, ServiceProvider
+from .models import BlacklistedProvider, Customer, MyPet, PetShop, Profile, ServiceProvider
 from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
@@ -373,3 +373,12 @@ def provider_manage(request):
 def blacklist(request):
     providers = BlacklistedProvider.objects.all()
     return render(request,'admin/blacklist.html',{'providers':providers})
+def add_product(request):
+    if request.method == 'POST':
+        PetShop.objects.create(
+            
+        )
+
+    return render(request,'admin/add_product.html')
+def view_products(request):
+    return render(request,'admin/view_products.html')

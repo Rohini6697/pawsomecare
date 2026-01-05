@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Products | Pawsome Care</title>
+    <link rel="stylesheet" href="{% static 'css/admin/view_products.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="admin-navbar">
+    <h2 class="logo">Pawsome<span>Care</span> Admin</h2>
+    <div class="nav-actions">
+        <a href="{% url 'add_product' %}" class="add-btn">+ Add Product</a>
+        <a href="{% url 'goback' %}" class="logout-btn">Logout</a>
+    </div>
+</nav>
+
+<!-- PAGE -->
+<div class="container">
+
+    <h2 class="page-title">All Products</h2>
+
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="Product">
+                    {% else %}
+                        <span class="no-img">No Image</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ product.name }}</td>
+                <td>{{ product.category }}</td>
+                <td>₹{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+
+                <td>
+                    {% if product.stock > 0 %}
+                        <span class="in-stock">In Stock</span>
+                    {% else %}
+                        <span class="out-stock">Out of Stock</span>
+                    {% endif %}
+                </td>
+
+                <td class="actions">
+                    <a href="{% url 'edit_product' product.id %}" class="edit">Edit</a>
+                    <a href="{% url 'delete_product' product.id %}" class="delete">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="empty">No products available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

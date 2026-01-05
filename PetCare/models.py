@@ -97,3 +97,14 @@ class MyPet(models.Model):
 
     def __str__(self):
         return f"{self.customer}-{self.pet_name}"
+    
+class PetShop(models.Model):
+   product_name = models.CharField(max_length=50,null=False,blank=False) 
+   product_category = models.CharField(max_length=50,null=False,blank=False)
+   product_price = models.PositiveIntegerField(null=False,blank=False)
+   stock_quantity = models.PositiveIntegerField(null=False,blank=False)
+   product_description = models.TextField(max_length=100,null=False,blank=False)
+   product_image = models.FileField(null=False,blank=False)
+
+   def __str__(self):
+       return f"{self.product_name}"

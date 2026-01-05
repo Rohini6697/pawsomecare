@@ -54,7 +54,7 @@
             </a>
 
             <a href="{% url 'provider_manage' %}" class="action-card">
-                Manage Service Providers
+                Manage Providers
             </a>
 
             <a href="#" class="action-card">
@@ -67,39 +67,27 @@
         </div>
     </section>
 
+    <!-- 🛒 E-COMMERCE MANAGEMENT -->
+    <section class="actions">
+        <h2>E-commerce Management</h2>
 
-    <!-- RECENT ACTIVITY -->
-    <section class="activity">
-        <h2>Recent Provider Registrations</h2>
+        <div class="action-grid">
+            <a href="{% url 'add_product' %}" class="action-card ecommerce">
+                Add Products
+            </a>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>City</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for provider in recent_providers %}
-                <tr>
-                    <td>{{ provider.full_name }}</td>
-                    <td>{{ provider.city }}</td>
-                    <td>
-                        {% if provider.is_verified %}
-                            <span class="verified">Verified</span>
-                        {% else %}
-                            <span class="pending">Pending</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3">No recent registrations</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <a href="{% url 'view_products' %}" class="action-card ecommerce">
+                View Products
+            </a>
+
+            <a href="#" class="action-card ecommerce">
+                Orders
+            </a>
+
+            <a href="#" class="action-card ecommerce">
+                Payments
+            </a>
+        </div>
     </section>
 
 </div>
