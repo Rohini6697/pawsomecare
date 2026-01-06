@@ -23,8 +23,8 @@
         <li><a href="{% url 'my_pets' %}">My Pets</a></li>
         <li><a href="{% url 'service_bookings' %}">Bookings</a></li>
         <li><a href="{% url 'shop' %}">Shop</a></li>
-        <li><a href="{% url 'cart' %}" class="active">Cart</a></li>
-        <li><a href="{% url 'report' %}">report</a></li>
+        <li><a href="#" class="active">Cart</a></li>
+        <li><a href="{% url 'report' %}">Report</a></li>
     </ul>
 
     <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
@@ -32,7 +32,6 @@
 
 <!-- CART PAGE -->
 <section class="cart-page">
-
     <h1>🛒 My Cart</h1>
 
     <div class="cart-layout">
@@ -40,43 +39,33 @@
         <!-- CART ITEMS -->
         <div class="cart-items">
 
-            <div class="cart-item">
-                <img src="{% static 'images/dog-food.png' %}" alt="Dog Food">
+            {% if cart_items %}
+                {% for item in cart_items %}
+                <div class="cart-item">
 
-                <div class="item-info">
-                    <h3>Premium Dog Food</h3>
-                    <p>For Adult Dogs • 5kg</p>
+                    <img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}">
+
+                    <div class="item-info">
+                        <h3>{{ item.product.product_name }}</h3>
+                        <p>{{ item.product.product_category }}</p>
+                    </div>
+
+                    <div class="qty-control">
+                        <a href="{% url 'decrease_qty' item.id %}" class="qty-btn">−</a>
+                        <span>{{ item.quantity }}</span>
+                        <a href="{% url 'increase_qty' item.id %}" class="qty-btn">+</a>
+                    </div>
+
+                    <div class="item-price">
+                        ₹{{ item.product.product_price }}
+                    </div>
+
+                    <a href="{% url 'remove_from_cart' item.id %}" class="remove-btn">✕</a>
                 </div>
-
-                <div class="qty-control">
-                    <button>-</button>
-                    <span>1</span>
-                    <button>+</button>
-                </div>
-
-                <div class="item-price">₹1,299</div>
-
-                <button class="remove-btn">✕</button>
-            </div>
-
-            <div class="cart-item">
-                <img src="{% static 'images/cat-food.png' %}" alt="Cat Food">
-
-                <div class="item-info">
-                    <h3>Healthy Cat Food</h3>
-                    <p>For Cats • 3kg</p>
-                </div>
-
-                <div class="qty-control">
-                    <button>-</button>
-                    <span>2</span>
-                    <button>+</button>
-                </div>
-
-                <div class="item-price">₹899</div>
-
-                <button class="remove-btn">✕</button>
-            </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-cart">Your cart is empty 🐾</p>
+            {% endif %}
 
         </div>
 
@@ -86,7 +75,7 @@
 
             <div class="summary-row">
                 <span>Subtotal</span>
-                <span>₹3,097</span>
+                <span>₹{{ subtotal }}</span>
             </div>
 
             <div class="summary-row">
@@ -96,15 +85,63 @@
 
             <div class="summary-row total">
                 <span>Total</span>
-                <span>₹3,196</span>
+                <span>₹{{ total }}</span>
             </div>
 
             <button class="checkout-btn">Proceed to Checkout</button>
         </div>
 
     </div>
-
 </section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+document.querySelector(".checkout-btn").addEventListener("click", function () {
+
+    fetch("{% url 'create_cart_order' %}", {
+        method: "GET",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        const options = {
+            key: data.key,
+            amount: data.amount,
+            currency: "INR",
+            name: "Pawsome Care",
+            description: "Cart Payment",
+            order_id: data.order_id,
+
+            handler: function (response) {
+                fetch("{% url 'verify_payment' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `razorpay_order_id=${response.razorpay_order_id}
+                          &razorpay_payment_id=${response.razorpay_payment_id}
+                          &razorpay_signature=${response.razorpay_signature}`
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status === "success") {
+                        alert("Payment Successful 🎉");
+                        window.location.href = "{% url 'shop' %}";
+                    } else {
+                        alert("Payment Failed ❌");
+                    }
+                });
+            }
+        };
+
+        new Razorpay(options).open();
+    });
+});
+</script>
 
 </body>
 </html>

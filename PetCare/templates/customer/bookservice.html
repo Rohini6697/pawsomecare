@@ -3,36 +3,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Book Service</title>
+    <title>Book Service | Pawsome Care</title>
     <link rel="stylesheet" href="{% static 'css/customer/bookservice.css' %}">
 </head>
 <body>
 
 <div class="container">
-    <h1>Book a Service</h1>
 
-    <form method="POST" class="booking-form">
-        {% csrf_token %}
+    <h1>Choose a Service</h1>
 
-        <div class="form-group">
-            <label>Service Type</label>
-            <select name="service_type" required>
-                <option value="">Select service</option>
-                <option>Grooming</option>
-                <option>Veterinary Checkup</option>
-                <option>Pet Boarding</option>
-                <option>Training</option>
-            </select>
+    <!-- SERVICE FILTER -->
+    <section class="services">
+    <button class="service active" data-service="all">All</button>
+
+    {% for service in services %}
+        <button class="service" data-service="{{ service.key }}">
+            {{ service.label }}
+        </button>
+    {% endfor %}
+</section>
+
+
+    <!-- PROVIDERS GRID -->
+    <section class="providers-container">
+
+        {% for provider in providers %}
+        <div class="provider-card"
+             data-services="{{ provider.services|join:',' }}">
+
+            <h3>{{ provider.full_name }}</h3>
+            <p class="city">{{ provider.city }}</p>
+
+            <p class="bio">
+                {{ provider.bio|default:"No bio available" }}
+            </p>
+
+            <a href="{% url 'booknow' provider.id %}?service={{ service }}">
+                <button class="book-btn">Book Now</button>
+            </a>
+
         </div>
+        {% empty %}
+            <p>No providers available</p>
+        {% endfor %}
 
-        <div class="form-group full-width">
-            <label>Notes</label>
-            <textarea name="notes" placeholder="Any special instructions"></textarea>
-        </div>
+    </section>
 
-        <button type="submit">Proceed to Payment</button>
-    </form>
 </div>
 
+<script src="{% static 'js/customer/bookservice.js' %}"></script>
 </body>
 </html>

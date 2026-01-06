@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ provider.full_name }} | Pawsome Care</title>
+    <link rel="stylesheet" href="{% static 'css/customer/booknow.css' %}">
+</head>
+<body>
+
+<div class="page">
+
+    <!-- PROVIDER HEADER -->
+    <div class="provider-header">
+        <h1>{{ provider.full_name }}</h1>
+        <span class="badge">{{ provider.get_provider_type_display }}</span>
+        <p class="city">{{ provider.city }}</p>
+    </div>
+
+    <!-- PROVIDER INFO -->
+    <div class="info-card">
+        <h3>About</h3>
+        <p>{{ provider.bio|default:"No description provided." }}</p>
+
+        <div class="info-grid">
+            <div><strong>Phone:</strong> {{ provider.phone_number }}</div>
+            <div><strong>Travel Distance:</strong> {{ provider.travel_distance }} km</div>
+            <div><strong>Address:</strong> {{ provider.address }}</div>
+            <div><strong>Pincode:</strong> {{ provider.pincode }}</div>
+        </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="services-card">
+        <h3>Services & Pricing</h3>
+
+        {% if provider.services %}
+    {% for service, price in provider.services.items %}
+        <div class="service-row">
+            <span class="service-name">{{ service|title }}</span>
+            <span class="price">₹{{ price }}</span>
+
+            <button type="button" class="book-btn"
+                data-service="{{ service }}"
+                data-price="{{ price }}"
+                data-provider="{{ provider.id }}">
+                Proceed to Payment
+            </button>
+
+
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No services listed</p>
+{% endif %}
+
+
+    </div>
+
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+document.querySelectorAll(".book-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+
+        alert("Button clicked");  // 🔥 DEBUG 1
+
+        const service = this.dataset.service;
+        const amount = this.dataset.price;
+        const providerId = this.dataset.provider;
+
+        fetch("{% url 'create_order' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `service=${service}&amount=${amount}&provider_id=${providerId}`
+        })
+        .then(res => {
+            alert("Order created"); // 🔥 DEBUG 2
+            return res.json();
+        })
+        .then(data => {
+
+            alert("Opening Razorpay"); // 🔥 DEBUG 3
+
+            const options = {
+                key: data.key,
+                amount: data.amount,
+                currency: "INR",
+                name: "Pawsome Care",
+                description: service,
+                order_id: data.order_id,
+                handler: function (response) {
+                    alert("Payment success");
+                }
+            };
+
+            new Razorpay(options).open();
+        });
+    });
+});
+</script>
+
+
+</body>
+
+</html>

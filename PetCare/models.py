@@ -117,6 +117,27 @@ class PetShop(models.Model):
     def __str__(self):
         return self.product_name
     
+# class Cart(models.Model):
+#     customer = models.OneToOneField(Profile,on_delete=models.CASCADE)
+class Payment(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+    service_name = models.CharField(max_length=100)
+    amount = models.PositiveIntegerField()
+    razorpay_order_id = models.CharField(max_length=100)
+    razorpay_payment_id = models.CharField(max_length=100, null=True, blank=True)
+    razorpay_signature = models.CharField(max_length=255, null=True, blank=True)
+    is_paid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+# def __str__(self):
+#     return f"{}"
+
 class Cart(models.Model):
-    customer = models.OneToOneField(Profile,on_delete=models.CASCADE)
-    
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    product = models.ForeignKey(PetShop, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.customer.fullname} - {self.product.product_name}"

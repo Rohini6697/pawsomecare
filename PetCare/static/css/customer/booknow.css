@@ -1,0 +1,81 @@
+body {
+    background: #f5f7fa;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.provider-header {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.provider-header h1 {
+    margin: 0;
+}
+
+.badge {
+    background: #ff9800;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.city {
+    color: #777;
+    margin-top: 5px;
+}
+
+.info-card,
+.services-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.service-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.service-name {
+    font-weight: 600;
+}
+
+.price {
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.book-btn {
+    background: #ff9800;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+
+.book-btn:hover {
+    background: #e68900;
+}

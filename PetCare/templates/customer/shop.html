@@ -67,7 +67,10 @@
         <p class="price">₹{{ product.product_price }}</p>
 
         <div class="product-actions">
-            <button class="add-cart-btn">Add to Cart</button>
+            <a href="{% url 'add_to_cart' product.id %}" class="add-cart-btn">
+                Add to Cart
+            </a>
+
             <button class="buy-btn">Buy Now</button>
         </div>
     </div>

@@ -2,7 +2,7 @@ from pyexpat.errors import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import BlacklistedProvider, Customer, MyPet, PetShop, Profile, ServiceProvider
+from .models import BlacklistedProvider, Cart, Customer, MyPet, PetShop, Profile, ServiceProvider
 from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
@@ -133,7 +133,39 @@ def shop(request):
     return render(request, 'customer/shop.html', {'products': products})
 
 def cart(request):
-    return render(request,'customer/cart.html')
+    customer = get_object_or_404(Customer, customer=request.user.profile)
+
+    cart_items = Cart.objects.filter(customer=customer)
+
+    subtotal = 0
+    for item in cart_items:
+        subtotal += item.product.product_price * item.quantity
+
+    delivery_charge = 99 if cart_items.exists() else 0
+    total = subtotal + delivery_charge
+
+    return render(request, "customer/cart.html", {
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "total": total
+    })
+
+    # return render(request,'customer/cart.html')
+
+def add_to_cart(request, product_id):
+    product = get_object_or_404(PetShop, id=product_id)
+    customer = get_object_or_404(Customer, customer=request.user.profile)
+
+    cart_item, created = Cart.objects.get_or_create(
+        customer=customer,
+        product=product
+    )
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+    return redirect('cart')
+
 def report(request):
     return render(request,'customer/report.html')
 def new_booking(request):
@@ -162,11 +194,118 @@ def update_pet(request, pet_id):
         return redirect('my_pets')
 
     return render(request, 'customer/update_pet.html', {'pet': pet})
+def increase_qty(request, item_id):
+    item = get_object_or_404(Cart, id=item_id)
+    item.quantity += 1
+    item.save()
+    return redirect("cart")
+
+
+def decrease_qty(request, item_id):
+    item = get_object_or_404(Cart, id=item_id)
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+    else:
+        item.delete()
+    return redirect("cart")
+
+
+def remove_from_cart(request, item_id):
+    item = get_object_or_404(Cart, id=item_id)
+    item.delete()
+    return redirect("cart")
+def create_cart_order(request):
+    customer = get_object_or_404(Customer, customer=request.user.profile)
+    cart_items = Cart.objects.filter(customer=customer)
+
+    subtotal = 0
+    for item in cart_items:
+        subtotal += item.product.product_price * item.quantity
+
+    delivery_charge = 99
+    total_amount = subtotal + delivery_charge
+
+    client = razorpay.Client(
+        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    )
+
+    order = client.order.create({
+        "amount": total_amount * 100,  # rupees → paise
+        "currency": "INR",
+        "payment_capture": 1
+    })
+
+    return JsonResponse({
+        "order_id": order["id"],
+        "amount": total_amount * 100,
+        "key": settings.RAZORPAY_KEY_ID
+    })
+
+def verify_payment(request):
+    client = razorpay.Client(
+        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    )
+
+    data = {
+        "razorpay_order_id": request.POST.get("razorpay_order_id"),
+        "razorpay_payment_id": request.POST.get("razorpay_payment_id"),
+        "razorpay_signature": request.POST.get("razorpay_signature"),
+    }
+
+    try:
+        client.utility.verify_payment_signature(data)
+
+        # ✅ Payment success → clear cart
+        customer = get_object_or_404(Customer, customer=request.user.profile)
+        Cart.objects.filter(customer=customer).delete()
+
+        return JsonResponse({"status": "success"})
+    except:
+        return JsonResponse({"status": "failed"})
+
+
+from django.shortcuts import render
+from .models import ServiceProvider
 
 def bookservice(request):
-    return render(request,'customer/bookservice.html')
+    providers = ServiceProvider.objects.filter(
+        is_verified=True,
+        user__role="service_providers"
+    )
 
+    service_keys = set()
 
+    for provider in providers:
+        if provider.services:
+
+            # if services is a dictionary → use keys
+            if isinstance(provider.services, dict):
+                service_keys.update(provider.services.keys())
+
+            # if services is a list → use values directly
+            elif isinstance(provider.services, list):
+                service_keys.update(provider.services)
+
+    services = [
+        {"key": key, "label": key.replace("_", " ").title()}
+        for key in sorted(service_keys)
+    ]
+
+    return render(request, "customer/bookservice.html", {
+        "services": services,
+        "providers": providers
+    })
+
+def booknow(request,provider_id):
+    provider = get_object_or_404(
+        ServiceProvider,
+        id=provider_id,
+        is_verified=True
+    )
+    return render(request,'customer/booknow.html', {
+        "provider": provider
+    })
 
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -175,6 +314,8 @@ from django.contrib import messages
 from .models import ServiceProvider, Profile
 # ====================================== Provider ======================================
 @login_required
+
+
 def provider_details(request, provider_id):
     profile = get_object_or_404(Profile, id=provider_id)
 
@@ -184,6 +325,7 @@ def provider_details(request, provider_id):
 
     if request.method == "POST":
 
+        # BASIC DETAILS
         provider.full_name = request.POST.get("full_name")
         provider.phone_number = request.POST.get("phone_number")
         provider.provider_type = request.POST.get("provider_type")
@@ -193,12 +335,22 @@ def provider_details(request, provider_id):
         provider.pincode = request.POST.get("pincode")
         provider.travel_distance = request.POST.get("travel_distance")
 
-        # Services (checkboxes)
-        provider.services = request.POST.getlist("services")
-        provider.id_type = request.POST.get("id_type")
-        provider.id_number = request.POST.get('id_number')
+        # ⭐ SERVICES + PRICE (IMPORTANT PART)
+        selected_services = request.POST.getlist("services")
+        services_data = {}
 
-        # Files
+        for service in selected_services:
+            price = request.POST.get(f"{service}_price")
+            if price:
+                services_data[service] = int(price)
+
+        provider.services = services_data  # stored as JSON
+
+        # ID DETAILS
+        provider.id_type = request.POST.get("id_type")
+        provider.id_number = request.POST.get("id_number")
+
+        # FILES
         if request.FILES.get("id_proof"):
             provider.id_proof = request.FILES.get("id_proof")
 
@@ -238,8 +390,50 @@ def edit_provider_profile(request,provider_id):
 def bookings(request,provider_id):
     return render(request,'provider/bookings.html')
 
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
+def create_order(request):
+    if request.method == "POST":
+        amount = int(request.POST.get("amount")) * 100
+        service_name = request.POST.get("service")
+        provider_id = request.POST.get("provider_id")
 
+        client = razorpay.Client(
+            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+        )
+
+        order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": 1
+        })
+
+        return JsonResponse({
+            "order_id": order["id"],
+            "amount": amount,
+            "key": settings.RAZORPAY_KEY_ID
+        })
+
+@csrf_exempt
+def verify_payment(request):
+    client = razorpay.Client(
+        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    )
+
+    params_dict = {
+        "razorpay_order_id": request.POST.get("razorpay_order_id"),
+        "razorpay_payment_id": request.POST.get("razorpay_payment_id"),
+        "razorpay_signature": request.POST.get("razorpay_signature")
+    }
+
+    try:
+        client.utility.verify_payment_signature(params_dict)
+        return JsonResponse({"status": "success"})
+    except:
+        return JsonResponse({"status": "failed"})
 
 
 # =========================================== Admin ==================================================
