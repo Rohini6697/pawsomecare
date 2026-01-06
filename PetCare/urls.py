@@ -46,6 +46,8 @@ urlpatterns = [
     path('blacklist/',views.blacklist,name='blacklist'),
     path('add_product/',views.add_product,name='add_product'),
     path('view_products/',views.view_products,name='view_products'),
+    path('update_products/<int:product_id>/',views.update_products,name='update_products'),
+    path('delete_products/<int:product_id>/',views.delete_products,name='delete_products'),
 
     
 

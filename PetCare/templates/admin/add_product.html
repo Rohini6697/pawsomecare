@@ -23,7 +23,6 @@
     <form method="post" enctype="multipart/form-data" class="product-form">
         {% csrf_token %}
 
-        <!-- GRID -->
         <div class="form-grid">
 
             <div class="form-group">
@@ -35,10 +34,20 @@
                 <label>Category</label>
                 <select name="category" required>
                     <option value="">Select Category</option>
-                    <option>Pet Food</option>
-                    <option>Accessories</option>
-                    <option>Grooming</option>
-                    <option>Health Care</option>
+                    <option value="Pet Food">Pet Food</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Grooming">Grooming</option>
+                    <option value="Health Care">Health Care</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Pet Type</label>
+                <select name="pet_type" required>
+                    <option value="">Select Pet Type</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Cats_and_Dogs">Cat and Dogs</option>
                 </select>
             </div>
 

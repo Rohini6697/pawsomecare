@@ -99,12 +99,24 @@ class MyPet(models.Model):
         return f"{self.customer}-{self.pet_name}"
     
 class PetShop(models.Model):
-   product_name = models.CharField(max_length=50,null=False,blank=False) 
-   product_category = models.CharField(max_length=50,null=False,blank=False)
-   product_price = models.PositiveIntegerField(null=False,blank=False)
-   stock_quantity = models.PositiveIntegerField(null=False,blank=False)
-   product_description = models.TextField(max_length=100,null=False,blank=False)
-   product_image = models.FileField(null=False,blank=False)
 
-   def __str__(self):
-       return f"{self.product_name}"
+    PET_TYPE_CHOICES = (
+        ('Dog', 'Dog'),
+        ('Cat', 'Cat'),
+        ('Cats_and_Dogs','Cats and Dogs')
+    )
+
+    product_name = models.CharField(max_length=50, null=False, blank=False)
+    product_category = models.CharField(max_length=50, null=False, blank=False)
+    pet_type = models.CharField(max_length=50, choices=PET_TYPE_CHOICES)
+    product_price = models.PositiveIntegerField(null=False, blank=False)
+    stock_quantity = models.PositiveIntegerField(null=False, blank=False)
+    product_description = models.TextField(max_length=100, null=False, blank=False)
+    product_image = models.FileField(upload_to='products/', null=False, blank=False)
+
+    def __str__(self):
+        return self.product_name
+    
+class Cart(models.Model):
+    customer = models.OneToOneField(Profile,on_delete=models.CASCADE)
+    

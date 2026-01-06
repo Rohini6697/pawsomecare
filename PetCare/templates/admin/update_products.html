@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Product | Admin</title>
+    <link rel="stylesheet" href="{% static 'css/admin/update_products.css' %}">
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <div class="form-card">
+        <h2>Update Product</h2>
+        <p class="subtitle">Edit product details</p>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                <div>
+                    <label>Product Name</label>
+                    <input type="text" name="name" value="{{ product.product_name }}" required>
+                </div>
+
+                <div>
+                    <label>Category</label>
+                    <input type="text" name="category" value="{{ product.product_category }}" required>
+                </div>
+
+                <div>
+                    <label>Price (₹)</label>
+                    <input type="number" name="price" value="{{ product.product_price }}" required>
+                </div>
+
+                <div>
+                    <label>Stock Quantity</label>
+                    <input type="number" name="stock" value="{{ product.stock_quantity }}" required>
+                </div>
+            </div>
+
+            <label>Description</label>
+            <textarea name="description">{{ product.product_description }}</textarea>
+
+            <!-- IMAGE PREVIEW -->
+            <div class="image-section">
+                <label>Current Image</label>
+                {% if product.product_image %}
+                    <img src="{{ product.product_image.url }}" class="preview-img">
+                {% else %}
+                    <p class="no-img">No image uploaded</p>
+                {% endif %}
+            </div>
+
+            <label>Change Image</label>
+            <input type="file" name="image">
+
+            <div class="btn-group">
+                <button type="submit" class="save-btn">Update Product</button>
+                <a href="{% url 'view_products' %}" class="cancel-btn">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

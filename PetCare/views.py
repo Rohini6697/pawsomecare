@@ -129,7 +129,9 @@ def add_pets(request):
 def service_bookings(request):
     return render(request,'customer/service_bookings.html')
 def shop(request):
-    return render(request,'customer/shop.html')
+    products = PetShop.objects.all()
+    return render(request, 'customer/shop.html', {'products': products})
+
 def cart(request):
     return render(request,'customer/cart.html')
 def report(request):
@@ -376,9 +378,33 @@ def blacklist(request):
 def add_product(request):
     if request.method == 'POST':
         PetShop.objects.create(
-            
+            product_name = request.POST.get('name'),
+            product_category = request.POST.get('category'),
+            pet_type = request.POST.get('pet_type'),
+            product_price = request.POST.get('price'),
+            stock_quantity = request.POST.get('stock'),
+            product_description = request.POST.get('description'),
+            product_image = request.FILES.get('image'),
         )
+        return redirect('view_products')
 
     return render(request,'admin/add_product.html')
 def view_products(request):
-    return render(request,'admin/view_products.html')
+    products = PetShop.objects.all()
+    return render(request,'admin/view_products.html',{'products':products})
+def update_products(request,product_id):
+    product = PetShop.objects.get(id=product_id)
+    if request.method == 'POST':
+        product.product_name = request.POST.get('name')
+        product.product_category = request.POST.get('category')
+        product.product_price = request.POST.get('price')
+        product.stock_quantity = request.POST.get('stock')
+        product.product_category = request.POST.get('description')
+        product.product_image = request.FILES.get('image')
+        product.save()
+        return redirect('view_products')
+    return render(request,'admin/update_products.html',{'product':product})
+def delete_products(request,product_id):
+    product = get_object_or_404(PetShop,id=product_id)
+    product.delete()
+    return redirect('view_products')

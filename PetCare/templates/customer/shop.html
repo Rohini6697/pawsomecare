@@ -47,32 +47,24 @@
 <section class="categories">
     <button class="category active">All</button>
     <button class="category">Pet Food</button>
-    <button class="category">Toys</button>
+    <button class="category">Grooming</button>
     <button class="category">Accessories</button>
+    <button class="category">Health Care</button>
 </section>
+
+
 
 <!-- PRODUCTS GRID -->
 <section class="products-container">
 
-    <!-- PRODUCT CARD -->
-    <div class="product-card">
-        <img src="{% static 'images/shop/dog-food.png' %}" alt="Dog Food">
+    {% for product in products %}
+    <div class="product-card"
+         data-category="{{ product.product_category|lower }}">
 
-        <h3>Premium Dog Food</h3>
-        <p class="price">₹899</p>
+        <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}">
 
-        <div class="product-actions">
-            <button class="add-cart-btn">Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-        </div>
-    </div>
-
-    <!-- PRODUCT CARD -->
-    <div class="product-card">
-        <img src="{% static 'images/shop/cat-food.png' %}" alt="Cat Food">
-
-        <h3>Healthy Cat Food</h3>
-        <p class="price">₹749</p>
+        <h3>{{ product.product_name }}</h3>
+        <p class="price">₹{{ product.product_price }}</p>
 
         <div class="product-actions">
             <button class="add-cart-btn">Add to Cart</button>
@@ -80,20 +72,13 @@
         </div>
     </div>
 
-    <!-- PRODUCT CARD -->
-    <div class="product-card">
-        <img src="{% static 'images/shop/toy.png' %}" alt="Pet Toy">
-
-        <h3>Chew Toy</h3>
-        <p class="price">₹299</p>
-
-        <div class="product-actions">
-            <button class="add-cart-btn">Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-        </div>
-    </div>
+    {% empty %}
+        <p>No products available</p>
+    {% endfor %}
 
 </section>
+
+
 <script src="{% static 'js/customer/shop.js' %}"></script>
 
 </body>

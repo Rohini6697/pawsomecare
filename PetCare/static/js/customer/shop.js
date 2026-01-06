@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryButtons.forEach(button => {
         button.addEventListener("click", () => {
 
-            // Remove active class from all
             categoryButtons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
 
@@ -16,16 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (selectedCategory === "all") {
                     product.style.display = "block";
-                } 
-                else if (selectedCategory.includes("food") && productCategory === "food") {
+                }
+                else if (selectedCategory === productCategory) {
                     product.style.display = "block";
-                } 
-                else if (selectedCategory === "toys" && productCategory === "toys") {
-                    product.style.display = "block";
-                } 
-                else if (selectedCategory === "accessories" && productCategory === "accessories") {
-                    product.style.display = "block";
-                } 
+                }
                 else {
                     product.style.display = "none";
                 }

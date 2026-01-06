@@ -14,7 +14,7 @@
     <h2 class="logo">Pawsome<span>Care</span> Admin</h2>
     <div class="nav-actions">
         <a href="{% url 'add_product' %}" class="add-btn">+ Add Product</a>
-        <a href="{% url 'goback' %}" class="logout-btn">Logout</a>
+        <a href="{% url 'admin_home' %}" class="logout-btn">Back</a>
     </div>
 </nav>
 
@@ -29,6 +29,7 @@
                 <th>Image</th>
                 <th>Name</th>
                 <th>Category</th>
+                <th>Pet Type</th> <!-- ✅ ADDED -->
                 <th>Price</th>
                 <th>Stock</th>
                 <th>Status</th>
@@ -40,20 +41,21 @@
             {% for product in products %}
             <tr>
                 <td>
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="Product">
+                    {% if product.product_image %}
+                        <img src="{{ product.product_image.url }}" alt="Product">
                     {% else %}
                         <span class="no-img">No Image</span>
                     {% endif %}
                 </td>
 
-                <td>{{ product.name }}</td>
-                <td>{{ product.category }}</td>
-                <td>₹{{ product.price }}</td>
-                <td>{{ product.stock }}</td>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.product_category }}</td>
+                <td>{{ product.pet_type }}</td> <!-- ✅ ADDED -->
+                <td>₹{{ product.product_price }}</td>
+                <td>{{ product.stock_quantity }}</td>
 
                 <td>
-                    {% if product.stock > 0 %}
+                    {% if product.stock_quantity > 0 %}
                         <span class="in-stock">In Stock</span>
                     {% else %}
                         <span class="out-stock">Out of Stock</span>
@@ -61,13 +63,13 @@
                 </td>
 
                 <td class="actions">
-                    <a href="{% url 'edit_product' product.id %}" class="edit">Edit</a>
-                    <a href="{% url 'delete_product' product.id %}" class="delete">Delete</a>
+                    <a href="{% url 'update_products' product.id %}" class="edit">Edit</a>
+                    <a href="{% url 'delete_products' product.id %}" class="delete">Delete</a>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="7" class="empty">No products available</td>
+                <td colspan="8" class="empty">No products available</td>
             </tr>
             {% endfor %}
         </tbody>
