@@ -2,7 +2,7 @@ from pyexpat.errors import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import BlacklistedProvider, Cart, Customer, MyPet, PetShop, Profile, ServiceProvider
+from .models import BlacklistedProvider, Cart, Customer, MyPet, Payment, PetShop, Profile, ServiceBooking, ServiceProvider
 from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
@@ -127,7 +127,18 @@ def add_pets(request):
     return render(request, 'customer/add_pets.html')
 
 def service_bookings(request):
-    return render(request,'customer/service_bookings.html')
+    customer = Customer.objects.get(customer=request.user.profile)
+
+    bookings = ServiceBooking.objects.filter(
+        customer=customer
+    ).select_related("provider")
+
+    return render(
+        request,
+        "customer/service_bookings.html",
+        {"bookings": bookings}
+    )
+
 def shop(request):
     products = PetShop.objects.all()
     return render(request, 'customer/shop.html', {'products': products})
@@ -242,27 +253,76 @@ def create_cart_order(request):
         "key": settings.RAZORPAY_KEY_ID
     })
 
-def verify_payment(request):
-    client = razorpay.Client(
-        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
-    )
+from django.views.decorators.csrf import csrf_exempt
 
-    data = {
-        "razorpay_order_id": request.POST.get("razorpay_order_id"),
-        "razorpay_payment_id": request.POST.get("razorpay_payment_id"),
-        "razorpay_signature": request.POST.get("razorpay_signature"),
-    }
+def create_service_order(request):
+    if request.method == "POST":
 
-    try:
-        client.utility.verify_payment_signature(data)
+        customer = Customer.objects.get(customer=request.user.profile)
 
-        # ✅ Payment success → clear cart
-        customer = get_object_or_404(Customer, customer=request.user.profile)
-        Cart.objects.filter(customer=customer).delete()
+        provider_id = request.POST.get("provider_id")
+        service_name = request.POST.get("service")   # ✅ FIXED
+        amount = int(request.POST.get("amount")) * 100
+
+        provider = ServiceProvider.objects.get(id=provider_id)
+
+        client = razorpay.Client(
+            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+        )
+
+        order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": 1
+        })
+
+        Payment.objects.create(
+            customer=customer,
+            provider=provider,
+            service_name=service_name,
+            amount=amount // 100,
+            razorpay_order_id=order["id"]
+        )
+
+        return JsonResponse({
+            "order_id": order["id"],
+            "key": settings.RAZORPAY_KEY_ID,   # ✅ FIXED
+            "amount": amount
+        })
+
+import json
+from django.views.decorators.csrf import csrf_exempt
+from .models import ServiceBooking
+
+@csrf_exempt
+@csrf_exempt
+def verify_service_payment(request):
+    if request.method == "POST":
+
+        razorpay_order_id = request.POST.get("razorpay_order_id")
+        razorpay_payment_id = request.POST.get("razorpay_payment_id")
+        razorpay_signature = request.POST.get("razorpay_signature")
+
+        payment = Payment.objects.get(
+            razorpay_order_id=razorpay_order_id
+        )
+
+        payment.razorpay_payment_id = razorpay_payment_id
+        payment.razorpay_signature = razorpay_signature
+        payment.is_paid = True
+        payment.save()
+
+        # ✅ CREATE SERVICE BOOKING
+        ServiceBooking.objects.create(
+            customer=payment.customer,
+            provider=payment.provider,
+            service_name=payment.service_name,
+            amount=payment.amount,
+            payment=payment
+        )
 
         return JsonResponse({"status": "success"})
-    except:
-        return JsonResponse({"status": "failed"})
+
 
 
 from django.shortcuts import render
@@ -306,6 +366,8 @@ def booknow(request,provider_id):
     return render(request,'customer/booknow.html', {
         "provider": provider
     })
+
+
 
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -395,45 +457,81 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
-def create_order(request):
+def create_cart_order(request):
     if request.method == "POST":
-        amount = int(request.POST.get("amount")) * 100
-        service_name = request.POST.get("service")
-        provider_id = request.POST.get("provider_id")
+        customer = Customer.objects.get(customer=request.user.profile)
+
+        cart_items = Cart.objects.filter(customer=customer)
+        if not cart_items.exists():
+            return JsonResponse({"error": "Cart is empty"}, status=400)
+
+        subtotal = sum(item.total_price() for item in cart_items)
+        delivery_charge = 99
+        total_amount = subtotal + delivery_charge
 
         client = razorpay.Client(
             auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
         )
 
         order = client.order.create({
-            "amount": amount,
+            "amount": total_amount * 100,
             "currency": "INR",
             "payment_capture": 1
         })
 
+        Payment.objects.create(
+            customer=customer,
+            provider=None,
+            service_name="Cart Purchase",
+            amount=total_amount,
+            razorpay_order_id=order["id"],
+            is_paid=False
+        )
+
         return JsonResponse({
             "order_id": order["id"],
-            "amount": amount,
-            "key": settings.RAZORPAY_KEY_ID
+            "key": settings.RAZORPAY_KEY_ID,
+            "amount": total_amount * 100
         })
 
+
+
 @csrf_exempt
-def verify_payment(request):
-    client = razorpay.Client(
-        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
-    )
+def verify_cart_payment(request):
+    if request.method == "POST":
 
-    params_dict = {
-        "razorpay_order_id": request.POST.get("razorpay_order_id"),
-        "razorpay_payment_id": request.POST.get("razorpay_payment_id"),
-        "razorpay_signature": request.POST.get("razorpay_signature")
-    }
+        client = razorpay.Client(
+            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+        )
 
-    try:
-        client.utility.verify_payment_signature(params_dict)
-        return JsonResponse({"status": "success"})
-    except:
-        return JsonResponse({"status": "failed"})
+        data = {
+            "razorpay_order_id": request.POST.get("razorpay_order_id"),
+            "razorpay_payment_id": request.POST.get("razorpay_payment_id"),
+            "razorpay_signature": request.POST.get("razorpay_signature"),
+        }
+
+        try:
+            client.utility.verify_payment_signature(data)
+
+            payment = Payment.objects.get(
+                razorpay_order_id=data["razorpay_order_id"]
+            )
+
+            payment.razorpay_payment_id = data["razorpay_payment_id"]
+            payment.razorpay_signature = data["razorpay_signature"]
+            payment.is_paid = True
+            payment.save()
+
+            # ✅ CLEAR CART
+            Cart.objects.filter(customer=payment.customer).delete()
+
+            return JsonResponse({"status": "success"})
+
+        except Exception as e:
+            print("Cart payment verify error:", e)
+            return JsonResponse({"status": "failed"})
+
+
 
 
 # =========================================== Admin ==================================================

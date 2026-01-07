@@ -96,52 +96,72 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-document.querySelector(".checkout-btn").addEventListener("click", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-    fetch("{% url 'create_cart_order' %}", {
-        method: "GET",
-        headers: {
-            "X-CSRFToken": "{{ csrf_token }}"
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+    const checkoutBtn = document.querySelector(".checkout-btn");
 
-        const options = {
-            key: data.key,
-            amount: data.amount,
-            currency: "INR",
-            name: "Pawsome Care",
-            description: "Cart Payment",
-            order_id: data.order_id,
+    if (!checkoutBtn) {
+        console.error("Checkout button not found");
+        return;
+    }
 
-            handler: function (response) {
-                fetch("{% url 'verify_payment' %}", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}",
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: `razorpay_order_id=${response.razorpay_order_id}
-                          &razorpay_payment_id=${response.razorpay_payment_id}
-                          &razorpay_signature=${response.razorpay_signature}`
-                })
-                .then(res => res.json())
-                .then(result => {
-                    if (result.status === "success") {
-                        alert("Payment Successful 🎉");
-                        window.location.href = "{% url 'shop' %}";
-                    } else {
-                        alert("Payment Failed ❌");
-                    }
-                });
+    checkoutBtn.addEventListener("click", function () {
+
+        console.log("Checkout clicked");
+
+        fetch("{% url 'create_cart_order' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
             }
-        };
+        })
+        .then(response => response.json())
+        .then(data => {
 
-        new Razorpay(options).open();
+            console.log("Order data:", data);
+
+            const options = {
+                key: data.key,
+                amount: data.amount,
+                currency: "INR",
+                name: "Pawsome Care",
+                description: "Cart Payment",
+                order_id: data.order_id,
+
+                handler: function (response) {
+
+                    fetch("{% url 'verify_cart_payment' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body:
+                            `razorpay_order_id=${response.razorpay_order_id}` +
+                            `&razorpay_payment_id=${response.razorpay_payment_id}` +
+                            `&razorpay_signature=${response.razorpay_signature}`
+                    })
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.status === "success") {
+                            alert("Payment Successful 🎉");
+                            window.location.href = "{% url 'shop' %}";
+                        } else {
+                            alert("Payment Failed ❌");
+                        }
+                    });
+                }
+            };
+
+            new Razorpay(options).open();
+        })
+        .catch(err => console.error("Payment error:", err));
     });
+
 });
 </script>
+
+
 
 </body>
 </html>

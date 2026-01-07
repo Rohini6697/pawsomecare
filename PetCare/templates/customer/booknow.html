@@ -64,13 +64,11 @@
 document.querySelectorAll(".book-btn").forEach(btn => {
     btn.addEventListener("click", function () {
 
-        alert("Button clicked");  // 🔥 DEBUG 1
-
         const service = this.dataset.service;
         const amount = this.dataset.price;
         const providerId = this.dataset.provider;
 
-        fetch("{% url 'create_order' %}", {
+        fetch("{% url 'create_service_order' %}", {
             method: "POST",
             headers: {
                 "X-CSRFToken": "{{ csrf_token }}",
@@ -78,13 +76,8 @@ document.querySelectorAll(".book-btn").forEach(btn => {
             },
             body: `service=${service}&amount=${amount}&provider_id=${providerId}`
         })
-        .then(res => {
-            alert("Order created"); // 🔥 DEBUG 2
-            return res.json();
-        })
+        .then(res => res.json())
         .then(data => {
-
-            alert("Opening Razorpay"); // 🔥 DEBUG 3
 
             const options = {
                 key: data.key,
@@ -93,8 +86,29 @@ document.querySelectorAll(".book-btn").forEach(btn => {
                 name: "Pawsome Care",
                 description: service,
                 order_id: data.order_id,
+
                 handler: function (response) {
-                    alert("Payment success");
+
+                    fetch("{% url 'verify_service_payment' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body:
+                            `razorpay_order_id=${response.razorpay_order_id}` +
+                            `&razorpay_payment_id=${response.razorpay_payment_id}` +
+                            `&razorpay_signature=${response.razorpay_signature}`
+                    })
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.status === "success") {
+                            alert("Payment successful & service booked!");
+                            window.location.href = "{% url 'service_bookings' %}";
+                        } else {
+                            alert("Payment verification failed");
+                        }
+                    });
                 }
             };
 
@@ -103,6 +117,8 @@ document.querySelectorAll(".book-btn").forEach(btn => {
     });
 });
 </script>
+
+
 
 
 </body>

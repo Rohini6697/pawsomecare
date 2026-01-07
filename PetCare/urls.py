@@ -28,8 +28,14 @@ urlpatterns = [
     path("increase/<int:item_id>/", views.increase_qty, name="increase_qty"),
     path("decrease/<int:item_id>/", views.decrease_qty, name="decrease_qty"),
     path("remove/<int:item_id>/", views.remove_from_cart, name="remove_from_cart"),
+    path("service/create-order/", views.create_service_order, name="create_service_order"),
+ path("service/verify-payment/", views.verify_service_payment, name="verify_service_payment"),
+
+    # cart
     path("cart/create-order/", views.create_cart_order, name="create_cart_order"),
-    path("verify-payment/", views.verify_payment, name="verify_payment"),
+path("cart/verify-payment/", views.verify_cart_payment, name="verify_cart_payment"),
+
+
 
 
 
@@ -56,8 +62,7 @@ urlpatterns = [
     path('update_products/<int:product_id>/',views.update_products,name='update_products'),
     path('delete_products/<int:product_id>/',views.delete_products,name='delete_products'),
     path('booknow/<int:provider_id>/',views.booknow,name='booknow'),
-    path("create-order/", views.create_order, name="create_order"),
-    path("verify-payment/", views.verify_payment, name="verify_payment"),
+    
 
     
 

@@ -121,7 +121,14 @@ class PetShop(models.Model):
 #     customer = models.OneToOneField(Profile,on_delete=models.CASCADE)
 class Payment(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+
+    provider = models.ForeignKey(
+        ServiceProvider,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
     service_name = models.CharField(max_length=100)
     amount = models.PositiveIntegerField()
     razorpay_order_id = models.CharField(max_length=100)
@@ -129,6 +136,7 @@ class Payment(models.Model):
     razorpay_signature = models.CharField(max_length=255, null=True, blank=True)
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
 
 # def __str__(self):
 #     return f"{}"
@@ -139,5 +147,28 @@ class Cart(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
+    def total_price(self):
+        return self.product.product_price * self.quantity
+
     def __str__(self):
         return f"{self.customer.fullname} - {self.product.product_name}"
+
+class ServiceBooking(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+    service_name = models.CharField(max_length=100)
+    amount = models.PositiveIntegerField()
+    payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
+    booking_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('confirmed', 'Confirmed'),
+            ('pending', 'Pending'),
+            ('cancelled', 'Cancelled')
+        ],
+        default='confirmed'
+    )
+
+    def __str__(self):
+        return f"{self.customer} - {self.service_name}"

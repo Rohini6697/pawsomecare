@@ -38,47 +38,57 @@
 <!-- BOOKINGS HEADER -->
 <section class="bookings-header">
     <h1>My Bookings</h1>
-    <a href="{% url 'new_booking' %}"><button class="btn-primary">+ New Booking</button></a>
 </section>
 
 <!-- BOOKINGS LIST -->
+<!-- BOOKINGS LIST -->
 <section class="bookings-container">
 
-    <!-- BOOKING CARD -->
+{% if bookings %}
+    {% for booking in bookings %}
     <div class="booking-card">
+
         <div class="booking-top">
-            <h3>🐕 Dog Grooming</h3>
-            <span class="status confirmed">Confirmed</span>
+            <h3>🐾 {{ booking.service_name|title }}</h3>
+
+            <span class="status {{ booking.status }}">
+                {{ booking.status|title }}
+            </span>
         </div>
 
-        <p><strong>Pet:</strong> Buddy</p>
-        <p><strong>Date:</strong> 12 Feb 2025</p>
-        <p><strong>Time:</strong> 10:30 AM</p>
+        <p><strong>Provider:</strong> {{ booking.provider.full_name }}</p>
+        <p><strong>City:</strong> {{ booking.provider.city }}</p>
+        <p><strong>Price:</strong> ₹{{ booking.amount }}</p>
 
-        <div class="booking-actions">
-            <button class="view-btn">View</button>
-            <button class="cancel-btn">Cancel</button>
-        </div>
+        <p>
+            <strong>Booked On:</strong>
+            {{ booking.booking_date|date:"d M Y, h:i A" }}
+        </p>
+
+        <!-- <div class="booking-actions">
+            <a href="#">
+                <button class="view-btn">View</button>
+            </a>
+
+            {% if booking.status == "confirmed" %}
+            <a href="#">
+                <button class="cancel-btn">Cancel</button>
+            </a>
+            {% endif %}
+        </div> -->
+
     </div>
+    {% endfor %}
 
-    <!-- BOOKING CARD -->
-    <div class="booking-card">
-        <div class="booking-top">
-            <h3>🐈 Vet Consultation</h3>
-            <span class="status pending">Pending</span>
-        </div>
-
-        <p><strong>Pet:</strong> Misty</p>
-        <p><strong>Date:</strong> 15 Feb 2025</p>
-        <p><strong>Time:</strong> 4:00 PM</p>
-
-        <div class="booking-actions">
-            <button class="view-btn">View</button>
-            <button class="cancel-btn">Cancel</button>
-        </div>
+{% else %}
+    <div class="no-bookings">
+        <h3>No bookings yet 🐶</h3>
+        <p>Book a service to see it here.</p>
     </div>
+{% endif %}
 
 </section>
+
 
 </body>
 </html>
