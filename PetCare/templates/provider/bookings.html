@@ -16,7 +16,7 @@
         <a href="{% url 'provider_home' %}" class="back-btn">← Back to Dashboard</a>
     </div>
 
-    <!-- FILTER -->
+    <!-- FILTER (UI ONLY FOR NOW) -->
     <div class="filter-bar">
         <button class="filter active">Upcoming</button>
         <button class="filter">Completed</button>
@@ -26,48 +26,28 @@
     <!-- BOOKINGS LIST -->
     <div class="booking-list">
 
-        <!-- CARD -->
-        <div class="booking-card">
-            <div class="booking-info">
-                <h4>🐕 Dog Walking</h4>
-                <p><strong>Pet:</strong> Bruno</p>
-                <p><strong>Date:</strong> 10 Jan 2026</p>
-                <p><strong>Time:</strong> 6:00 PM</p>
-                <p><strong>Location:</strong> Kochi</p>
-            </div>
+        {% if bookings %}
+            {% for booking in bookings %}
+            <div class="booking-card">
 
-            <div class="booking-status upcoming">
-                Upcoming
-            </div>
-        </div>
+                <div class="booking-info">
+                    <h4>🐾 {{ booking.service_name }}</h4>
 
-        <div class="booking-card">
-            <div class="booking-info">
-                <h4>✂️ Grooming</h4>
-                <p><strong>Pet:</strong> Bella</p>
-                <p><strong>Date:</strong> 05 Jan 2026</p>
-                <p><strong>Time:</strong> 7:30 PM</p>
-                <p><strong>Location:</strong> Ernakulam</p>
-            </div>
+                    <p><strong>Customer:</strong> {{ booking.customer.fullname }}</p>
+                    <p><strong>Amount:</strong> ₹{{ booking.amount }}</p>
+                    <p><strong>Date:</strong> {{ booking.booking_date|date:"d M Y" }}</p>
+                </div>
 
-            <div class="booking-status completed">
-                Completed
-            </div>
-        </div>
+                <!-- STATUS -->
+                <div class="booking-status {{ booking.status }}">
+                    {{ booking.status|title }}
+                </div>
 
-        <div class="booking-card">
-            <div class="booking-info">
-                <h4>🏠 Pet Sitting</h4>
-                <p><strong>Pet:</strong> Milo</p>
-                <p><strong>Date:</strong> 01 Jan 2026</p>
-                <p><strong>Time:</strong> 4:00 PM</p>
-                <p><strong>Location:</strong> Kakkanad</p>
             </div>
-
-            <div class="booking-status cancelled">
-                Cancelled
-            </div>
-        </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align:center;">No bookings yet.</p>
+        {% endif %}
 
     </div>
 

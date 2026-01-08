@@ -450,7 +450,17 @@ def edit_provider_profile(request,provider_id):
 
     return render(request,'provider/edit_provider_profile.html',{'provider':provider})
 def bookings(request,provider_id):
-    return render(request,'provider/bookings.html')
+    profile = request.user.profile
+
+    # Safety check
+    if profile.role != "service_providers":
+        return redirect("customer_home")
+
+    provider = ServiceProvider.objects.get(user=profile)
+
+    bookings = ServiceBooking.objects.filter(provider=provider).order_by("-booking_date")
+
+    return render(request,'provider/bookings.html',{"bookings": bookings})
 
 import razorpay
 from django.conf import settings
