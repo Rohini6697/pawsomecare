@@ -115,3 +115,21 @@ body {
     background: #f8d7da;
     color: #721c24;
 }
+.btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 5px;
+    display: inline-block;
+}
+
+.btn.confirm {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn.cancel {
+    background-color: #dc3545;
+    color: white;
+}

@@ -367,13 +367,15 @@ def booknow(request,provider_id):
         "provider": provider
     })
 
+def confirm_service(request):
+    
+    return render(request,'provider/confirm_service.html')
 
 
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import ServiceProvider, Profile
+# from django.shortcuts import render, redirect, get_object_or_404
+# from django.contrib.auth.decorators import login_required
+# from django.contrib import messages
+# from .models import ServiceProvider, Profile
 # ====================================== Provider ======================================
 @login_required
 

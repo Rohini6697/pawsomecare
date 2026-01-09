@@ -167,7 +167,7 @@ class ServiceBooking(models.Model):
             ('pending', 'Pending'),
             ('cancelled', 'Cancelled')
         ],
-        default='confirmed'
+        default='pending'
     )
 
     def __str__(self):

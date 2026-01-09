@@ -10,20 +10,11 @@
 
 <div class="booking-page">
 
-    <!-- HEADER -->
     <div class="page-header">
         <h2>My Bookings 📅</h2>
         <a href="{% url 'provider_home' %}" class="back-btn">← Back to Dashboard</a>
     </div>
 
-    <!-- FILTER (UI ONLY FOR NOW) -->
-    <div class="filter-bar">
-        <button class="filter active">Upcoming</button>
-        <button class="filter">Completed</button>
-        <button class="filter">Cancelled</button>
-    </div>
-
-    <!-- BOOKINGS LIST -->
     <div class="booking-list">
 
         {% if bookings %}
@@ -32,15 +23,27 @@
 
                 <div class="booking-info">
                     <h4>🐾 {{ booking.service_name }}</h4>
-
                     <p><strong>Customer:</strong> {{ booking.customer.fullname }}</p>
                     <p><strong>Amount:</strong> ₹{{ booking.amount }}</p>
                     <p><strong>Date:</strong> {{ booking.booking_date|date:"d M Y" }}</p>
                 </div>
 
-                <!-- STATUS -->
-                <div class="booking-status {{ booking.status }}">
-                    {{ booking.status|title }}
+                <div class="booking-actions">
+
+                    <div class="booking-status {{ booking.status }}">
+                        {{ booking.status|title }}
+                    </div>
+
+                    {% if booking.status == 'pending' %}
+                        <a href="{% url 'confirm_service' %}" class="btn confirm">
+                            ✅ Confirm
+                        </a>
+
+                        <a href="#" class="btn cancel">
+                            ❌ Cancel
+                        </a>
+                    {% endif %}
+
                 </div>
 
             </div>

@@ -29,11 +29,13 @@ urlpatterns = [
     path("decrease/<int:item_id>/", views.decrease_qty, name="decrease_qty"),
     path("remove/<int:item_id>/", views.remove_from_cart, name="remove_from_cart"),
     path("service/create-order/", views.create_service_order, name="create_service_order"),
- path("service/verify-payment/", views.verify_service_payment, name="verify_service_payment"),
+    path("service/verify-payment/", views.verify_service_payment, name="verify_service_payment"),
+    path("confirm_service/", views.confirm_service, name="confirm_service"),
+
 
     # cart
     path("cart/create-order/", views.create_cart_order, name="create_cart_order"),
-path("cart/verify-payment/", views.verify_cart_payment, name="verify_cart_payment"),
+    path("cart/verify-payment/", views.verify_cart_payment, name="verify_cart_payment"),
 
 
 
