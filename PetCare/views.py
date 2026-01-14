@@ -370,7 +370,7 @@ def booknow(request,provider_id):
 def confirm_service(request):
     
     return render(request,'provider/confirm_service.html')   
-
+ 
 
 # from django.shortcuts import render, redirect, get_object_or_404
 # from django.contrib.auth.decorators import login_required
