@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Services</title>
+    <link rel="stylesheet" href="{% static 'css/provider/services.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <h2>🛠 My Services</h2>
+    <a href="{% url 'provider_home' %}" class="back-btn">← Back</a>
+
+
+    {% if services %}
+        {% for service, price in services.items %}
+        <div class="service-card">
+
+            <div class="service-header">
+                <h3>{{ service|title }}</h3>
+                <span class="price">₹{{ price }}</span>
+            </div>
+
+            <!-- TIME SLOTS -->
+            <div class="timeslots">
+                <h4>Available Time Slots</h4>
+
+                {% with service_slots=timeslots %}
+                <ul>
+                    {% for slot in service_slots %}
+                        {% if slot.service_name == service and slot.is_available %}
+                        <li>
+                            📅 {{ slot.date|date:"d M Y" }}
+                            ⏰ {{ slot.time|time:"h:i A" }}
+                        </li>
+                        {% endif %}
+                    {% empty %}
+                        <p class="empty">No time slots added</p>
+                    {% endfor %}
+                </ul>
+                {% endwith %}
+            </div>
+
+            <!-- ADD SLOT FORM -->
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="service_name" value="{{ service }}">
+
+                <label>Date</label>
+                <input type="date" name="date" required>
+
+                <label>Time</label>
+                <input type="time" name="time" required>
+
+                <button type="submit">Add Time Slot</button>
+            </form>
+
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No services added yet.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

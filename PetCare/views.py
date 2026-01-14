@@ -2,7 +2,7 @@ from pyexpat.errors import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import BlacklistedProvider, Cart, Customer, MyPet, Payment, PetShop, Profile, ServiceBooking, ServiceProvider
+from .models import BlacklistedProvider, Cart, Customer, MyPet, Payment, PetShop, Profile, ServiceBooking, ServiceProvider, TimeSlot
 from django.contrib.auth import authenticate,login as auth_login,logout
 from .forms import UserForm
 from django.shortcuts import get_object_or_404
@@ -543,7 +543,20 @@ def verify_cart_payment(request):
             print("Cart payment verify error:", e)
             return JsonResponse({"status": "failed"})
 
+def services(request,provider_id):
+    provider = request.user.profile.serviceprovider
 
+    services = provider.services or {}  # JSON field
+    timeslots = TimeSlot.objects.filter(provider=provider)
+
+    if request.method == "POST":
+        TimeSlot.objects.create(
+            provider=provider,
+            service_name=request.POST['service_name'],
+            date=request.POST['date'],
+            time=request.POST['time']
+        )
+    return render(request,'provider/services.html',{'services':services,'timeslots': timeslots})
 
 
 # =========================================== Admin ==================================================

@@ -172,3 +172,22 @@ class ServiceBooking(models.Model):
 
     def __str__(self):
         return f"{self.customer} - {self.service_name}"
+
+
+class TimeSlot(models.Model):
+    provider = models.ForeignKey(
+        ServiceProvider,
+        on_delete=models.CASCADE,
+        related_name='timeslots'
+    )
+
+    service_name = models.CharField(max_length=100)  
+    # example: "grooming", "dog walking"
+
+    date = models.DateField()
+    time = models.TimeField()   # ✅ SINGLE TIME (multiple rows = multiple times)
+
+    is_available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.service_name} | {self.date} | {self.time}"

@@ -47,6 +47,7 @@ urlpatterns = [
     path('provider_pending/',views.provider_pending,name='provider_pending'),
     path('edit_provider_profile/<int:provider_id>/',views.edit_provider_profile,name='edit_provider_profile'),
     path('bookings/<int:provider_id>/',views.bookings,name='bookings'),
+    path('services/<int:provider_id>/',views.services,name='services'),
     
     
 
