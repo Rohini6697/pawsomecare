@@ -293,8 +293,9 @@ def create_service_order(request):
 import json
 from django.views.decorators.csrf import csrf_exempt
 from .models import ServiceBooking
+from django.db import transaction
+from .models import TimeSlot
 
-@csrf_exempt
 @csrf_exempt
 def verify_service_payment(request):
     if request.method == "POST":
@@ -302,6 +303,7 @@ def verify_service_payment(request):
         razorpay_order_id = request.POST.get("razorpay_order_id")
         razorpay_payment_id = request.POST.get("razorpay_payment_id")
         razorpay_signature = request.POST.get("razorpay_signature")
+        slot_id = request.POST.get("slot_id")
 
         payment = Payment.objects.get(
             razorpay_order_id=razorpay_order_id
@@ -311,6 +313,16 @@ def verify_service_payment(request):
         payment.razorpay_signature = razorpay_signature
         payment.is_paid = True
         payment.save()
+
+        # 🔒 LOCK SLOT (PREVENT DOUBLE BOOKING)
+        with transaction.atomic():
+            slot = TimeSlot.objects.select_for_update().get(id=slot_id)
+
+            if not slot.is_available:
+                return JsonResponse({"status": "already_booked"})
+
+            slot.is_available = False
+            slot.save()
 
         # ✅ CREATE SERVICE BOOKING
         ServiceBooking.objects.create(
@@ -322,6 +334,7 @@ def verify_service_payment(request):
         )
 
         return JsonResponse({"status": "success"})
+
 
 
 
@@ -367,10 +380,36 @@ def booknow(request,provider_id):
         "provider": provider
     })
 
-def confirm_service(request):
-    
-    return render(request,'provider/confirm_service.html')   
+  
  
+
+def slot_booking(request, provider_id):
+    provider = get_object_or_404(ServiceProvider, id=provider_id)
+
+    # ✅ get selected service from URL
+    service = request.GET.get("service")
+    if not service:
+        return redirect("booknow", provider_id=provider_id)
+
+    # ✅ get price from provider services
+    price = provider.services.get(service)
+    if not price:
+        return redirect("booknow", provider_id=provider_id)
+
+    # ✅ get available slots for this provider + service
+    slots = TimeSlot.objects.filter(
+        provider=provider,
+        service_name=service,
+        is_available=True
+    ).order_by("date", "time")
+
+    return render(request, "customer/slot_booking.html", {
+        "provider": provider,
+        "service": service,
+        "price": price,
+        "slots": slots
+    })
+
 
 # from django.shortcuts import render, redirect, get_object_or_404
 # from django.contrib.auth.decorators import login_required
@@ -451,18 +490,32 @@ def edit_provider_profile(request,provider_id):
     provider = get_object_or_404(ServiceProvider, id=provider_id)
 
     return render(request,'provider/edit_provider_profile.html',{'provider':provider})
-def bookings(request,provider_id):
+def bookings(request, provider_id):
     profile = request.user.profile
 
-    # Safety check
     if profile.role != "service_providers":
         return redirect("customer_home")
 
     provider = ServiceProvider.objects.get(user=profile)
 
-    bookings = ServiceBooking.objects.filter(provider=provider).order_by("-booking_date")
+    bookings = ServiceBooking.objects.filter(
+        provider=provider
+    ).order_by("-booking_date")
 
-    return render(request,'provider/bookings.html',{"bookings": bookings})
+    timeslots = TimeSlot.objects.filter(
+        provider=provider,
+        is_available=False   # booked slots only
+    )
+
+    return render(
+        request,
+        "provider/bookings.html",
+        {
+            "bookings": bookings,
+            "timeslots": timeslots
+        }
+    )
+
 
 import razorpay
 from django.conf import settings
@@ -558,7 +611,9 @@ def services(request,provider_id):
         )
     return render(request,'provider/services.html',{'services':services,'timeslots': timeslots})
 
-
+def confirm_service(request):
+    
+    return render(request,'provider/confirm_service.html') 
 # =========================================== Admin ==================================================
 def admin_home(request):
     return render(request,'admin/admin_home.html')

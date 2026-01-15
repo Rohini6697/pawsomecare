@@ -40,12 +40,15 @@
             <span class="service-name">{{ service|title }}</span>
             <span class="price">₹{{ price }}</span>
 
-            <button type="button" class="book-btn"
+            <!-- <button type="button" class="book-btn"
                 data-service="{{ service }}"
                 data-price="{{ price }}"
                 data-provider="{{ provider.id }}">
                 Proceed to Payment
-            </button>
+            </button> -->
+            <a href="{% url 'slot_booking' provider.id %}?service={{ service }}"class="book-btn">
+                Proceed to Payment
+            </a>
 
 
         </div>

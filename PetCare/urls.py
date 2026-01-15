@@ -31,6 +31,7 @@ urlpatterns = [
     path("service/create-order/", views.create_service_order, name="create_service_order"),
     path("service/verify-payment/", views.verify_service_payment, name="verify_service_payment"),
     path("confirm_service/", views.confirm_service, name="confirm_service"),
+    path("slot_booking/<int:provider_id>/", views.slot_booking, name="slot_booking"),
 
 
     # cart

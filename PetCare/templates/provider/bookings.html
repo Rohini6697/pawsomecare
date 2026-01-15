@@ -22,28 +22,36 @@
             <div class="booking-card">
 
                 <div class="booking-info">
-                    <h4>🐾 {{ booking.service_name }}</h4>
+                    <h4>🐾 {{ booking.service_name|title }}</h4>
+
                     <p><strong>Customer:</strong> {{ booking.customer.fullname }}</p>
                     <p><strong>Amount:</strong> ₹{{ booking.amount }}</p>
-                    <p><strong>Date:</strong> {{ booking.booking_date|date:"d M Y" }}</p>
+
+                    {% for slot in timeslots %}
+                        {% if slot.service_name == booking.service_name %}
+                            <p><strong>Service Date:</strong> {{ slot.date|date:"d M Y" }}</p>
+                            <p><strong>Service Time:</strong> {{ slot.time }}</p>
+                        {% endif %}
+                    {% empty %}
+                        <p><strong>Service Slot:</strong> Not available</p>
+                    {% endfor %}
+
+                    {% with booking.customer.mypet_set.first as pet %}
+                        {% if pet %}
+                            <p><strong>Pet Type:</strong> {{ pet.pet_type }}</p>
+                        {% endif %}
+                    {% endwith %}
                 </div>
 
                 <div class="booking-actions">
-
                     <div class="booking-status {{ booking.status }}">
                         {{ booking.status|title }}
                     </div>
 
-                    {% if booking.status == 'pending' %}
-                        <a href="{% url 'confirm_service' %}" class="btn confirm">
-                            ✅ Confirm
-                        </a>
-
-                        <a href="#" class="btn cancel">
-                            ❌ Cancel
-                        </a>
+                    {% if booking.status == "pending" %}
+                        <a href="{% url 'confirm_service' %}" class="btn confirm">✅ Confirm</a>
+                        <a href="#" class="btn cancel">❌ Cancel</a>
                     {% endif %}
-
                 </div>
 
             </div>

@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f8;
+}
+
+.page {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+/* PROVIDER HEADER */
+.provider-header {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.provider-header h2 {
+    margin-bottom: 6px;
+}
+
+.badge {
+    background: #4caf50;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.city {
+    color: #777;
+    margin-top: 6px;
+}
+
+/* SERVICE CARD */
+.service-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.service-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.price {
+    font-weight: bold;
+}
+
+/* SLOT CARD */
+.slot-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.slot {
+    border: 2px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.slot input {
+    display: none;
+}
+
+.slot:hover {
+    border-color: #4caf50;
+}
+
+.slot input:checked + .slot-info {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.slot-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.no-slots {
+    color: #999;
+    margin-top: 10px;
+}
+
+/* PAY BUTTON */
+.pay-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background: #43a047;
+}

@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book {{ service|title }} | {{ provider.full_name }}</title>
+
+    <link rel="stylesheet" href="{% static 'css/customer/slot_booking.css' %}">
+</head>
+<body>
+
+<div class="page">
+
+    <!-- PROVIDER HEADER -->
+    <div class="provider-header">
+        <h2>{{ provider.full_name }}</h2>
+        <span class="badge">{{ provider.get_provider_type_display }}</span>
+        <p class="city">{{ provider.city }}</p>
+    </div>
+
+    <!-- SERVICE SUMMARY -->
+    <div class="service-card">
+        <h3>Selected Service</h3>
+        <div class="service-row">
+            <span class="service-name">{{ service|title }}</span>
+            <span class="price">₹{{ price }}</span>
+        </div>
+    </div>
+
+    <!-- SLOT SELECTION -->
+    <div class="slot-card">
+        <h3>Select Time Slot</h3>
+
+        <form id="paymentForm">
+            {% csrf_token %}
+
+            {% if slots %}
+                <div class="slots-grid">
+                    {% for slot in slots %}
+                        <label class="slot">
+                            <input type="radio" name="slot_id" value="{{ slot.id }}" required>
+                            <div class="slot-info">
+                                <span class="date">📅 {{ slot.date }}</span>
+                                <span class="time">⏰ {{ slot.time }}</span>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-slots">No slots available for this service.</p>
+            {% endif %}
+
+            <!-- Hidden data -->
+            <input type="hidden" name="service" value="{{ service }}">
+            <input type="hidden" name="amount" value="{{ price }}">
+            <input type="hidden" name="provider_id" value="{{ provider.id }}">
+
+            <button type="submit" class="pay-btn" id="payBtn" disabled>
+                Proceed to Payment
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+// ✅ Enable button when slot selected
+document.querySelectorAll("input[name='slot_id']").forEach(input => {
+    input.addEventListener("change", () => {
+        document.getElementById("payBtn").disabled = false;
+    });
+});
+
+// ✅ Handle payment
+document.getElementById("paymentForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const payBtn = document.getElementById("payBtn");
+    payBtn.disabled = true;
+    payBtn.innerText = "Processing...";
+
+    const formData = new FormData(this);
+
+    fetch("{% url 'create_service_order' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        const options = {
+            key: data.key,
+            amount: data.amount,
+            currency: "INR",
+            name: "Pawsome Care",
+            description: "{{ service|title }}",
+            order_id: data.order_id,
+
+            handler: function (response) {
+                fetch("{% url 'verify_service_payment' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body:
+                        `razorpay_order_id=${response.razorpay_order_id}` +
+                        `&razorpay_payment_id=${response.razorpay_payment_id}` +
+                        `&razorpay_signature=${response.razorpay_signature}` +
+                        `&slot_id=${formData.get("slot_id")}`
+                })
+                .then(() => {
+                    alert("Service booked successfully!");
+                    window.location.href = "{% url 'service_bookings' %}";
+                });
+            }
+        };
+
+        new Razorpay(options).open();
+    });
+});
+</script>
+
+
+</body>
+</html>
