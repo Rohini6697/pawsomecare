@@ -335,6 +335,56 @@ def verify_service_payment(request):
 
         return JsonResponse({"status": "success"})
 
+def refund_booking(request, booking_id):
+    profile = request.user.profile
+
+    if profile.role != "service_providers":
+        return redirect("customer_home")
+
+    booking = get_object_or_404(ServiceBooking, id=booking_id)
+    payment = booking.payment
+
+    # ❌ Safety checks
+    if not payment.is_paid:
+        messages.error(request, "Payment not completed")
+        return redirect("provider_bookings")
+
+    if booking.status == "cancelled":
+        messages.warning(request, "Booking already cancelled")
+        return redirect("provider_bookings")
+
+    client = razorpay.Client(
+        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    )
+
+    try:
+        with transaction.atomic():
+
+            # 🔁 Razorpay refund
+            client.payment.refund(
+                payment.razorpay_payment_id,
+                {
+                    "amount": payment.amount * 100  # paise
+                }
+            )
+
+            # 🔄 Update booking
+            booking.status = "cancelled"
+            booking.save()
+
+            # 🔄 Free slot (best effort)
+            TimeSlot.objects.filter(
+                provider=booking.provider,
+                service_name=booking.service_name,
+                is_available=False
+            ).update(is_available=True)
+
+            messages.success(request, "Refund processed successfully")
+
+    except Exception as e:
+        messages.error(request, f"Refund failed: {str(e)}")
+
+    return redirect("provider_bookings")
 
 
 

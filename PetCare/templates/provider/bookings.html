@@ -48,11 +48,17 @@
                         {{ booking.status|title }}
                     </div>
 
-                    {% if booking.status == "pending" %}
+                    {% if booking.status == "pending" or booking.status == "confirmed" %}
                         <a href="{% url 'confirm_service' %}" class="btn confirm">✅ Confirm</a>
-                        <a href="#" class="btn cancel">❌ Cancel</a>
+
+                        <a href="{% url 'refund_booking' booking.id %}"
+                        class="btn cancel"
+                        onclick="return confirm('Are you sure you want to refund this booking?');">
+                        💸 Refund
+                        </a>
                     {% endif %}
                 </div>
+
 
             </div>
             {% endfor %}

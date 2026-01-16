@@ -30,6 +30,8 @@ urlpatterns = [
     path("remove/<int:item_id>/", views.remove_from_cart, name="remove_from_cart"),
     path("service/create-order/", views.create_service_order, name="create_service_order"),
     path("service/verify-payment/", views.verify_service_payment, name="verify_service_payment"),
+    path("provider/refund/<int:booking_id>/", views.refund_booking, name="refund_booking"),
+
     path("confirm_service/", views.confirm_service, name="confirm_service"),
     path("slot_booking/<int:provider_id>/", views.slot_booking, name="slot_booking"),
 
