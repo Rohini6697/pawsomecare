@@ -35,7 +35,7 @@
                     {% empty %}
                         <p><strong>Service Slot:</strong> Not available</p>
                     {% endfor %}
-
+ 
                     {% with booking.customer.mypet_set.first as pet %}
                         {% if pet %}
                             <p><strong>Pet Type:</strong> {{ pet.pet_type }}</p>
