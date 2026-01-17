@@ -347,11 +347,11 @@ def refund_booking(request, booking_id):
     # ❌ Safety checks
     if not payment.is_paid:
         messages.error(request, "Payment not completed")
-        return redirect("provider_bookings")
+        return redirect("provider_home")
 
     if booking.status == "cancelled":
         messages.warning(request, "Booking already cancelled")
-        return redirect("provider_bookings")
+        return redirect("provider_home")
 
     client = razorpay.Client(
         auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
@@ -384,7 +384,7 @@ def refund_booking(request, booking_id):
     except Exception as e:
         messages.error(request, f"Refund failed: {str(e)}")
 
-    return redirect("provider_bookings")
+    return redirect("provider_home")
 
 
 
@@ -661,9 +661,56 @@ def services(request,provider_id):
         )
     return render(request,'provider/services.html',{'services':services,'timeslots': timeslots})
 
-def confirm_service(request):
-    
-    return render(request,'provider/confirm_service.html') 
+def confirm_service(request, booking_id):
+    booking = get_object_or_404(ServiceBooking, id=booking_id)
+
+    # Safety checks
+    if booking.status == "confirmed":
+        messages.info(request, "Booking already confirmed")
+        return redirect("provider_home")
+
+    if booking.status == "cancelled":
+        messages.error(request, "Cancelled booking cannot be confirmed")
+        return redirect("provider_home")
+
+    # ✅ Confirm booking
+    booking.status = "confirmed"
+    booking.save()
+
+    # 📧 SEND EMAIL TO CUSTOMER
+    customer_email = booking.customer.customer.user.email
+
+    subject = "Your Service Booking is Confirmed 🐾"
+
+    message = f"""
+Hi {booking.customer.fullname},
+
+Good news! 🎉
+
+Your booking for **{booking.service_name.title()}** has been confirmed by the service provider.
+
+Provider: {booking.provider.full_name}
+Amount Paid: ₹{booking.amount}
+
+📅 Please be available on the scheduled date and time.
+
+Thank you for choosing Pawsome Care 🐶🐱
+
+Regards,
+Pawsome Care Team
+"""
+
+    if customer_email:
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [customer_email],
+            fail_silently=True
+        )
+
+    messages.success(request, "Service confirmed and email sent to customer")
+    return redirect("provider_home")
 # =========================================== Admin ==================================================
 def admin_home(request):
     return render(request,'admin/admin_home.html')

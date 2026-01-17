@@ -49,7 +49,7 @@
                     </div>
 
                     {% if booking.status == "pending" or booking.status == "confirmed" %}
-                        <a href="{% url 'confirm_service' %}" class="btn confirm">✅ Confirm</a>
+                        <a href="{% url 'confirm_service' booking.id %}" class="btn confirm">✅ Confirm</a>
 
                         <a href="{% url 'refund_booking' booking.id %}"
                         class="btn cancel"
