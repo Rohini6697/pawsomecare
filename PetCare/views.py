@@ -696,6 +696,9 @@ Amount Paid: ₹{booking.amount}
 
 Thank you for choosing Pawsome Care 🐶🐱
 
+
+
+
 Regards,
 Pawsome Care Team
 """
