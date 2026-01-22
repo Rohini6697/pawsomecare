@@ -880,3 +880,22 @@ def delete_products(request,product_id):
     product = get_object_or_404(PetShop,id=product_id)
     product.delete()
     return redirect('view_products')
+
+
+
+# ------------------  Voice Assistant --------------------------------------
+from django.http import JsonResponse
+import json
+from .ai_engine.intent_classifier import detect_intent
+
+def voice_command(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        text = data.get("command")
+
+        intent = detect_intent(text)
+
+        return JsonResponse({
+            "text": text,
+            "intent": intent
+        })

@@ -3,6 +3,7 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from .views import ai_intent_api
 
 urlpatterns = [
     path('',views.home,name='home'),
@@ -69,7 +70,9 @@ urlpatterns = [
     path('delete_products/<int:product_id>/',views.delete_products,name='delete_products'),
     path('booknow/<int:provider_id>/',views.booknow,name='booknow'),
     
+# Voice Assistant
 
+    path("ai/intent/", ai_intent_api, name="ai_intent"),
     
 
 ]

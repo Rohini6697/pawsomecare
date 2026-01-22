@@ -1,0 +1,44 @@
+text,intent
+Buy dog food,ecommerce
+Buy cat food,ecommerce
+Order pet food online,ecommerce
+Purchase dog toys,ecommerce
+Buy grooming products,ecommerce
+Order dog shampoo,ecommerce
+Buy pet accessories,ecommerce
+Add food to cart,ecommerce
+I want to buy treats for my dog,ecommerce
+Show me pet products,ecommerce
+
+Book grooming for my dog,booking
+Schedule grooming appointment,booking
+Book pet walking service,booking
+I want to book a vet visit,booking
+Schedule vet appointment for my cat,booking
+Reserve pet sitting service,booking
+Book boarding for my dog,booking
+I need grooming tomorrow,booking
+Can I book daycare for my pet,booking
+Arrange a pet service,booking
+
+Add my pet details,pet_management
+Add a new pet,pet_management
+Register my dog,pet_management
+Update my pet information,pet_management
+Edit my pet profile,pet_management
+Change my dog age,pet_management
+Delete my pet record,pet_management
+Remove pet from profile,pet_management
+Show my pet details,pet_management
+Manage my pets,pet_management
+
+What services do you offer,general_query
+Help me,general_query
+How does this app work,general_query
+What is PawsomeCare,general_query
+Can you help me book a service,general_query
+I need assistance,general_query
+Tell me about pet care services,general_query
+What can you do,general_query
+Guide me through the app,general_query
+I have a question,general_query
