@@ -14,3 +14,4 @@ def detect_intent(user_text):
     text_vector = vectorizer.transform([user_text])
     intent = model.predict(text_vector)[0]
     return intent
+    
