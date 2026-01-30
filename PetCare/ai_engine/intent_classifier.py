@@ -1,17 +1,28 @@
-import pickle
 import os
+import pickle
 
-MODEL_PATH = os.path.join(
-    os.path.dirname(__file__),
-    "ml",
-    "intent_model.pkl"
-)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "ml", "intent_model.pkl")
 
-with open(MODEL_PATH, "rb") as f:
-    vectorizer, model = pickle.load(f)
+vectorizer = None
+model = None
 
-def detect_intent(user_text):
-    text_vector = vectorizer.transform([user_text])
-    intent = model.predict(text_vector)[0]
-    return intent
-    
+# Load model safely
+if os.path.exists(MODEL_PATH):
+    with open(MODEL_PATH, "rb") as f:
+        vectorizer, model = pickle.load(f)
+else:
+    print("⚠️ intent_model.pkl not found. Train the model first.")
+
+def detect_intent(text):
+    if not model or not vectorizer:
+        return {"intent": "unknown", "confidence": 0.0}
+
+    X = vectorizer.transform([text])
+    intent = model.predict(X)[0]
+    confidence = max(model.predict_proba(X)[0])
+
+    return {
+        "intent": intent,
+        "confidence": round(confidence, 2)
+    }

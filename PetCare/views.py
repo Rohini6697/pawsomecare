@@ -888,14 +888,15 @@ from django.http import JsonResponse
 import json
 from .ai_engine.intent_classifier import detect_intent
 
-def voice_command(request):
+def ai_intent_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        text = data.get("command")
+        text = data.get("command", "")
 
-        intent = detect_intent(text)
+        intent, confidence = detect_intent(text)
 
         return JsonResponse({
             "text": text,
-            "intent": intent
+            "intent": intent,
+            "confidence": round(confidence * 100, 2)
         })
