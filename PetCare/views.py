@@ -459,6 +459,53 @@ def slot_booking(request, provider_id):
         "price": price,
         "slots": slots
     })
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from .models import ServiceBooking, ServiceProvider, Customer, TimeSlot
+
+@login_required
+def cash_on_service_booking(request, provider_id):
+    if request.method != "POST":
+        return redirect("bookservice")
+
+    # 1️⃣ Check profile exists
+    if not hasattr(request.user, "profile"):
+        return HttpResponseForbidden("Profile not found")
+
+    profile = request.user.profile
+
+    # 2️⃣ Check role
+    if profile.role != "customer":
+        return HttpResponseForbidden("Only customers can book services")
+
+    # 3️⃣ Check customer object
+    try:
+        customer = profile.customer
+    except Customer.DoesNotExist:
+        return HttpResponseForbidden("Customer profile missing")
+
+    provider = get_object_or_404(ServiceProvider, id=provider_id)
+
+    service = request.POST.get("service")
+    amount = request.POST.get("amount")
+    slot_id = request.POST.get("slot_id")
+
+    # 4️⃣ Lock the slot
+    slot = get_object_or_404(TimeSlot, id=slot_id, is_available=True)
+    slot.is_available = False
+    slot.save()
+
+    # 5️⃣ Create booking (NO payment for COS)
+    ServiceBooking.objects.create(
+        customer=customer,
+        provider=provider,
+        service_name=service,
+        amount=amount,
+        status="confirmed"
+    )
+
+    return redirect("service_bookings")
 
 
 # from django.shortcuts import render, redirect, get_object_or_404

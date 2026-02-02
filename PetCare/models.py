@@ -158,7 +158,12 @@ class ServiceBooking(models.Model):
     provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     service_name = models.CharField(max_length=100)
     amount = models.PositiveIntegerField()
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
+    payment = models.OneToOneField(
+        Payment,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     booking_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,

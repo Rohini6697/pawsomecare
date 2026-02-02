@@ -27,11 +27,11 @@
         </div>
     </div>
 
-    <!-- SLOT SELECTION -->
+    <!-- SLOT & PAYMENT -->
     <div class="slot-card">
         <h3>Select Time Slot</h3>
 
-        <form id="paymentForm">
+        <form id="bookingForm" method="POST">
             {% csrf_token %}
 
             {% if slots %}
@@ -40,49 +40,66 @@
                         <label class="slot">
                             <input type="radio" name="slot_id" value="{{ slot.id }}" required>
                             <div class="slot-info">
-                                <span class="date">📅 {{ slot.date }}</span>
-                                <span class="time">⏰ {{ slot.time }}</span>
+                                <span>📅 {{ slot.date }}</span>
+                                <span>⏰ {{ slot.time }}</span>
                             </div>
                         </label>
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="no-slots">No slots available for this service.</p>
+                <p class="no-slots">No slots available.</p>
             {% endif %}
 
-            <!-- Hidden data -->
+            <!-- Hidden fields -->
             <input type="hidden" name="service" value="{{ service }}">
             <input type="hidden" name="amount" value="{{ price }}">
-            <input type="hidden" name="provider_id" value="{{ provider.id }}">
 
-            <button type="submit" class="pay-btn" id="payBtn" disabled>
-                Proceed to Payment
-            </button>
+            <div class="button-group">
 
+                <!-- CASH ON SERVICE -->
+                <button
+                    type="submit"
+                    formaction="{% url 'cash_on_service_booking' provider.id %}"
+                    class="book-btn cos-btn"
+                >
+                    Cash on Service
+                </button>
+
+                <!-- ONLINE PAYMENT -->
+                <button
+                    type="button"
+                    class="pay-btn"
+                    id="payBtn"
+                    disabled
+                >
+                    Proceed to Payment
+                </button>
+
+            </div>
         </form>
     </div>
 
 </div>
 
+<!-- Razorpay -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-// ✅ Enable button when slot selected
+// ✅ Enable buttons when slot selected
 document.querySelectorAll("input[name='slot_id']").forEach(input => {
     input.addEventListener("change", () => {
         document.getElementById("payBtn").disabled = false;
     });
 });
 
-// ✅ Handle payment
-document.getElementById("paymentForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+// ✅ Handle ONLINE payment
+document.getElementById("payBtn").addEventListener("click", function () {
 
-    const payBtn = document.getElementById("payBtn");
-    payBtn.disabled = true;
-    payBtn.innerText = "Processing...";
+    const form = document.getElementById("bookingForm");
+    const formData = new FormData(form);
 
-    const formData = new FormData(this);
+    this.disabled = true;
+    this.innerText = "Processing...";
 
     fetch("{% url 'create_service_order' %}", {
         method: "POST",
@@ -103,6 +120,7 @@ document.getElementById("paymentForm").addEventListener("submit", function(e) {
             order_id: data.order_id,
 
             handler: function (response) {
+
                 fetch("{% url 'verify_service_payment' %}", {
                     method: "POST",
                     headers: {
@@ -126,7 +144,6 @@ document.getElementById("paymentForm").addEventListener("submit", function(e) {
     });
 });
 </script>
-
 
 </body>
 </html>

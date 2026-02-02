@@ -35,7 +35,11 @@ urlpatterns = [
 
     path("confirm_service/<int:booking_id>/", views.confirm_service, name="confirm_service"),
     path("slot_booking/<int:provider_id>/", views.slot_booking, name="slot_booking"),
-
+    path(
+        "service/cash-booking/<int:provider_id>/",
+        views.cash_on_service_booking,
+        name="cash_on_service_booking"
+    ),
 
     # cart
     path("cart/create-order/", views.create_cart_order, name="create_cart_order"),
