@@ -930,20 +930,189 @@ def delete_products(request,product_id):
 
 
 
-# ------------------  Voice Assistant --------------------------------------
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import json
+
 from .ai_engine.intent_classifier import detect_intent
+from .models import PetShop, MyPet, ServiceProvider, TimeSlot
 
+# ------------------------------------
+# Temporary in-memory session (demo)
+# ------------------------------------
+SESSION_MEMORY = {}
+
+@csrf_exempt
 def ai_intent_api(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        text = data.get("command", "")
+    if request.method != "POST":
+        return JsonResponse({"error": "POST only"}, status=400)
 
-        intent, confidence = detect_intent(text)
+    data = json.loads(request.body)
+    text = data.get("command", "").lower()
+    user_id = data.get("user_id", "guest")
+
+    # Get or create session
+    session = SESSION_MEMORY.get(user_id, {
+        "intent": None,
+        "slots": {}
+    })
+
+    # ---------------------------
+    # Step 1: Detect intent
+    # ---------------------------
+    if not session["intent"]:
+        session["intent"] = detect_intent(text)
+
+    intent = session["intent"]
+    slots = session["slots"]
+
+    # =====================================================
+    # 🐾 PET STORE – PRODUCT BOOKING FLOW
+    # =====================================================
+    if intent == "pet_store":
+
+        # 1️⃣ Pet type
+        if "pet_type" not in slots:
+            if "dog" in text:
+                slots["pet_type"] = "Dog"
+            elif "cat" in text:
+                slots["pet_type"] = "Cat"
+            else:
+                return JsonResponse({
+                    "reply": "Is this for a dog or a cat?"
+                })
+
+        # 2️⃣ Category
+        if "category" not in slots:
+            categories = PetShop.objects.values_list(
+                "product_category", flat=True
+            ).distinct()
+
+            for cat in categories:
+                if cat.lower() in text:
+                    slots["category"] = cat
+                    break
+
+            if "category" not in slots:
+                return JsonResponse({
+                    "reply": "Which category do you want?",
+                    "options": list(categories)
+                })
+
+        # 3️⃣ Product selection
+        if "product" not in slots:
+            products = PetShop.objects.filter(
+                pet_type=slots["pet_type"],
+                product_category=slots["category"]
+            )
+
+            for p in products:
+                if p.product_name.lower() in text:
+                    slots["product"] = p.product_name
+                    slots["price"] = p.product_price
+                    break
+
+            if "product" not in slots:
+                return JsonResponse({
+                    "reply": "Please select a product",
+                    "options": [
+                        f"{p.product_name} – ₹{p.product_price}"
+                        for p in products
+                    ]
+                })
+
+        # ✅ Product booked
+        SESSION_MEMORY[user_id] = {
+            "intent": None,
+            "slots": {}
+        }
 
         return JsonResponse({
-            "text": text,
-            "intent": intent,
-            "confidence": round(confidence * 100, 2)
+            "reply": f"✅ {slots['product']} booked successfully for ₹{slots['price']}"
         })
+
+    # =====================================================
+    # 🏥 SERVICE BOOKING FLOW
+    # =====================================================
+    if intent == "service_booking":
+
+        # 1️⃣ Service
+        if "service" not in slots:
+            if "groom" in text:
+                slots["service"] = "Grooming"
+            elif "walk" in text:
+                slots["service"] = "Walking"
+            elif "vet" in text:
+                slots["service"] = "Vet"
+            else:
+                return JsonResponse({
+                    "reply": "Which service do you want? Grooming, walking, or vet?"
+                })
+
+        # 2️⃣ Pet
+        if "pet" not in slots:
+            pets = MyPet.objects.all()
+            for p in pets:
+                if p.pet_name.lower() in text:
+                    slots["pet"] = p.pet_name
+                    break
+
+            if "pet" not in slots:
+                return JsonResponse({
+                    "reply": "Which pet is this for?",
+                    "options": [p.pet_name for p in pets]
+                })
+
+        # 3️⃣ Provider
+        if "provider" not in slots:
+            providers = ServiceProvider.objects.filter(is_verified=True)
+            for pr in providers:
+                if pr.full_name.lower() in text:
+                    slots["provider"] = pr.full_name
+                    break
+
+            if "provider" not in slots:
+                return JsonResponse({
+                    "reply": "Choose a service provider",
+                    "options": [p.full_name for p in providers]
+                })
+
+        # 4️⃣ Time slot
+        if "time_slot" not in slots:
+            time_slots = TimeSlot.objects.filter(
+                service_name=slots["service"],
+                is_available=True
+            )
+
+            for ts in time_slots:
+                if str(ts.time) in text:
+                    slots["time_slot"] = f"{ts.date} {ts.time}"
+                    ts.is_available = False
+                    ts.save()
+                    break
+
+            if "time_slot" not in slots:
+                return JsonResponse({
+                    "reply": "Available time slots:",
+                    "options": [
+                        f"{t.date} at {t.time}"
+                        for t in time_slots
+                    ]
+                })
+
+        # ✅ Service booked
+        SESSION_MEMORY[user_id] = {
+            "intent": None,
+            "slots": {}
+        }
+
+        return JsonResponse({
+            "reply": f"✅ {slots['service']} service booked for {slots['pet']} at {slots['time_slot']}"
+        })
+
+    # =====================================================
+    # ❓ UNKNOWN INTENT
+    # =====================================================
+    return JsonResponse({
+        "reply": "Sorry, I didn’t understand that. Please try again."
+    })

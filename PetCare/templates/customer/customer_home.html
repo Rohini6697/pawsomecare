@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pawsome Care | Customer Dashboard</title>
 
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/customer/customer_home.css' %}">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 
@@ -23,24 +21,38 @@
     </div>
 
     <ul class="nav-links">
-        <li><a href="{% url 'customer_home' %}" class="active">Home</a></li>
+        <li><a href="{% url 'customer_home' %}">Home</a></li>
         <li><a href="{% url 'my_pets' %}">My Pets</a></li>
         <li><a href="{% url 'service_bookings' %}">Bookings</a></li>
         <li><a href="{% url 'shop' %}">Shop</a></li>
         <li><a href="{% url 'cart' %}">Cart</a></li>
-        <li><a href="{% url 'report' %}">report</a></li>
     </ul>
 
     <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
 </nav>
 
+<!-- VOICE HINT -->
+<div class="voice-hint" id="voiceHint">
+    Tap 🎤 and speak (example: “Book grooming for Bruno”)
+</div>
+
+<!-- VOICE BUTTON -->
+<button class="voice-btn" id="voiceBtn">🎤 Speak</button>
+
+<!-- VOICE BOX -->
+<div class="voice-box" id="voiceBox">
+    <h4>🤖 Pawla says</h4>
+    <p id="assistantText"></p>
+</div>
+
 <!-- HERO -->
 <section class="hero">
     <div class="hero-content">
-        <h1>Everything Your Pet Needs<br>
+        <h1>
+            Everything Your Pet Needs<br>
             <span class="highlight">One Trusted Platform</span>
         </h1>
-        <p>Manage pets, book services, track orders & appointments — all in one place.</p>
+        <p>Book services and shop using voice or click.</p>
 
         <div class="hero-actions">
             <button class="btn-primary">Book a Service</button>
@@ -53,33 +65,131 @@
     </div>
 </section>
 
-<!-- DASHBOARD ACTIONS -->
+<!-- DASHBOARD -->
 <section class="dashboard-actions">
     <div class="action-card">
         <h3>🐾 My Pets</h3>
-        <p>Add & manage your pets, medical history, and diet plans.</p>
+        <p>Manage registered pets.</p>
     </div>
 
     <div class="action-card">
-        <h3>📅 Bookings</h3>
-        <p>Track walking, sitting, grooming, training & vet appointments.</p>
+        <h3>📅 Services</h3>
+        <p>Grooming, walking, vet visits.</p>
     </div>
 
     <div class="action-card">
-        <h3>🛒 Orders</h3>
-        <p>View pet store orders, deliveries, and invoices.</p>
+        <h3>🛒 Pet Store</h3>
+        <p>Food, toys & accessories.</p>
     </div>
 
     <div class="action-card">
         <h3>📊 Reports</h3>
-        <p>Daily activity reports, photos, health & progress updates.</p>
+        <p>Daily health & activity.</p>
     </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
     <p>© 2025 Pawsome Care. All Rights Reserved.</p>
 </footer>
+
+<!-- ================= VOICE ASSISTANT JS ================= -->
+<script>
+const voiceBtn = document.getElementById("voiceBtn");
+const voiceBox = document.getElementById("voiceBox");
+const assistantText = document.getElementById("assistantText");
+const voiceHint = document.getElementById("voiceHint");
+
+let recognition;
+let listening = false;
+
+window.onload = () => {
+    voiceHint.style.display = "block";
+    setTimeout(() => voiceHint.style.display = "none", 4000);
+};
+
+voiceBtn.addEventListener("click", () => {
+
+    if (!("webkitSpeechRecognition" in window)) {
+        alert("Please use Google Chrome for voice support.");
+        return;
+    }
+
+    if (listening) {
+        recognition.stop();
+        speechSynthesis.cancel();
+        resetUI();
+        return;
+    }
+
+    recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    const welcome = new SpeechSynthesisUtterance(
+        "Hi, I am Pawla. You can book pet services or buy products using your voice."
+    );
+
+    assistantText.innerText = welcome.text;
+    voiceBox.style.display = "block";
+    speechSynthesis.speak(welcome);
+
+    voiceBtn.classList.add("listening");
+    voiceBtn.innerText = "🎤 Listening...";
+    listening = true;
+
+    welcome.onend = () => recognition.start();
+
+    recognition.onresult = (event) => {
+        const command = event.results[0][0].transcript;
+        assistantText.innerText = `You said: "${command}"`;
+
+        // 🔗 SEND TO DJANGO
+        fetch("/ai/intent/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken()
+            },
+            body: JSON.stringify({ command: command })
+        })
+        .then(res => res.json())
+        .then(data => {
+            assistantText.innerText = `Intent detected: ${data.intent}`;
+
+            const reply = new SpeechSynthesisUtterance(
+                `I understood this as ${data.intent}`
+            );
+            reply.rate = 1.05;   // cheerful
+            reply.pitch = 1.2;   // friendly
+            speechSynthesis.speak(reply);
+        })
+        .catch(err => {
+            assistantText.innerText = "Sorry, something went wrong.";
+            console.error(err);
+        });
+
+        resetUI();
+    };
+
+    recognition.onerror = resetUI;
+    recognition.onend = resetUI;
+});
+
+function resetUI() {
+    listening = false;
+    voiceBtn.classList.remove("listening");
+    voiceBtn.innerText = "🎤 Speak";
+}
+
+// CSRF helper
+function getCSRFToken() {
+    return document.cookie
+        .split("; ")
+        .find(row => row.startsWith("csrftoken="))
+        ?.split("=")[1];
+}
+</script>
+
 
 </body>
 </html>
