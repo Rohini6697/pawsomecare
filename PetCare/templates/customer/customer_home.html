@@ -154,15 +154,16 @@ voiceBtn.addEventListener("click", () => {
         })
         .then(res => res.json())
         .then(data => {
-            assistantText.innerText = `Intent detected: ${data.intent}`;
+    console.log("Backend response:", data);
 
-            const reply = new SpeechSynthesisUtterance(
-                `I understood this as ${data.intent}`
-            );
-            reply.rate = 1.05;   // cheerful
-            reply.pitch = 1.2;   // friendly
-            speechSynthesis.speak(reply);
-        })
+    assistantText.innerText = data.reply;
+
+    const reply = new SpeechSynthesisUtterance(data.reply);
+    reply.rate = 1.05;
+    reply.pitch = 1.2;
+    speechSynthesis.speak(reply);
+})
+
         .catch(err => {
             assistantText.innerText = "Sorry, something went wrong.";
             console.error(err);
