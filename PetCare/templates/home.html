@@ -6,25 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pawsome Care</title>
 
-    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
-    <style>
-        /* VOICE BOX STYLE (you can also move to home.css) */
-        .voice-box {
-            width: 320px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 10px;
-            margin: 10px auto;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: left;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -32,7 +15,7 @@
 <!-- NAVBAR -->
 <nav class="navbar">
     <div class="logo-wrapper">
-        <img class="logo-img" src="{% static 'images/pawsomecare-logo.png' %}" alt="Pawsome Care Logo">
+        <img class="logo-img" src="{% static 'images/pawsomecare-logo.png' %}">
         <h2 class="logo">Pawsome<span>Care</span></h2>
     </div>
 
@@ -40,7 +23,7 @@
         <li><a href="#">Home</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#about">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#contact">Contact</a></li>
     </ul>
 
     <div class="auth-buttons">
@@ -49,44 +32,42 @@
     </div>
 </nav>
 
-
-
-<!-- HERO WITH SLIDER -->
+<!-- HERO -->
 <section class="hero">
 
     <div class="slideshow-container">
 
         <div class="slide active">
-            <img src="https://static.vecteezy.com/system/resources/thumbnails/050/051/069/small/a-siamese-kitten-with-vivid-blue-eyes-gazes-forward-against-a-soft-pink-background-displaying-a-calm-and-inquisitive-expression-photo.jpeg" alt="Slide 1">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/050/051/069/small/a-siamese-kitten-with-vivid-blue-eyes-gazes-forward-against-a-soft-pink-background-displaying-a-calm-and-inquisitive-expression-photo.jpeg">
             <div class="overlay"></div>
-            <div class="caption">Moments in Silence</div>
+            <div class="caption">Premium Love & Care</div>
         </div>
 
         <div class="slide">
-            <img src="https://media.istockphoto.com/id/1925414601/photo/head-shot-of-a-happy-panting-golden-retriever-dog-looking-at-camera-wearing-a-collar-and.jpg?s=612x612&w=0&k=20&c=M48uIc5c_dsqpHHbI5E2znZ2jObWbhHyIousbdf2Peo=" alt="Slide 2">
+            <img src="https://t4.ftcdn.net/jpg/10/00/07/51/360_F_1000075122_poDpyxtmt4Hl9Nzt5YfRtDBNZLc1bLr9.jpg">
             <div class="overlay"></div>
-            <div class="caption">Light Between Shadows</div>
+            <div class="caption">Trusted Pet Services</div>
         </div>
 
         <div class="slide">
-            <img src="https://png.pngtree.com/thumb_back/fh260/background/20250606/pngtree-a-studio-photography-of-cute-dogs-and-cats-with-pastel-colors-image_17396214.jpg" alt="Slide 3">
+            <img src="https://png.pngtree.com/thumb_back/fh260/background/20250606/pngtree-a-studio-photography-of-cute-dogs-and-cats-with-pastel-colors-image_17396214.jpg">
             <div class="overlay"></div>
-            <div class="caption">Still Frames</div>
+            <div class="caption">Because Pets Are Family</div>
         </div>
 
-        <a class="prev">&#10094;</a>
-        <a class="next">&#10095;</a>
+        <span class="prev">&#10094;</span>
+        <span class="next">&#10095;</span>
 
         <div class="dots-container">
-            <div class="dot active" data-index="0"></div>
-            <div class="dot" data-index="1"></div>
-            <div class="dot" data-index="2"></div>
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
         </div>
     </div>
 
     <div class="hero-content">
         <h1>Premium Care for Your<br><span class="highlight">Furry Friends</span></h1>
-        <p>Your one-stop solution for Pet Walking, Sitting, Grooming & more.</p>
+        <p>Your one-stop solution for walking, sitting, grooming & more.</p>
         <a href="{% url 'explore_services' %}">
             <button class="btn-secondary">Explore Services</button>
         </a>
@@ -99,75 +80,43 @@
     <h2 class="section-title">Our Services</h2>
 
     <div class="service-container">
-
-        <div class="service-card">
-            <h3>🐕 Pet Walking</h3>
-            <p>Real-time tracking, photos & safe outdoor walks.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>🏡 Pet Sitting</h3>
-            <p>Home visits with feeding, cleaning & daily reports.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>✂️ Grooming</h3>
-            <p>Bathing, haircut, nail trimming & full grooming.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>🌞 Daycare</h3>
-            <p>Drop your pet for daytime play, feeding & activity logs.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>🏨 Boarding</h3>
-            <p>Overnight stays with rooms, meals & daily updates.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>🐶 Vet & Medical</h3>
-            <p>Book vet visits, symptoms upload & prescriptions.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>🎓 Training</h3>
-            <p>Obedience lessons with weekly progress tracking.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>🍗 Diet Plans</h3>
-            <p>Personalized nutrition and feeding schedules.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>🛒 Pet Store</h3>
-            <p>Food, toys, treats with cart, checkout & delivery.</p>
-        </div>
-
+        <div class="service-card">🐕 <h3>Pet Walking</h3><p>Safe, tracked outdoor walks</p></div>
+        <div class="service-card">🏡 <h3>Pet Sitting</h3><p>Home care & daily updates</p></div>
+        <div class="service-card">✂️ <h3>Grooming</h3><p>Full hygiene & styling</p></div>
+        <div class="service-card">🌞 <h3>Daycare</h3><p>Play, feed & relax</p></div>
+        <div class="service-card">🏨 <h3>Boarding</h3><p>Overnight premium stays</p></div>
+        <div class="service-card">🎓 <h3>Training</h3><p>Obedience & behavior</p></div>
     </div>
 </section>
 
 <!-- ABOUT -->
 <section id="about" class="about">
     <div class="about-container">
-
         <div class="about-text">
-            <h2 class="section-title">About PawsomeCare</h2>
+            <h2>About PawsomeCare</h2>
             <p>
-                At <strong>PawsomeCare</strong>, we believe every pet deserves love, comfort, safety,
-                and a little extra pampering.
+                At <strong>PawsomeCare</strong>, we treat every pet like our own.
+                From daily walks to medical care, we ensure safety, comfort,
+                and happiness for your furry companions.
             </p>
-
             <a href="{% url 'learnmore' %}">
                 <button class="btn-secondary">Learn More</button>
             </a>
         </div>
 
         <div class="about-image">
-            <img src="https://img.freepik.com/premium-vector/adorable-cartoon-animals-wide-angle-centered-composition_1323048-106077.jpg?semt=ais_se_enriched&w=740&q=80" alt="About Pawsome Care">
+            <img src="https://img.freepik.com/premium-vector/adorable-cartoon-animals-wide-angle-centered-composition_1323048-106077.jpg">
         </div>
+    </div>
+</section>
+<!-- CONTACT -->
+<section id="contact" class="contact">
+    <h2 class="section-title">Contact Us</h2>
 
+    <div class="contact-details">
+        <p>📍 Address: Kerala, India</p>
+        <p>📞 Phone: +91 98765 43210</p>
+        <p>✉️ Email: support@pawsomecare.com</p>
     </div>
 </section>
 
@@ -177,8 +126,40 @@
 </footer>
 
 <!-- JAVASCRIPT -->
+<script>
+    const slides = document.querySelectorAll(".slide");
+    const dots = document.querySelectorAll(".dot");
+    let index = 0;
 
+    function showSlide(i) {
+        slides.forEach(s => s.classList.remove("active"));
+        dots.forEach(d => d.classList.remove("active"));
+        slides[i].classList.add("active");
+        dots[i].classList.add("active");
+    }
 
+    document.querySelector(".next").onclick = () => {
+        index = (index + 1) % slides.length;
+        showSlide(index);
+    };
+
+    document.querySelector(".prev").onclick = () => {
+        index = (index - 1 + slides.length) % slides.length;
+        showSlide(index);
+    };
+
+    dots.forEach((dot, i) => {
+        dot.onclick = () => {
+            index = i;
+            showSlide(index);
+        };
+    });
+
+    setInterval(() => {
+        index = (index + 1) % slides.length;
+        showSlide(index);
+    }, 4000);
+</script>
 
 </body>
 </html>
