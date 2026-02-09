@@ -1,124 +1,242 @@
+/* ---------------- GLOBAL ---------------- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: "Montserrat", sans-serif;
 }
 
 body {
-    background: #f4f6f8;
+    background: #F7F5FA;
+    color: #2A2A42;
 }
 
+a {
+    text-decoration: none;
+}
+
+/* ---------------- PAGE WRAPPER ---------------- */
 .page {
-    max-width: 700px;
-    margin: 30px auto;
+    max-width: 900px;
+    margin: 40px auto;
     padding: 20px;
 }
 
-/* PROVIDER HEADER */
+/* ---------------- PROVIDER HEADER ---------------- */
 .provider-header {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    background: linear-gradient(
+        135deg,
+        rgba(156, 132, 255, 0.18),
+        rgba(255, 143, 177, 0.18)
+    );
+    padding: 30px;
+    border-radius: 24px;
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .provider-header h2 {
-    margin-bottom: 6px;
+    font-size: 30px;
+    font-weight: 800;
 }
 
-.badge {
-    background: #4caf50;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
+.provider-header .badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #9C84FF;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-.city {
-    color: #777;
+.provider-header .city {
     margin-top: 6px;
+    font-weight: 600;
+    color: #FF8FB1;
 }
 
-/* SERVICE CARD */
+/* ---------------- SERVICE CARD ---------------- */
 .service-card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.service-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 22px;
+    padding: 2px;
+    background: linear-gradient(135deg, #9C84FF, #FF8FB1);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.service-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #9C84FF;
 }
 
 .service-row {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
-    font-size: 16px;
+    font-weight: 600;
 }
 
 .price {
-    font-weight: bold;
+    color: #FF8FB1;
 }
 
-/* SLOT CARD */
+/* ---------------- SLOT CARD ---------------- */
 .slot-card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    position: relative;
 }
 
+.slot-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 22px;
+    padding: 2px;
+    background: linear-gradient(135deg, #FF8FB1, #9C84FF);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.slot-card h3 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: #9C84FF;
+}
+
+/* ---------------- SLOTS GRID ---------------- */
 .slots-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
-    margin: 15px 0;
+    margin-bottom: 25px;
 }
 
 .slot {
-    border: 2px solid #ddd;
-    padding: 12px;
-    border-radius: 8px;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 .slot input {
     display: none;
 }
 
-.slot:hover {
-    border-color: #4caf50;
+.slot-info {
+    padding: 14px;
+    border-radius: 14px;
+    border: 2px solid #ddd;
+    text-align: center;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.slot-info span {
+    display: block;
+    font-size: 14px;
 }
 
 .slot input:checked + .slot-info {
-    color: #4caf50;
-    font-weight: bold;
+    border-color: #9C84FF;
+    background: rgba(156, 132, 255, 0.12);
 }
 
-.slot-info {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
+/* ---------------- NO SLOTS ---------------- */
 .no-slots {
-    color: #999;
+    text-align: center;
+    color: #4C4C70;
+    font-weight: 600;
+}
+
+/* ---------------- BUTTONS ---------------- */
+.button-group {
+    display: flex;
+    gap: 15px;
     margin-top: 10px;
 }
 
-/* PAY BUTTON */
+.book-btn,
 .pay-btn {
-    margin-top: 20px;
-    width: 100%;
+    flex: 1;
     padding: 12px;
-    background: #4caf50;
-    color: white;
+    border-radius: 10px;
+    font-weight: 700;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
-.pay-btn:hover {
-    background: #43a047;
+/* Cash on Service */
+.cos-btn {
+    background: #FF8FB1;
+    color: #fff;
+}
+
+.cos-btn:hover {
+    background: #e6769b;
+}
+
+/* Online Payment */
+.pay-btn {
+    background: #9C84FF;
+    color: #fff;
+}
+
+.pay-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pay-btn:not(:disabled):hover {
+    background: #8367FF;
+}
+.back-btn {
+    background: transparent;
+    border: none;
+    color: #8b5cf6;        /* same purple theme */
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    display: block;
+    margin-left: auto;    /* 👈 pushes button to right */
+    margin-bottom: 12px;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 600px) {
+
+    .provider-header h2 {
+        font-size: 24px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
 }

@@ -108,6 +108,7 @@ def my_pets(request):
 
     pets = MyPet.objects.filter(customer=customer)  
     return render(request,'customer/my_pets.html',{'pets':pets})
+
 def add_pets(request):
     customer = get_object_or_404(Customer, customer=request.user.profile)
 
