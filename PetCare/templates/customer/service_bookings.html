@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>My Bookings | Pawsome Care</title>
 
-    <!-- MAIN DASHBOARD CSS (navbar, fonts, buttons) -->
+    <!-- MAIN DASHBOARD CSS -->
     <link rel="stylesheet" href="{% static 'css/customer/customer_home.css' %}">
 
     <!-- BOOKINGS PAGE CSS -->
@@ -16,7 +16,7 @@
 
 <body>
 
-<!-- NAVBAR (SAME AS DASHBOARD) -->
+<!-- NAVBAR -->
 <nav class="navbar">
     <div class="logo-wrapper">
         <img src="{% static 'images/pawsomecare-logo.png' %}" class="logo-img">
@@ -29,18 +29,17 @@
         <li><a href="{% url 'service_bookings' %}" class="active">Bookings</a></li>
         <li><a href="{% url 'shop' %}">Shop</a></li>
         <li><a href="{% url 'cart' %}">Cart</a></li>
-        <li><a href="{% url 'report' %}">report</a></li>
+        <li><a href="{% url 'report' %}">Report</a></li>
     </ul>
 
     <a href="#" class="btn-secondary">Logout</a>
 </nav>
 
-<!-- BOOKINGS HEADER -->
+<!-- HEADER -->
 <section class="bookings-header">
     <h1>My Bookings</h1>
 </section>
 
-<!-- BOOKINGS LIST -->
 <!-- BOOKINGS LIST -->
 <section class="bookings-container">
 
@@ -60,12 +59,24 @@
         <p><strong>City:</strong> {{ booking.provider.city }}</p>
         <p><strong>Price:</strong> ₹{{ booking.amount }}</p>
 
+        <!-- ✅ PAYMENT STATUS -->
+        <p>
+            <strong>Payment Mode:</strong>
+            {% if booking.payment %}
+                Paid Online
+            {% else %}
+                Cash on Service
+            {% endif %}
+        </p>
+
         <p>
             <strong>Booked On:</strong>
             {{ booking.booking_date|date:"d M Y, h:i A" }}
         </p>
 
-        <!-- <div class="booking-actions">
+        <!-- OPTIONAL ACTIONS -->
+        <!--
+        <div class="booking-actions">
             <a href="#">
                 <button class="view-btn">View</button>
             </a>
@@ -75,11 +86,11 @@
                 <button class="cancel-btn">Cancel</button>
             </a>
             {% endif %}
-        </div> -->
+        </div>
+        -->
 
     </div>
     {% endfor %}
-
 {% else %}
     <div class="no-bookings">
         <h3>No bookings yet 🐶</h3>
@@ -88,7 +99,6 @@
 {% endif %}
 
 </section>
-
 
 </body>
 </html>

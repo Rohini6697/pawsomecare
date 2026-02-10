@@ -4,40 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Provider Dashboard | Pawsome Care</title>
+
+    <!-- GOOGLE FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/provider/provider_home.css' %}">
 </head>
 <body>
 
-<div class="dashboard">
-
-    <!-- NAVBAR / HEADER -->
-    <div class="dashboard-header">
-        <div class="header-left">
-            <h2>Welcome, {{ request.user.username }} 🐾</h2>
-            <p class="status">
-                Status: <span class="verified">Verified</span>
-            </p>
-        </div>
-
-        <!-- QUICK ACTIONS NAVBAR -->
-        <div class="quick-actions">
-            <a href="{% url 'bookings' provider.id %}" class="nav-link">📅 Bookings</a>
-            <a href="{% url 'services' provider.id %}" class="nav-link">💰 Services</a>
-            <a href="#" class="nav-link">🔔 Alerts</a>
-            <a href="#" class="nav-link">⭐ Service History</a>
-        </div>
-
-        <a href="{% url 'goback' %}" class="logout-btn">Logout</a>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo-wrapper">
+        <img src="{% static 'images/pawsomecare-logo.png' %}" class="logo-img" alt="Logo">
+        <h2 class="logo">Pawsome<span>Care</span></h2>
     </div>
 
-    <!-- PROFILE SUMMARY -->
+    <ul class="nav-links">
+        <li><a href="{% url 'provider_home' %}" class="active">Dashboard</a></li>
+        <li><a href="{% url 'bookings' provider.id %}">Bookings</a></li>
+        <li><a href="{% url 'services' provider.id %}">Services</a></li>
+        <li><a href="#">Alerts</a></li>
+        <li><a href="#">History</a></li>
+    </ul>
+
+    <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
+</nav>
+
+<!-- DASHBOARD CONTENT -->
+<div class="dashboard">
+
+    <!-- PROFILE -->
     <div class="profile-card">
         <h3>My Profile</h3>
         <p><strong>City:</strong> {{ provider.city }}</p>
         <p><strong>Services:</strong> {{ provider.services|join:", " }}</p>
         <p><strong>Travel Distance:</strong> {{ provider.travel_distance }} km</p>
 
-        <a href="{% url 'edit_provider_profile' provider.id %}" class="btn">
+        <a href="{% url 'edit_provider_profile' provider.id %}" class="btn-primary">
             Edit Profile
         </a>
     </div>
@@ -48,24 +52,21 @@
             <h4>New Requests</h4>
             <p>3</p>
         </div>
-
         <div class="stat-card">
             <h4>Today's Jobs</h4>
             <p>2</p>
         </div>
-
         <div class="stat-card">
             <h4>Completed</h4>
             <p>14</p>
         </div>
-
         <div class="stat-card">
             <h4>Total Earnings</h4>
             <p>₹18,450</p>
         </div>
     </div>
 
-    <!-- TODAY TASKS -->
+    <!-- TASKS -->
     <div class="section">
         <h3>Today's Tasks</h3>
         <ul class="task-list">
