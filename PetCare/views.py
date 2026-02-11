@@ -929,58 +929,89 @@ def delete_products(request,product_id):
     product.delete()
     return redirect('view_products')
 
+# ======================================= voice assistant =============================================
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
 from .ai_engine.intent_classifier import detect_intent
-from .models import PetShop, MyPet, ServiceProvider, TimeSlot
-
-SESSION_MEMORY = {}
+from .ai_engine.slot_extractor import extract_slots
+from .ai_engine.dialog_manager import next_question
 
 @csrf_exempt
 def ai_intent_api(request):
+
     if request.method != "POST":
         return JsonResponse({"error": "POST only"}, status=400)
 
     data = json.loads(request.body)
-    text = data.get("command", "").lower()
-    user_id = data.get("user_id", "guest")
+    raw_text = data.get("command", "")
+    text = raw_text.lower()
 
-    # 🔹 Get ML result
-    result = detect_intent(text)
+    # 🔄 RESET
+    if "reset" in text or "cancel" in text:
+        request.session.flush()
+        return JsonResponse({"reply": "Conversation reset. How can I help you?"})
 
-    intent = result["intent"]
-    confidence = result["confidence"]
+    # 📦 Load existing slots (IMPORTANT FIX)
+    slots = request.session.get("slots", {
+        "intent_type": None,
+        "pet_type": None,
+        "category": None,
+        "product_name": None,
+        "service": None,
+        "time_slot": None
+    })
 
-    print("RAW ML OUTPUT:", result)
-    print("INTENT:", intent, "CONFIDENCE:", confidence)
+    # 1️⃣ Detect intent ONLY if not set
+    if not slots["intent_type"]:
+        intent_data = detect_intent(text)
+        intent = intent_data["intent"]
+        confidence = intent_data["confidence"]
 
-    # 🔹 Low confidence fallback
-    if confidence < 0.5:
+        if confidence < 0.4:
+            return JsonResponse({
+                "reply": "Can you tell me a bit more?"
+            })
+
+        slots["intent_type"] = intent
+    else:
+        intent = slots["intent_type"]
+        confidence = 1.0
+
+    # 2️⃣ Extract slots
+    extracted = extract_slots(text)
+    for k, v in extracted.items():
+        if v:
+            slots[k] = v
+
+    request.session["slots"] = slots
+
+    # 3️⃣ Ask next question
+    question = next_question(slots)
+
+    if question:
         return JsonResponse({
-            "intent": intent,
-            "confidence": confidence,
-            "reply": "I’m not sure what you mean. Do you want to book a service or buy products?"
+            "reply": question,
+            "slots": slots
         })
 
-    # ------------------ PRODUCT BOOKING ------------------
+    # 4️⃣ ADD TO CART (ECOMMERCE)
     if intent == "ecommerce":
+        cart = request.session.get("cart", [])
+        cart.append({
+            "pet_type": slots["pet_type"],
+            "category": slots["category"],
+            "product_name": slots["product_name"]
+        })
+        request.session["cart"] = cart
+        request.session.pop("slots")
+
         return JsonResponse({
-            "intent": intent,
-            "confidence": confidence,
-            "reply": "Sure! Is this for a dog or a cat?"
+            "reply": f"🛒 {slots['product_name']} added to cart for your {slots['pet_type']}!"
         })
 
-    if intent == "service_booking":
-        return JsonResponse({
-            "intent": intent,
-            "confidence": confidence,
-            "reply": "Which service do you want? Grooming, walking, or vet?"
-        })
-
-    # ------------------ UNKNOWN ------------------
     return JsonResponse({
-        "reply": "Sorry, I didn’t understand that."
+        "reply": "Done!"
     })

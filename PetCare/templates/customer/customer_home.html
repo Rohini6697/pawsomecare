@@ -101,6 +101,7 @@ const voiceHint = document.getElementById("voiceHint");
 
 let recognition;
 let listening = false;
+let isSpeaking = false;
 
 window.onload = () => {
     voiceHint.style.display = "block";
@@ -115,74 +116,109 @@ voiceBtn.addEventListener("click", () => {
     }
 
     if (listening) {
-        recognition.stop();
-        speechSynthesis.cancel();
-        resetUI();
+        stopListening();
         return;
     }
 
-    recognition = new webkitSpeechRecognition();
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
-
-    const welcome = new SpeechSynthesisUtterance(
-        "Hi, I am Pawla. You can book pet services or buy products using your voice."
-    );
-
-    assistantText.innerText = welcome.text;
-    voiceBox.style.display = "block";
-    speechSynthesis.speak(welcome);
-
-    voiceBtn.classList.add("listening");
-    voiceBtn.innerText = "🎤 Listening...";
-    listening = true;
-
-    welcome.onend = () => recognition.start();
-
-    recognition.onresult = (event) => {
-        const command = event.results[0][0].transcript;
-        assistantText.innerText = `You said: "${command}"`;
-
-        // 🔗 SEND TO DJANGO
-        fetch("/ai/intent/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCSRFToken()
-            },
-            body: JSON.stringify({ command: command })
-        })
-        .then(res => res.json())
-        .then(data => {
-    console.log("Backend response:", data);
-
-    assistantText.innerText = data.reply;
-
-    const reply = new SpeechSynthesisUtterance(data.reply);
-    reply.rate = 1.05;
-    reply.pitch = 1.2;
-    speechSynthesis.speak(reply);
-})
-
-        .catch(err => {
-            assistantText.innerText = "Sorry, something went wrong.";
-            console.error(err);
-        });
-
-        resetUI();
-    };
-
-    recognition.onerror = resetUI;
-    recognition.onend = resetUI;
+    startAssistant();
 });
 
-function resetUI() {
+function startAssistant() {
+
+    recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = true;      // 🔥 keeps listening
+    recognition.interimResults = false;
+
+    recognition.onresult = handleResult;
+
+    recognition.onerror = (event) => {
+        console.log("Speech recognition error:", event.error);
+    };
+
+    recognition.onend = () => {
+        // 🔥 Restart automatically if still in listening mode
+        if (listening && !isSpeaking) {
+            recognition.start();
+        }
+    };
+
+    listening = true;
+    voiceBtn.classList.add("listening");
+    voiceBtn.innerText = "🎤 Listening...";
+
+    const welcomeText = 
+        "Hi, I am Pawla. You can book pet services or buy products using your voice.";
+
+    speak(welcomeText, () => {
+        recognition.start();
+    });
+
+    voiceBox.style.display = "block";
+}
+
+function handleResult(event) {
+
+    const command = event.results[event.results.length - 1][0].transcript;
+    console.log("User said:", command);
+
+    assistantText.innerText = `You said: "${command}"`;
+
+    recognition.stop();   // 🔥 pause while processing
+
+    fetch("/ai/intent/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken()
+        },
+        body: JSON.stringify({ command: command })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        console.log("Backend response:", data);
+
+        speak(data.reply, () => {
+            if (listening) {
+                recognition.start();   // 🔥 resume after speaking
+            }
+        });
+
+    })
+    .catch(err => {
+        console.error(err);
+        speak("Sorry, something went wrong.", () => {
+            recognition.start();
+        });
+    });
+}
+
+function speak(text, callback) {
+
+    isSpeaking = true;
+    assistantText.innerText = text;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1.05;
+    utterance.pitch = 1.1;
+
+    utterance.onend = () => {
+        isSpeaking = false;
+        if (callback) callback();
+    };
+
+    speechSynthesis.speak(utterance);
+}
+
+function stopListening() {
     listening = false;
+    recognition.stop();
+    speechSynthesis.cancel();
     voiceBtn.classList.remove("listening");
     voiceBtn.innerText = "🎤 Speak";
 }
 
-// CSRF helper
 function getCSRFToken() {
     return document.cookie
         .split("; ")
@@ -190,6 +226,8 @@ function getCSRFToken() {
         ?.split("=")[1];
 }
 </script>
+
+
 
 
 </body>

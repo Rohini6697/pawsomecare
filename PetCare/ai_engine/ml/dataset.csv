@@ -10,16 +10,16 @@ Add food to cart,ecommerce
 I want to buy treats for my dog,ecommerce
 Show me pet products,ecommerce
 
-Book grooming for my dog,booking
-Schedule grooming appointment,booking
-Book pet walking service,booking
-I want to book a vet visit,booking
-Schedule vet appointment for my cat,booking
-Reserve pet sitting service,booking
-Book boarding for my dog,booking
-I need grooming tomorrow,booking
-Can I book daycare for my pet,booking
-Arrange a pet service,booking
+Book grooming for my dog,service_booking
+Schedule grooming appointment,service_booking
+Book pet walking service,service_booking
+I want to book a vet visit,service_booking
+Schedule vet appointment for my cat,service_booking
+Reserve pet sitting service,service_booking
+Book boarding for my dog,service_booking
+I need grooming tomorrow,service_booking
+Can I book daycare for my pet,service_booking
+Arrange a pet service,service_booking
 
 Add my pet details,pet_management
 Add a new pet,pet_management
@@ -42,3 +42,37 @@ Tell me about pet care services,general_query
 What can you do,general_query
 Guide me through the app,general_query
 I have a question,general_query
+
+buy products,ecommerce
+buy pet products,ecommerce
+shop products,ecommerce
+purchase products,ecommerce
+I want to buy something,ecommerce
+I want to shop,ecommerce
+
+buy products,ecommerce
+buy pet products,ecommerce
+shop products,ecommerce
+purchase products,ecommerce
+open pet shop,ecommerce
+show shop,ecommerce
+I want to shop,ecommerce
+add items to cart,ecommerce
+buy dog food,ecommerce
+buy cat food,ecommerce
+
+book grooming,booking
+book pet service,booking
+schedule grooming,booking
+book vet appointment,booking
+book walking service,booking
+book daycare,booking
+
+add my pet,pet_management
+register pet,pet_management
+add dog,pet_management
+add cat,pet_management
+
+help me,general_query
+what can you do,general_query
+how does this work,general_query

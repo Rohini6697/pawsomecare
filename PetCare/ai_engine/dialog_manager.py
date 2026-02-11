@@ -1,12 +1,12 @@
-# ai_engine/dialog_manager.py
-
 def next_question(slots):
-    if slots["intent_type"] == "product_booking":
+
+    if slots["intent_type"] == "ecommerce":
+
         if not slots["pet_type"]:
             return "Is this for a dog or a cat?"
 
         if not slots["category"]:
-            return "Which category do you want? Food, toys, or accessories?"
+            return "What category do you want? Food, toys, or accessories?"
 
         if not slots["product_name"]:
             return "Which product would you like?"
@@ -14,16 +14,16 @@ def next_question(slots):
         return None
 
     if slots["intent_type"] == "service_booking":
-        if not slots["pet_id"]:
-            return "Which of your registered pets is this for?"
+
+        if not slots["pet_type"]:
+            return "Is this for a dog or a cat?"
 
         if not slots["service"]:
-            return "Which service do you want?"
-
-        if not slots["provider_id"]:
-            return "Which service provider would you like?"
+            return "Which service do you need? Grooming, walking, or vet?"
 
         if not slots["time_slot"]:
             return "Which time slot do you prefer?"
 
         return None
+
+    return "How can I help you?"
