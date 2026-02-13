@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- NAVBAR (UNCHANGED) -->
 <nav class="navbar">
     <div class="logo-wrapper">
         <img src="{% static 'images/pawsomecare-logo.png' %}" class="logo-img" alt="Logo">
@@ -24,55 +24,38 @@
         <li><a href="{% url 'provider_home' %}" class="active">Dashboard</a></li>
         <li><a href="{% url 'bookings' provider.id %}">Bookings</a></li>
         <li><a href="{% url 'services' provider.id %}">Services</a></li>
-        <li><a href="#">Alerts</a></li>
+        <li><a href="#">Location</a></li>
         <li><a href="#">History</a></li>
     </ul>
 
     <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
 </nav>
 
-<!-- DASHBOARD CONTENT -->
-<div class="dashboard">
+<!-- MAIN DASHBOARD -->
+<div class="dashboard-container">
 
-    <!-- PROFILE -->
+    <!-- LEFT SIDE IMAGE -->
+    <div class="dashboard-image">
+        <img src="{% static 'images/provider-banner.jpg' %}" alt="Provider Image">
+    </div>
+
+    <!-- RIGHT SIDE PROFILE CARD -->
     <div class="profile-card">
-        <h3>My Profile</h3>
-        <p><strong>City:</strong> {{ provider.city }}</p>
-        <p><strong>Services:</strong> {{ provider.services|join:", " }}</p>
-        <p><strong>Travel Distance:</strong> {{ provider.travel_distance }} km</p>
 
-        <a href="{% url 'edit_provider_profile' provider.id %}" class="btn-primary">
-            Edit Profile
-        </a>
-    </div>
+        <h2>Welcome, {{ provider.user.username }} 👋</h2>
 
-    <!-- STATS -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h4>New Requests</h4>
-            <p>3</p>
+        <div class="profile-details">
+            <p><strong>📍 City:</strong> {{ provider.city }}</p>
+            <p><strong>🛠 Services:</strong> {{ provider.services|join:", " }}</p>
+            <p><strong>🚗 Travel Distance:</strong> {{ provider.travel_distance }} km</p>
         </div>
-        <div class="stat-card">
-            <h4>Today's Jobs</h4>
-            <p>2</p>
-        </div>
-        <div class="stat-card">
-            <h4>Completed</h4>
-            <p>14</p>
-        </div>
-        <div class="stat-card">
-            <h4>Total Earnings</h4>
-            <p>₹18,450</p>
-        </div>
-    </div>
 
-    <!-- TASKS -->
-    <div class="section">
-        <h3>Today's Tasks</h3>
-        <ul class="task-list">
-            <li>🐕 Walk Bruno – 6:00 PM</li>
-            <li>✂️ Groom Bella – 7:30 PM</li>
-        </ul>
+        <div class="profile-buttons">
+            <a href="{% url 'edit_provider_profile' provider.id %}" class="btn-primary">
+                ✏️ Edit Profile
+            </a>
+        </div>
+
     </div>
 
 </div>

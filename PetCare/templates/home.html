@@ -120,46 +120,65 @@
     </div>
 </section>
 
+
+
+<!-- Chat Icon -->
+<div class="chat-icon" onclick="toggleChat()">💬</div>
+
+<!-- Chat Box -->
+<div class="chat-box" id="chatBox">
+    <div class="chat-header">
+        Pawsome Assistant 🐾
+    </div>
+
+    <div class="chat-messages" id="messages">
+        <p><strong>Bot:</strong> Hi! How can I help you today?</p>
+    </div>
+
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
 <!-- FOOTER -->
 <footer>
     <p>© 2025 Pawsome Care. All Rights Reserved.</p>
 </footer>
 
-<!-- JAVASCRIPT -->
 <script>
-    const slides = document.querySelectorAll(".slide");
-    const dots = document.querySelectorAll(".dot");
-    let index = 0;
+function toggleChat() {
+    const box = document.getElementById("chatBox");
+    box.style.display = box.style.display === "flex" ? "none" : "flex";
+}
 
-    function showSlide(i) {
-        slides.forEach(s => s.classList.remove("active"));
-        dots.forEach(d => d.classList.remove("active"));
-        slides[i].classList.add("active");
-        dots[i].classList.add("active");
-    }
+function sendMessage() {
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
 
-    document.querySelector(".next").onclick = () => {
-        index = (index + 1) % slides.length;
-        showSlide(index);
-    };
+    if (!message) return;
 
-    document.querySelector(".prev").onclick = () => {
-        index = (index - 1 + slides.length) % slides.length;
-        showSlide(index);
-    };
+    const messagesDiv = document.getElementById("messages");
 
-    dots.forEach((dot, i) => {
-        dot.onclick = () => {
-            index = i;
-            showSlide(index);
-        };
+    // Show user message
+    messagesDiv.innerHTML += "<p><strong>You:</strong> " + message + "</p>";
+
+    fetch("/chat/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "message=" + encodeURIComponent(message)
+    })
+    .then(response => response.json())
+    .then(data => {
+        messagesDiv.innerHTML += "<p><strong>Bot:</strong> " + data.reply + "</p>";
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-    setInterval(() => {
-        index = (index + 1) % slides.length;
-        showSlide(index);
-    }, 4000);
+    input.value = "";
+}
 </script>
 
+<!-- ================= END CHATBOT ================= -->
 </body>
 </html>

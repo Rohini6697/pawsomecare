@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 from .views import ai_intent_api
+from .views import chatbot_view
+
 
 urlpatterns = [
     path('',views.home,name='home'),
@@ -35,11 +37,11 @@ urlpatterns = [
 
     path("confirm_service/<int:booking_id>/", views.confirm_service, name="confirm_service"),
     path("slot_booking/<int:provider_id>/", views.slot_booking, name="slot_booking"),
-    path(
-        "service/cash-booking/<int:provider_id>/",
-        views.cash_on_service_booking,
-        name="cash_on_service_booking"
-    ),
+    # path(
+    #     "service/cash-booking/<int:provider_id>/",
+    #     views.cash_on_service_booking,
+    #     name="cash_on_service_booking"
+    # ),
 
     # cart
     path("cart/create-order/", views.create_cart_order, name="create_cart_order"),
@@ -73,6 +75,10 @@ urlpatterns = [
     path('update_products/<int:product_id>/',views.update_products,name='update_products'),
     path('delete_products/<int:product_id>/',views.delete_products,name='delete_products'),
     path('booknow/<int:provider_id>/',views.booknow,name='booknow'),
+
+# chat bot
+    path("chat/", chatbot_view, name="chatbot"),
+
     
 # Voice Assistant
 

@@ -262,3 +262,87 @@ footer {
     color: #555;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
 }
+/* ================= PROVIDERS SECTION ================= */
+
+.providers-section {
+    padding: 60px 8%;
+    background: #f9fafc;
+}
+
+.providers-section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 35px;
+    color: #222;
+}
+
+.providers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* Provider Card */
+.provider-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    transition: 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.provider-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.provider-card h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.provider-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+/* Verified Badge */
+.provider-card::before {
+    content: "✔ Verified";
+    position: absolute;
+    top: 15px;
+    right: -40px;
+    background: #2ecc71;
+    color: white;
+    padding: 5px 40px;
+    font-size: 12px;
+    transform: rotate(45deg);
+    display: none;
+}
+
+.provider-card.verified::before {
+    display: block;
+}
+
+/* View Services Button */
+.provider-card .btn-primary {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, #ff7a18, #ffb347);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.provider-card .btn-primary:hover {
+    background: linear-gradient(135deg, #ff5f00, #ffa500);
+}

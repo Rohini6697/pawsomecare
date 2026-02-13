@@ -66,27 +66,26 @@
 </section>
 
 <!-- DASHBOARD -->
-<section class="dashboard-actions">
-    <div class="action-card">
-        <h3>🐾 My Pets</h3>
-        <p>Manage registered pets.</p>
-    </div>
+<section class="providers-section">
+    <h2>Available Services in {{ customer.city }}</h2>
 
-    <div class="action-card">
-        <h3>📅 Services</h3>
-        <p>Grooming, walking, vet visits.</p>
-    </div>
+    {% if providers %}
+        <div class="providers-grid">
+            {% for provider in providers %}
+                <div class="provider-card">
+                    <h3>{{ provider.full_name }}</h3>
+                    <p>{{ provider.provider_type }}</p>
+                    <p>📍 {{ provider.city }}</p>
 
-    <div class="action-card">
-        <h3>🛒 Pet Store</h3>
-        <p>Food, toys & accessories.</p>
-    </div>
-
-    <div class="action-card">
-        <h3>📊 Reports</h3>
-        <p>Daily health & activity.</p>
-    </div>
+                    
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No service providers available in your city yet.</p>
+    {% endif %}
 </section>
+
 
 <footer>
     <p>© 2025 Pawsome Care. All Rights Reserved.</p>

@@ -21,6 +21,7 @@
             {% for booking in bookings %}
             <div class="booking-card">
 
+                <!-- Booking Info -->
                 <div class="booking-info">
                     <h4>🐾 {{ booking.service_name|title }}</h4>
 
@@ -35,7 +36,7 @@
                     {% empty %}
                         <p><strong>Service Slot:</strong> Not available</p>
                     {% endfor %}
- 
+
                     {% with booking.customer.mypet_set.first as pet %}
                         {% if pet %}
                             <p><strong>Pet Type:</strong> {{ pet.pet_type }}</p>
@@ -43,22 +44,39 @@
                     {% endwith %}
                 </div>
 
+                <!-- Booking Actions -->
                 <div class="booking-actions">
+
+                    <!-- Status -->
                     <div class="booking-status {{ booking.status }}">
                         {{ booking.status|title }}
                     </div>
 
-                    {% if booking.status == "pending" or booking.status == "confirmed" %}
-                        <a href="{% url 'confirm_service' booking.id %}" class="btn confirm">✅ Confirm</a>
-
-                        <a href="{% url 'refund_booking' booking.id %}"
-                        class="btn cancel"
-                        onclick="return confirm('Are you sure you want to refund this booking?');">
-                        💸 Refund
+                    <!-- Confirm Button (only for pending) -->
+                    {% if booking.status == "pending" %}
+                        <a href="{% url 'confirm_service' booking.id %}"
+                           class="btn confirm"
+                           onclick="return confirm('Confirm this service?');">
+                            ✅ Confirm
                         </a>
                     {% endif %}
-                </div>
 
+                    <!-- Refund Button -->
+                    {% if booking.payment %}
+                        <!-- ONLINE PAYMENT -->
+                        <a href="{% url 'refund_booking' booking.id %}"
+                           class="btn cancel"
+                           onclick="return confirm('Are you sure you want to refund this booking?');">
+                            💸 Refund
+                        </a>
+                    {% else %}
+                        <!-- CASH ON SERVICE -->
+                        <button class="btn cancel disabled-btn" disabled>
+                            💸 Refund
+                        </button>
+                    {% endif %}
+
+                </div>
 
             </div>
             {% endfor %}

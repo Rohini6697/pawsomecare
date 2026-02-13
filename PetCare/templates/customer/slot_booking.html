@@ -4,24 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Book {{ service|title }} | {{ provider.full_name }}</title>
-
     <link rel="stylesheet" href="{% static 'css/customer/slot_booking.css' %}">
 </head>
 <body>
+
 <button type="button" class="back-btn" onclick="window.history.back()">
     ← Go Back
 </button>
 
 <div class="page">
 
-    <!-- PROVIDER HEADER -->
     <div class="provider-header">
         <h2>{{ provider.full_name }}</h2>
         <span class="badge">{{ provider.get_provider_type_display }}</span>
         <p class="city">{{ provider.city }}</p>
     </div>
 
-    <!-- SERVICE SUMMARY -->
     <div class="service-card">
         <h3>Selected Service</h3>
         <div class="service-row">
@@ -30,11 +28,10 @@
         </div>
     </div>
 
-    <!-- SLOT & PAYMENT -->
     <div class="slot-card">
         <h3>Select Time Slot</h3>
 
-        <form id="bookingForm" method="POST">
+        <form id="bookingForm">
             {% csrf_token %}
 
             {% if slots %}
@@ -53,49 +50,33 @@
                 <p class="no-slots">No slots available.</p>
             {% endif %}
 
-            <!-- Hidden fields -->
+            <!-- Hidden Fields -->
             <input type="hidden" name="service" value="{{ service }}">
             <input type="hidden" name="amount" value="{{ price }}">
+            <input type="hidden" name="provider_id" value="{{ provider.id }}">
 
             <div class="button-group">
-
-                <!-- CASH ON SERVICE -->
-                <button
-                    type="submit"
-                    formaction="{% url 'cash_on_service_booking' provider.id %}"
-                    class="book-btn cos-btn"
-                >
-                    Cash on Service
-                </button>
-
-                <!-- ONLINE PAYMENT -->
-                <button
-                    type="button"
-                    class="pay-btn"
-                    id="payBtn"
-                    disabled
-                >
+                <button type="button" class="pay-btn" id="payBtn" disabled>
                     Proceed to Payment
                 </button>
-
             </div>
         </form>
     </div>
 
 </div>
 
-<!-- Razorpay -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-// ✅ Enable buttons when slot selected
+const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+// Enable payment button
 document.querySelectorAll("input[name='slot_id']").forEach(input => {
     input.addEventListener("change", () => {
         document.getElementById("payBtn").disabled = false;
     });
 });
 
-// ✅ Handle ONLINE payment
 document.getElementById("payBtn").addEventListener("click", function () {
 
     const form = document.getElementById("bookingForm");
@@ -106,13 +87,17 @@ document.getElementById("payBtn").addEventListener("click", function () {
 
     fetch("{% url 'create_service_order' %}", {
         method: "POST",
-        headers: {
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
+        headers: { "X-CSRFToken": csrfToken },
         body: formData
     })
     .then(res => res.json())
     .then(data => {
+
+        if (!data.order_id) {
+            alert("Order creation failed.");
+            location.reload();
+            return;
+        }
 
         const options = {
             key: data.key,
@@ -127,7 +112,7 @@ document.getElementById("payBtn").addEventListener("click", function () {
                 fetch("{% url 'verify_service_payment' %}", {
                     method: "POST",
                     headers: {
-                        "X-CSRFToken": "{{ csrf_token }}",
+                        "X-CSRFToken": csrfToken,
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
                     body:
@@ -136,9 +121,15 @@ document.getElementById("payBtn").addEventListener("click", function () {
                         `&razorpay_signature=${response.razorpay_signature}` +
                         `&slot_id=${formData.get("slot_id")}`
                 })
-                .then(() => {
-                    alert("Service booked successfully!");
-                    window.location.href = "{% url 'service_bookings' %}";
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status === "success") {
+                        alert("Service booked successfully!");
+                        window.location.href = "{% url 'service_bookings' %}";
+                    } else {
+                        alert("Slot already booked.");
+                        location.reload();
+                    }
                 });
             }
         };
