@@ -1,97 +1,212 @@
+/* ---------------- GLOBAL ---------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    background: #F7F5FA;
+    color: #2A2A42;
 }
 
+a {
+    text-decoration: none;
+}
+
+/* ---------------- NAVBAR ---------------- */
+.navbar {
+    width: 100%;
+    padding: 20px 50px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #9C84FF;
+}
+
+.logo span {
+    color: #FF8FB1;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    font-weight: 600;
+    color: #2A2A42;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #9C84FF;
+}
+
+.btn-secondary {
+    background: #FF8FB1;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #9C84FF;
+}
+
+/* ---------------- CONTAINER ---------------- */
 .container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
 }
 
-h2 {
+.container h2 {
+    font-size: 28px;
     margin-bottom: 20px;
+    color: #9C84FF;
 }
 
+.back-btn {
+    display: inline-block;
+    margin-bottom: 30px;
+    background: #FF8FB1;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: #9C84FF;
+}
+
+/* ---------------- SERVICE CARD ---------------- */
 .service-card {
     background: #fff;
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 20px;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    transition: 0.3s;
 }
 
+.service-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Header */
 .service-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 15px;
+}
+
+.service-header h3 {
+    color: #2A2A42;
 }
 
 .price {
-    background: #007bff;
-    color: #fff;
+    background: #9C84FF;
+    color: white;
     padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 14px;
+    border-radius: 8px;
+    font-weight: 600;
 }
 
+/* ---------------- TIMESLOTS ---------------- */
 .timeslots {
-    margin-top: 12px;
+    background: #F7F5FA;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.timeslots h4 {
+    margin-bottom: 10px;
+    color: #9C84FF;
 }
 
 .timeslots ul {
-    padding-left: 18px;
+    list-style: none;
 }
 
 .timeslots li {
-    margin-bottom: 6px;
-    font-size: 14px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .empty {
-    font-size: 13px;
-    color: #888;
+    color: #777;
 }
 
-.timeslot-form {
-    margin-top: 14px;
+/* ---------------- FORM ---------------- */
+form {
     display: flex;
+    flex-direction: column;
     gap: 10px;
 }
 
-.timeslot-form input {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.timeslot-form button {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.timeslot-form button:hover {
-    background: #218838;
-}
-.back-btn {
-    display: inline-block;
-    margin-bottom: 15px;
-    padding: 8px 14px;
-    background-color: #444;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 6px;
+label {
+    font-weight: 600;
     font-size: 14px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+input:focus {
+    border-color: #9C84FF;
+}
+
+button {
+    margin-top: 10px;
+    background: #9C84FF;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
     cursor: pointer;
+    transition: 0.3s;
 }
 
-.back-btn:hover {
-    background-color: #222;
+button:hover {
+    background: #8367FF;
 }
-
-
- 

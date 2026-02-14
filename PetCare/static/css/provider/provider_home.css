@@ -179,3 +179,31 @@ a {
     margin-bottom: 10px;
     font-weight: 600;
 }
+/* ---------------- DASHBOARD LAYOUT ---------------- */
+.dashboard-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 60px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+/* LEFT IMAGE */
+.dashboard-image {
+    flex: 1;
+}
+
+.dashboard-image img {
+    width: 100%;
+    max-width: 500px;   /* control image size here */
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+/* RIGHT PROFILE */
+.profile-card {
+    flex: 1;
+}
