@@ -93,21 +93,32 @@
             </div>
         </div>
 
-        <!-- SERVICES -->
         <div class="section">
-            <h3>Services Offered</h3>
+    <h3>Services & Price</h3>
 
-            <div class="service-grid">
-        {% for service in services_list %}
-            <label class="service-box">
-                <input type="checkbox" name="services" value="{{ service }}"
-                    {% if service in provider.services %}checked{% endif %}>
-                <span>{{ service|title }}</span>
-            </label>
-        {% endfor %}
+    <div id="services-container">
+
+        {% if provider.services %}
+            {% for service, price in provider.services.items %}
+                <div class="service-row">
+                    <input type="text" 
+                           name="service_name_{{ forloop.counter }}" 
+                           value="{{ service }}" 
+                           placeholder="Service Name">
+
+                    <input type="number" 
+                           name="price_{{ forloop.counter }}" 
+                           value="{{ price }}" 
+                           placeholder="Price">
+                </div>
+            {% endfor %}
+        {% endif %}
+
     </div>
 
-        </div>
+    <button type="button" onclick="addService()">+ Add Service</button>
+</div>
+
 
         <!-- SAVE -->
         <div class="action-bar">
@@ -118,6 +129,25 @@
     </form>
 
 </div>
+<script>
+    let serviceCount = {{ service_count }};
+
+    function addService() {
+        serviceCount++;
+
+        const container = document.getElementById("services-container");
+
+        const div = document.createElement("div");
+        div.classList.add("service-row");
+
+        div.innerHTML = `
+            <input type="text" name="service_name_${serviceCount}" placeholder="Service Name">
+            <input type="number" name="price_${serviceCount}" placeholder="Price">
+        `;
+
+        container.appendChild(div);
+    }
+</script>
 
 </body>
 </html>

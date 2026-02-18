@@ -606,10 +606,40 @@ def provider_home(request):
     return render(request,'provider/provider_home.html',{'provider':provider})
 def provider_pending(request):
     return render(request,'provider/provider_pending.html')
-def edit_provider_profile(request,provider_id):
+from django.shortcuts import render, get_object_or_404, redirect
+
+def edit_provider_profile(request, provider_id):
     provider = get_object_or_404(ServiceProvider, id=provider_id)
 
-    return render(request,'provider/edit_provider_profile.html',{'provider':provider})
+    if not provider.services:
+        provider.services = {}
+
+    service_count = len(provider.services)
+
+    if request.method == "POST":
+
+        services_data = {}
+
+        for key, value in request.POST.items():
+            if key.startswith("service_name_"):
+                index = key.split("_")[-1]
+                service_name = value
+                price = request.POST.get(f"price_{index}")
+
+                if service_name and price:
+                    services_data[service_name] = int(price)
+
+        provider.services = services_data
+        provider.save()
+
+        return redirect("provider_home")
+
+    return render(request, "provider/edit_provider_profile.html", {
+        "provider": provider,
+        "service_count": service_count   # 👈 send this separately
+    })
+
+
 def bookings(request, provider_id):
     profile = request.user.profile
 
