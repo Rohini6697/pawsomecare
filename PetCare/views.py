@@ -536,9 +536,29 @@ def slot_booking(request, provider_id):
 # from django.contrib import messages
 # from .models import ServiceProvider, Profile
 # ====================================== Provider ======================================
+
+import requests
+
+def get_lat_long_from_address(address):
+    url = "https://nominatim.openstreetmap.org/search"
+    params = {
+        "q": address,
+        "format": "json",
+        "limit": 1
+    }
+
+    response = requests.get(url, params=params, headers={
+        "User-Agent": "pawsome-care-app"
+    })
+
+    data = response.json()
+
+    if data:
+        return float(data[0]["lat"]), float(data[0]["lon"])
+    return None, None
+
+
 @login_required
-
-
 def provider_details(request, provider_id):
     profile = get_object_or_404(Profile, id=provider_id)
 
@@ -556,7 +576,20 @@ def provider_details(request, provider_id):
         provider.city = request.POST.get("city")
         provider.address = request.POST.get("address")
         provider.pincode = request.POST.get("pincode")
-        provider.travel_distance = request.POST.get("travel_distance")
+        travel = request.POST.get("travel_distance")
+
+        if travel:
+            provider.travel_distance = float(travel)
+        else:
+            provider.travel_distance = None
+        # Convert address to latitude & longitude
+        full_address = f"{provider.address}, {provider.city}, {provider.pincode}"
+
+        lat, lon = get_lat_long_from_address(full_address)
+
+        provider.latitude = lat
+        provider.longitude = lon
+        
 
         # ⭐ SERVICES + PRICE (IMPORTANT PART)
         selected_services = request.POST.getlist("services")
@@ -599,6 +632,59 @@ def provider_details(request, provider_id):
         "provider/provider_details.html",
         {"provider": provider}
     )
+import math
+from django.shortcuts import render
+
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371  # Earth radius in km
+
+    dLat = math.radians(lat2 - lat1)
+    dLon = math.radians(lon2 - lon1)
+
+    a = (
+        math.sin(dLat/2)**2 +
+        math.cos(math.radians(lat1)) *
+        math.cos(math.radians(lat2)) *
+        math.sin(dLon/2)**2
+    )
+
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    return R * c
+
+
+def nearby_providers(request):
+
+    if request.method == "POST":
+        cust_lat = float(request.POST.get("latitude"))
+        cust_lon = float(request.POST.get("longitude"))
+
+
+        providers = ServiceProvider.objects.filter(is_verified=True)
+
+        nearby_list = []
+        
+
+        for provider in providers:
+
+            if provider.latitude and provider.longitude:
+
+                distance = haversine(
+                    cust_lat, cust_lon,
+                    provider.latitude, provider.longitude
+                )
+
+                # If travel_distance is set and valid
+                if provider.travel_distance is not None:
+
+                    if distance <= provider.travel_distance:
+                        provider.distance = round(distance, 2)
+                        nearby_list.append(provider)
+                # sort by nearest
+                nearby_list.sort(key=lambda x: x.distance)
+
+        return render(request, "customer/customer_home.html", {
+            "providers": nearby_list
+        })
 
 
 def provider_home(request):

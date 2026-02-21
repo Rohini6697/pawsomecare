@@ -66,8 +66,16 @@
 </section>
 
 <!-- DASHBOARD -->
+<button onclick="findNearbyProviders()" class="btn-primary">
+    📍 Find Providers Near Me
+</button>
+<form id="locationForm" method="POST" action="{% url 'nearby_providers' %}">
+    {% csrf_token %}
+    <input type="hidden" name="latitude" id="cust_lat">
+    <input type="hidden" name="longitude" id="cust_lon">
+</form>
 <section class="providers-section">
-    <h2>Available Services in {{ customer.city }}</h2>
+    <h2>Nearby Service Providers</h2>
 
     {% if providers %}
         <div class="providers-grid">
@@ -76,13 +84,12 @@
                     <h3>{{ provider.full_name }}</h3>
                     <p>{{ provider.provider_type }}</p>
                     <p>📍 {{ provider.city }}</p>
-
-                    
+                    <p>📏 {{ provider.distance }} km away</p>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <p>No service providers available in your city yet.</p>
+        <p>No providers found near your location.</p>
     {% endif %}
 </section>
 
@@ -93,136 +100,152 @@
 
 <!-- ================= VOICE ASSISTANT JS ================= -->
 <script>
-const voiceBtn = document.getElementById("voiceBtn");
-const voiceBox = document.getElementById("voiceBox");
-const assistantText = document.getElementById("assistantText");
-const voiceHint = document.getElementById("voiceHint");
+// const voiceBtn = document.getElementById("voiceBtn");
+// const voiceBox = document.getElementById("voiceBox");
+// const assistantText = document.getElementById("assistantText");
+// const voiceHint = document.getElementById("voiceHint");
 
-let recognition;
-let listening = false;
-let isSpeaking = false;
+// let recognition;
+// let listening = false;
+// let isSpeaking = false;
 
-window.onload = () => {
-    voiceHint.style.display = "block";
-    setTimeout(() => voiceHint.style.display = "none", 4000);
-};
+// window.onload = () => {
+//     voiceHint.style.display = "block";
+//     setTimeout(() => voiceHint.style.display = "none", 4000);
+// };
 
-voiceBtn.addEventListener("click", () => {
+// voiceBtn.addEventListener("click", () => {
 
-    if (!("webkitSpeechRecognition" in window)) {
-        alert("Please use Google Chrome for voice support.");
-        return;
-    }
+//     if (!("webkitSpeechRecognition" in window)) {
+//         alert("Please use Google Chrome for voice support.");
+//         return;
+//     }
 
-    if (listening) {
-        stopListening();
-        return;
-    }
+//     if (listening) {
+//         stopListening();
+//         return;
+//     }
 
-    startAssistant();
-});
+//     startAssistant();
+// });
 
-function startAssistant() {
+// function startAssistant() {
 
-    recognition = new webkitSpeechRecognition();
-    recognition.lang = "en-US";
-    recognition.continuous = true;      // 🔥 keeps listening
-    recognition.interimResults = false;
+//     recognition = new webkitSpeechRecognition();
+//     recognition.lang = "en-US";
+//     recognition.continuous = true;      // 🔥 keeps listening
+//     recognition.interimResults = false;
 
-    recognition.onresult = handleResult;
+//     recognition.onresult = handleResult;
 
-    recognition.onerror = (event) => {
-        console.log("Speech recognition error:", event.error);
-    };
+//     recognition.onerror = (event) => {
+//         console.log("Speech recognition error:", event.error);
+//     };
 
-    recognition.onend = () => {
-        // 🔥 Restart automatically if still in listening mode
-        if (listening && !isSpeaking) {
-            recognition.start();
-        }
-    };
+//     recognition.onend = () => {
+//         // 🔥 Restart automatically if still in listening mode
+//         if (listening && !isSpeaking) {
+//             recognition.start();
+//         }
+//     };
 
-    listening = true;
-    voiceBtn.classList.add("listening");
-    voiceBtn.innerText = "🎤 Listening...";
+//     listening = true;
+//     voiceBtn.classList.add("listening");
+//     voiceBtn.innerText = "🎤 Listening...";
 
-    const welcomeText = 
-        "Hi, I am Pawla. You can book pet services or buy products using your voice.";
+//     const welcomeText = 
+//         "Hi, I am Pawla. You can book pet services or buy products using your voice.";
 
-    speak(welcomeText, () => {
-        recognition.start();
-    });
+//     speak(welcomeText, () => {
+//         recognition.start();
+//     });
 
-    voiceBox.style.display = "block";
-}
+//     voiceBox.style.display = "block";
+// }
 
-function handleResult(event) {
+// function handleResult(event) {
 
-    const command = event.results[event.results.length - 1][0].transcript;
-    console.log("User said:", command);
+//     const command = event.results[event.results.length - 1][0].transcript;
+//     console.log("User said:", command);
 
-    assistantText.innerText = `You said: "${command}"`;
+//     assistantText.innerText = `You said: "${command}"`;
 
-    recognition.stop();   // 🔥 pause while processing
+//     recognition.stop();   // 🔥 pause while processing
 
-    fetch("/ai/intent/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCSRFToken()
-        },
-        body: JSON.stringify({ command: command })
-    })
-    .then(res => res.json())
-    .then(data => {
+//     fetch("/ai/intent/", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "X-CSRFToken": getCSRFToken()
+//         },
+//         body: JSON.stringify({ command: command })
+//     })
+//     .then(res => res.json())
+//     .then(data => {
 
-        console.log("Backend response:", data);
+//         console.log("Backend response:", data);
 
-        speak(data.reply, () => {
-            if (listening) {
-                recognition.start();   // 🔥 resume after speaking
-            }
+//         speak(data.reply, () => {
+//             if (listening) {
+//                 recognition.start();   // 🔥 resume after speaking
+//             }
+//         });
+
+//     })
+//     .catch(err => {
+//         console.error(err);
+//         speak("Sorry, something went wrong.", () => {
+//             recognition.start();
+//         });
+//     });
+// }
+
+// function speak(text, callback) {
+
+//     isSpeaking = true;
+//     assistantText.innerText = text;
+
+//     const utterance = new SpeechSynthesisUtterance(text);
+//     utterance.rate = 1.05;
+//     utterance.pitch = 1.1;
+
+//     utterance.onend = () => {
+//         isSpeaking = false;
+//         if (callback) callback();
+//     };
+
+//     speechSynthesis.speak(utterance);
+// }
+
+// function stopListening() {
+//     listening = false;
+//     recognition.stop();
+//     speechSynthesis.cancel();
+//     voiceBtn.classList.remove("listening");
+//     voiceBtn.innerText = "🎤 Speak";
+// }
+
+// function getCSRFToken() {
+//     return document.cookie
+//         .split("; ")
+//         .find(row => row.startsWith("csrftoken="))
+//         ?.split("=")[1];
+// }
+
+// location
+function findNearbyProviders() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById("cust_lat").value = position.coords.latitude;
+            document.getElementById("cust_lon").value = position.coords.longitude;
+
+            document.getElementById("locationForm").submit();
+        }, function() {
+            alert("Please allow location access.");
         });
-
-    })
-    .catch(err => {
-        console.error(err);
-        speak("Sorry, something went wrong.", () => {
-            recognition.start();
-        });
-    });
-}
-
-function speak(text, callback) {
-
-    isSpeaking = true;
-    assistantText.innerText = text;
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.05;
-    utterance.pitch = 1.1;
-
-    utterance.onend = () => {
-        isSpeaking = false;
-        if (callback) callback();
-    };
-
-    speechSynthesis.speak(utterance);
-}
-
-function stopListening() {
-    listening = false;
-    recognition.stop();
-    speechSynthesis.cancel();
-    voiceBtn.classList.remove("listening");
-    voiceBtn.innerText = "🎤 Speak";
-}
-
-function getCSRFToken() {
-    return document.cookie
-        .split("; ")
-        .find(row => row.startsWith("csrftoken="))
-        ?.split("=")[1];
+    } else {
+        alert("Geolocation not supported.");
+    }
 }
 </script>
 

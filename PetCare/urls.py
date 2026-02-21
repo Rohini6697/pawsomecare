@@ -37,6 +37,7 @@ urlpatterns = [
 
     path("confirm_service/<int:booking_id>/", views.confirm_service, name="confirm_service"),
     path("slot_booking/<int:provider_id>/", views.slot_booking, name="slot_booking"),
+    path('nearby-providers/', views.nearby_providers, name='nearby_providers'),
     # path(
     #     "service/cash-booking/<int:provider_id>/",
     #     views.cash_on_service_booking,

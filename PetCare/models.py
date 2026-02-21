@@ -50,10 +50,10 @@ class ServiceProvider(models.Model):
     address = models.TextField(null=True,blank=True)
     pincode = models.CharField(max_length=10,null=True,blank=True)
 
-    latitude = models.CharField(max_length=50,null=True,blank=True)
-    longitude = models.CharField(max_length=50,null=True,blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
-    travel_distance = models.PositiveIntegerField(null=True,blank=True)
+    travel_distance = models.FloatField(null=True, blank=True)
 
     services = models.JSONField(null=True,blank=True)  # store selected services
 
