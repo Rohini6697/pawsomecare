@@ -76,6 +76,7 @@ urlpatterns = [
     path('update_products/<int:product_id>/',views.update_products,name='update_products'),
     path('delete_products/<int:product_id>/',views.delete_products,name='delete_products'),
     path('booknow/<int:provider_id>/',views.booknow,name='booknow'),
+    path('view-bookings/', views.view_bookings, name='view_bookings'),
 
 # chat bot
     path("chat/", chatbot_view, name="chatbot"),

@@ -7,19 +7,81 @@
 }
 
 body {
-    background: #F7F5FA;
+    background: linear-gradient(135deg, #F7F5FA, #F0ECFF, #FFF0F6);
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
     color: #2A2A42;
+    overflow: hidden;
 }
 
-/* ---------------- LOGO ---------------- */
-.logo {
-    font-size: 26px;
-    font-weight: 800;
-    color: #9C84FF;
+/* Animated background */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.signin-card::before {
+    pointer-events: none;   /* THIS IS THE KEY */
 }
 
-.logo span {
-    color: #FF8FB1;
+/* ---------------- BACK BUTTON ---------------- */
+/* ---------------- BACK BUTTON (Premium Minimal) ---------------- */
+.back-home-btn {
+    position: absolute;
+    top: 40px;           /* not too top */
+    right: 40px;         /* moved to right */
+    padding: 8px 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(156,132,255,0.3);
+    color: #6A5ACD;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* Elegant hover */
+.back-home-btn:hover {
+    background: linear-gradient(135deg,#9C84FF,#FF8FB1);
+    color: white;
+    border: none;
+    box-shadow: 0 8px 20px rgba(156,132,255,0.3);
+    transform: translateY(-2px);
+}
+/* ---------------- FLOATING SHAPES ---------------- */
+.bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.shape1 {
+    width: 300px;
+    height: 300px;
+    background: #9C84FF;
+    top: -80px;
+    left: -80px;
+}
+
+.shape2 {
+    width: 250px;
+    height: 250px;
+    background: #FF8FB1;
+    bottom: -80px;
+    right: -60px;
+}
+
+.shape3 {
+    width: 200px;
+    height: 200px;
+    background: #6FDDB3;
+    top: 60%;
+    left: 70%;
 }
 
 /* ---------------- WRAPPER ---------------- */
@@ -28,25 +90,32 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 /* ---------------- CARD ---------------- */
 .signin-card {
     width: 420px;
     max-width: 95%;
-    padding: 34px 30px;
+    padding: 36px 30px;
     border-radius: 22px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
     position: relative;
+    animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .signin-card::before {
     content: "";
     position: absolute;
-    /* inset: 0; */
+    inset: 0;
     border-radius: 22px;
     padding: 2px;
     background: linear-gradient(135deg,#9C84FF,#FF8FB1,#6FDDB3);
@@ -66,9 +135,19 @@ body {
     line-height: 1.4;
 }
 
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #9C84FF;
+}
+
+.logo span {
+    color: #FF8FB1;
+}
+
 /* ---------------- FORM ---------------- */
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .form-group label {
@@ -80,22 +159,24 @@ body {
 
 .form-group input {
     width: 100%;
-    padding: 12px 14px;
+    padding: 13px 14px;
     border-radius: 12px;
     border: 1px solid #ddd;
     font-size: 14px;
+    transition: 0.3s ease;
 }
 
 .form-group input:focus {
     outline: none;
     border-color: #9C84FF;
     box-shadow: 0 0 0 3px rgba(156,132,255,0.2);
+    transform: scale(1.02);
 }
 
 /* ---------------- BUTTON ---------------- */
 .signin-btn {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 12px;
     padding: 14px;
     border-radius: 14px;
     border: none;
@@ -104,10 +185,12 @@ body {
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
+    transition: 0.3s ease;
 }
 
 .signin-btn:hover {
-    box-shadow: 0 10px 25px rgba(156,132,255,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(156,132,255,0.4);
 }
 
 /* ---------------- ERROR ---------------- */
@@ -123,7 +206,7 @@ body {
 
 /* ---------------- FOOTER ---------------- */
 .signin-footer {
-    margin-top: 16px;
+    margin-top: 18px;
     text-align: center;
     font-size: 14px;
 }

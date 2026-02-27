@@ -1,4 +1,4 @@
-/* RESET */
+/* ================= RESET ================= */
 * {
     margin: 0;
     padding: 0;
@@ -22,13 +22,9 @@ body {
     box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
-.logo {
+.admin-navbar h2 {
     font-size: 22px;
     font-weight: 700;
-}
-
-.logo span {
-    color: #FFE1EC;
 }
 
 .back-btn {
@@ -53,58 +49,39 @@ body {
 
 h1 {
     font-size: 30px;
-    margin-bottom: 8px;
+    margin-bottom: 30px;
     font-weight: 700;
 }
 
-.subtitle {
-    font-weight: 500;
-    color: #6b6b8a;
-    margin-bottom: 30px;
-    font-size: 15px;
-}
-
-/* ================= TOP ACTION ================= */
-.top-actions {
-    margin-bottom: 25px;
-}
-
-.top-actions .btn {
-    display: inline-block;
-    padding: 8px 20px;
-}
-
-/* ================= TABLE CARD ================= */
-.table-wrapper {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.07);
-    overflow-x: auto;
-    padding: 10px;
-}
-
-/* ================= TABLE ================= */
+/* ================= TABLE CARD EFFECT ================= */
 table {
     width: 100%;
     border-collapse: collapse;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.07);
 }
 
+/* TABLE HEADER */
 thead {
     background: #F1EDFF;
 }
 
-th, td {
+th {
     padding: 16px 18px;
     text-align: left;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #5c5c8a;
 }
 
-th {
-    font-weight: 700;
-    color: #5c5c8a;
-    text-transform: uppercase;
-    font-size: 13px;
-    letter-spacing: 0.5px;
+/* TABLE BODY */
+td {
+    padding: 16px 18px;
+    font-size: 14px;
 }
 
 tbody tr {
@@ -125,75 +102,34 @@ tbody tr:not(:last-child) {
     border-radius: 20px;
     font-size: 12px;
     font-weight: 700;
-    display: inline-block;
+    text-transform: capitalize;
 }
 
-.status.verified {
-    background: #E7FAF1;
-    color: #1c7c54;
-}
-
+/* Customize based on booking.status values */
 .status.pending {
     background: #FFF3CD;
     color: #856404;
 }
 
-.status.blacklisted {
+.status.completed {
+    background: #E7FAF1;
+    color: #1c7c54;
+}
+
+.status.cancelled {
     background: #FDE2E4;
     color: #842029;
 }
 
-/* ================= ACTION BUTTONS ================= */
-.actions {
-    display: flex;
-    gap: 8px;
-}
-
-.btn {
-    padding: 6px 14px;
-    border-radius: 25px;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    color: white;
-}
-
-/* BUTTON COLORS */
-.btn.view {
-    background: #9C84FF;
-}
-
-.btn.view:hover {
-    background: #856EFF;
-    transform: translateY(-2px);
-}
-
-.btn.approve {
-    background: #3CB371;
-}
-
-.btn.approve:hover {
-    background: #34a566;
-    transform: translateY(-2px);
-}
-
-.btn.danger {
-    background: #020846;
-}
-
-.btn.danger:hover {
-    background: #FF5252;
-    transform: translateY(-2px);
-}
-
 /* ================= EMPTY STATE ================= */
-.empty {
-    text-align: center;
+.no-bookings {
+    background: white;
     padding: 30px;
+    border-radius: 20px;
+    text-align: center;
     font-weight: 600;
     color: #8a8aa8;
-    font-size: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
 }
 
 /* ================= RESPONSIVE ================= */
@@ -203,8 +139,12 @@ tbody tr:not(:last-child) {
         padding: 20px;
     }
 
-    .actions {
-        flex-direction: column;
+    table {
+        font-size: 13px;
+    }
+
+    th, td {
+        padding: 12px;
     }
 
     .admin-navbar {

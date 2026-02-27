@@ -8,116 +8,127 @@
     <link rel="stylesheet" href="{% static 'css/admin/verify_providers.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<h2>Service Provider Verification</h2>
+<!-- NAVBAR -->
+<nav class="admin-navbar">
+    <h2 class="logo">Pawsome<span>Care</span> Admin</h2>
+    <a href="{% url 'admin_home' %}" class="back-btn">← Back</a>
+</nav>
 
-<button class="back-btn">
-    <a href="{% url 'admin_home' %}">Back</a>
-</button>
+<!-- PAGE CONTENT -->
+<div class="container">
 
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>City</th>
-            <th>Provider Type</th>
-            <th>ID Proof</th>
-            <th>Certificates</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+    <h1>Service Provider Verification</h1>
+    <p class="subtitle">Review and verify registered service providers</p>
 
-    <tbody>
-        {% for provider in providers %}
-        <tr
-            data-id-number="{{ provider.id_number }}"
-            data-email="{{ provider.email }}"
-            data-phone="{{ provider.phone_number }}"
-            >
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Provider Type</th>
+                    <th>ID Proof</th>
+                    <th>Certificates</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-            <td>{{ provider.full_name }}</td>
-            <td>{{ provider.city }}</td>
-            <td>{{ provider.provider_type|title }}</td>
+            <tbody>
+                {% for provider in providers %}
+                <tr
+                    data-id-number="{{ provider.id_number }}"
+                    data-email="{{ provider.user.user.email }}"
+                    data-phone="{{ provider.phone_number }}"
+                >
 
-            <!-- ID PROOF -->
-            <td>
-                {% if provider.id_proof %}
-                    <a href="{{ provider.id_proof.url }}" target="_blank">
-                        <strong>{{ provider.id_type|upper }}</strong>
-                    </a>
-                {% else %}
-                    <span class="not-uploaded">Not Uploaded</span>
-                {% endif %}
-            </td>
+                    <td>{{ provider.full_name }}</td>
+                    <td>{{ provider.city }}</td>
+                    <td>{{ provider.provider_type|title }}</td>
 
-            <!-- CERTIFICATES -->
-            <td>
-                {% if provider.grooming_certificate %}
-                    <a href="{{ provider.grooming_certificate.url }}" target="_blank">Grooming</a><br>
-                {% endif %}
-                {% if provider.vet_license %}
-                    <a href="{{ provider.vet_license.url }}" target="_blank">Vet License</a><br>
-                {% endif %}
-                {% if provider.training_certificate %}
-                    <a href="{{ provider.training_certificate.url }}" target="_blank">Training</a><br>
-                {% endif %}
-                {% if provider.organization_registration %}
-                    <a href="{{ provider.organization_registration.url }}" target="_blank">Organization</a>
-                {% endif %}
+                    <!-- ID PROOF -->
+                    <td>
+                        {% if provider.id_proof %}
+                            <a href="{{ provider.id_proof.url }}" target="_blank">
+                                {{ provider.id_type|upper }}
+                            </a>
+                        {% else %}
+                            <span class="status pending">Not Uploaded</span>
+                        {% endif %}
+                    </td>
 
-                {% if not provider.grooming_certificate and not provider.vet_license and not provider.training_certificate and not provider.organization_registration %}
-                    <span class="not-uploaded">None</span>
-                {% endif %}
-            </td>
+                    <!-- CERTIFICATES -->
+                    <td>
+                        {% if provider.grooming_certificate %}
+                            <a href="{{ provider.grooming_certificate.url }}" target="_blank">Grooming</a><br>
+                        {% endif %}
+                        {% if provider.vet_license %}
+                            <a href="{{ provider.vet_license.url }}" target="_blank">Vet License</a><br>
+                        {% endif %}
+                        {% if provider.training_certificate %}
+                            <a href="{{ provider.training_certificate.url }}" target="_blank">Training</a><br>
+                        {% endif %}
+                        {% if provider.organization_registration %}
+                            <a href="{{ provider.organization_registration.url }}" target="_blank">Organization</a>
+                        {% endif %}
 
-            <!-- STATUS -->
-            <td>
-                {% if provider.is_verified %}
-                    <span class="verified">Verified</span>
-                {% else %}
-                    <span class="pending">Pending</span>
-                {% endif %}
-            </td>
+                        {% if not provider.grooming_certificate and not provider.vet_license and not provider.training_certificate and not provider.organization_registration %}
+                            <span class="status pending">None</span>
+                        {% endif %}
+                    </td>
 
-            <!-- ACTION -->
-            <td>
-                {% if not provider.is_verified %}
-                    <a href="{% url 'accept_providers' provider.id %}"
-                       class="btn verify">
-                        Verify
-                    </a>
+                    <!-- STATUS -->
+                    <td>
+                        {% if provider.is_verified %}
+                            <span class="status verified">Verified</span>
+                        {% else %}
+                            <span class="status pending">Pending</span>
+                        {% endif %}
+                    </td>
 
-                    <a href="{% url 'reject_providers' provider.id %}"
-                       class="btn reject"
-                       onclick="return confirm('Are you sure you want to reject this provider?');">
-                        Reject
-                    </a>
-                {% else %}
-                    <span class="verified">Completed</span>
-                {% endif %}
-            </td>
-        </tr>
+                    <!-- ACTION -->
+                    <td>
+                        <div class="actions">
+                            {% if not provider.is_verified %}
+                                <a href="{% url 'accept_providers' provider.id %}"
+                                   class="btn approve">
+                                    Approve
+                                </a>
 
-        {% empty %}
-        <tr>
-            <td colspan="7">No service providers found.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                                <a href="{% url 'reject_providers' provider.id %}"
+                                   class="btn danger"
+                                   onclick="return confirm('Are you sure you want to reject this provider?');">
+                                    Reject
+                                </a>
+                            {% else %}
+                                <span class="status verified">Completed</span>
+                            {% endif %}
+                        </div>
+                    </td>
 
-</body>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty">No service providers found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- BLACKLIST SCRIPT -->
 {{ blacklisted|json_script:"blacklisted-data" }}
 
 <script>
     const blacklisted = JSON.parse(
         document.getElementById("blacklisted-data").textContent
     );
-
-    console.log("Blacklisted:", blacklisted);
-
 
     document.querySelectorAll("tbody tr").forEach(row => {
         const idNumber = row.dataset.idNumber;
@@ -131,10 +142,14 @@
         );
 
         if (isBlacklisted) {
+            const statusCell = row.querySelector("td:nth-child(6)");
             const actionCell = row.querySelector("td:last-child");
-            actionCell.innerHTML = `<span class="blacklisted">BLACKLISTED</span>`;
+
+            statusCell.innerHTML = `<span class="status blacklisted">Blacklisted</span>`;
+            actionCell.innerHTML = `<span class="status blacklisted">Restricted</span>`;
         }
     });
 </script>
 
+</body>
 </html>

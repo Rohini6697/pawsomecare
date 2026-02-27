@@ -1,65 +1,87 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Services</title>
+    <meta charset="UTF-8">
+    <title>My Services | Pawsome Care</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/provider/services.css' %}">
 </head>
 <body>
 
-<div class="container">
-    <h2>🛠 My Services</h2>
-    <a href="{% url 'provider_home' %}" class="back-btn">← Back</a>
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="logo-wrapper">
+        <!-- Optional logo image -->
+        <!-- <img src="{% static 'images/logo.png' %}" class="logo-img"> -->
+        <div class="logo">Pawsome<span>Care</span></div>
+    </div>
 
+    <ul class="nav-links">
+        <li><a href="{% url 'provider_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'bookings' provider.id %}">Bookings</a></li>
+        <li><a href="{% url 'services' provider.id %}" class="active">Services</a></li>
+    </ul>
+
+    <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
+</nav>
+
+<!-- ===== PAGE CONTENT ===== -->
+<div class="services-container">
+
+    <div class="page-header">
+        <h2>My Services 🛠</h2>
+    </div>
 
     {% if services %}
-        {% for service, price in services.items %}
-        <div class="service-card">
+        <div class="services-grid">
 
-            <div class="service-header">
-                <h3>{{ service|title }}</h3>
-                <span class="price">₹{{ price }}</span>
+            {% for service, price in services.items %}
+            <div class="service-card">
+
+                <div class="service-header">
+                    <h3>{{ service|title }}</h3>
+                    <span class="price">₹{{ price }}</span>
+                </div>
+
+                <!-- AVAILABLE SLOTS -->
+                <div class="slot-section">
+                    <h4>Available Time Slots</h4>
+
+                    <ul class="slot-list">
+                        {% for slot in timeslots %}
+                            {% if slot.service_name == service and slot.is_available %}
+                                <li>
+                                    {{ slot.date|date:"d M Y" }} • 
+                                    {{ slot.time|time:"h:i A" }}
+                                </li>
+                            {% endif %}
+                        {% empty %}
+                            <p class="empty">No time slots added</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- ADD SLOT FORM -->
+                <form method="POST" class="slot-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="service_name" value="{{ service }}">
+
+                    <input type="date" name="date" required>
+                    <input type="time" name="time" required>
+
+                    <button type="submit">Add Slot</button>
+                </form>
+
             </div>
-
-            <!-- TIME SLOTS -->
-            <div class="timeslots">
-                <h4>Available Time Slots</h4>
-
-                {% with service_slots=timeslots %}
-                <ul>
-                    {% for slot in service_slots %}
-                        {% if slot.service_name == service and slot.is_available %}
-                        <li>
-                            📅 {{ slot.date|date:"d M Y" }}
-                            ⏰ {{ slot.time|time:"h:i A" }}
-                        </li>
-                        {% endif %}
-                    {% empty %}
-                        <p class="empty">No time slots added</p>
-                    {% endfor %}
-                </ul>
-                {% endwith %}
-            </div>
-
-            <!-- ADD SLOT FORM -->
-            <form method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="service_name" value="{{ service }}">
-
-                <label>Date</label>
-                <input type="date" name="date" required>
-
-                <label>Time</label>
-                <input type="time" name="time" required>
-
-                <button type="submit">Add Time Slot</button>
-            </form>
+            {% endfor %}
 
         </div>
-        {% endfor %}
     {% else %}
-        <p>No services added yet.</p>
+        <p class="no-services">No services added yet.</p>
     {% endif %}
+
 </div>
 
 </body>

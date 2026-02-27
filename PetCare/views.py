@@ -740,13 +740,14 @@ def bookings(request, provider_id):
 
     timeslots = TimeSlot.objects.filter(
         provider=provider,
-        is_available=False   # booked slots only
+        is_available=False
     )
 
     return render(
         request,
         "provider/bookings.html",
         {
+            "provider": provider,      # 🔥 ADD THIS
             "bookings": bookings,
             "timeslots": timeslots
         }
@@ -832,10 +833,10 @@ def verify_cart_payment(request):
             print("Cart payment verify error:", e)
             return JsonResponse({"status": "failed"})
 
-def services(request,provider_id):
+def services(request, provider_id):
     provider = request.user.profile.serviceprovider
 
-    services = provider.services or {}  # JSON field
+    services = provider.services or {}
     timeslots = TimeSlot.objects.filter(provider=provider)
 
     if request.method == "POST":
@@ -845,7 +846,13 @@ def services(request,provider_id):
             date=request.POST['date'],
             time=request.POST['time']
         )
-    return render(request,'provider/services.html',{'services':services,'timeslots': timeslots})
+        return redirect('services', provider_id=provider.id)
+
+    return render(request, 'provider/services.html', {
+        'provider': provider,   # ✅ IMPORTANT
+        'services': services,
+        'timeslots': timeslots
+    })
 
 def confirm_service(request, booking_id):
     booking = get_object_or_404(ServiceBooking, id=booking_id)
@@ -902,7 +909,32 @@ Pawsome Care Team
     return redirect("provider_home")
 # =========================================== Admin ==================================================
 def admin_home(request):
-    return render(request,'admin/admin_home.html')
+    total_customers = Customer.objects.count()
+    total_providers = ServiceProvider.objects.count()
+    pending_providers = ServiceProvider.objects.filter(is_verified=False).count()
+    total_bookings = ServiceBooking.objects.count()
+
+    context = {
+        'total_customers': total_customers,
+        'total_providers': total_providers,
+        'pending_providers': pending_providers,
+        'total_bookings': total_bookings,
+    }
+
+    return render(request, 'admin/admin_home.html', context)
+
+from django.shortcuts import render
+from .models import ServiceBooking
+
+def view_bookings(request):
+    bookings = ServiceBooking.objects.select_related('customer', 'provider').order_by('-booking_date')
+
+    context = {
+        'bookings': bookings
+    }
+
+    return render(request, 'admin/view_bookings.html', context)
+
 def verify_providers(request):
     provider = ServiceProvider.objects.all()
     blacklisted = list(

@@ -4,24 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <title>My Bookings | Pawsome Care</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/provider/bookings.css' %}">
 </head>
 <body>
 
-<div class="booking-page">
+<!-- SAME NAVBAR AS DASHBOARD -->
+<nav class="navbar">
+    <div class="logo-wrapper">
+        <img src="{% static 'images/pawsomecare-logo.png' %}" class="logo-img" alt="Logo">
+        <h2 class="logo">Pawsome<span>Care</span></h2>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="{% url 'provider_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'bookings' provider.id %}" class="active">Bookings</a></li>
+        <li><a href="{% url 'services' provider.id %}">Services</a></li>
+    </ul>
+
+    <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
+</nav>
+
+<!-- BOOKINGS SECTION -->
+<div class="booking-container">
 
     <div class="page-header">
         <h2>My Bookings 📅</h2>
-        <a href="{% url 'provider_home' %}" class="back-btn">← Back to Dashboard</a>
     </div>
 
-    <div class="booking-list">
+    {% if bookings %}
+        <div class="booking-grid">
 
-        {% if bookings %}
             {% for booking in bookings %}
             <div class="booking-card">
 
-                <!-- Booking Info -->
                 <div class="booking-info">
                     <h4>🐾 {{ booking.service_name|title }}</h4>
 
@@ -30,29 +50,24 @@
 
                     {% for slot in timeslots %}
                         {% if slot.service_name == booking.service_name %}
-                            <p><strong>Service Date:</strong> {{ slot.date|date:"d M Y" }}</p>
-                            <p><strong>Service Time:</strong> {{ slot.time }}</p>
+                            <p><strong>Date:</strong> {{ slot.date|date:"d M Y" }}</p>
+                            <p><strong>Time:</strong> {{ slot.time }}</p>
                         {% endif %}
-                    {% empty %}
-                        <p><strong>Service Slot:</strong> Not available</p>
                     {% endfor %}
 
                     {% with booking.customer.mypet_set.first as pet %}
                         {% if pet %}
-                            <p><strong>Pet Type:</strong> {{ pet.pet_type }}</p>
+                            <p><strong>Pet:</strong> {{ pet.pet_type }}</p>
                         {% endif %}
                     {% endwith %}
                 </div>
 
-                <!-- Booking Actions -->
                 <div class="booking-actions">
 
-                    <!-- Status -->
                     <div class="booking-status {{ booking.status }}">
                         {{ booking.status|title }}
                     </div>
 
-                    <!-- Confirm Button (only for pending) -->
                     {% if booking.status == "pending" %}
                         <a href="{% url 'confirm_service' booking.id %}"
                            class="btn confirm"
@@ -61,16 +76,13 @@
                         </a>
                     {% endif %}
 
-                    <!-- Refund Button -->
                     {% if booking.payment %}
-                        <!-- ONLINE PAYMENT -->
                         <a href="{% url 'refund_booking' booking.id %}"
                            class="btn cancel"
-                           onclick="return confirm('Are you sure you want to refund this booking?');">
+                           onclick="return confirm('Refund this booking?');">
                             💸 Refund
                         </a>
                     {% else %}
-                        <!-- CASH ON SERVICE -->
                         <button class="btn cancel disabled-btn" disabled>
                             💸 Refund
                         </button>
@@ -80,11 +92,11 @@
 
             </div>
             {% endfor %}
-        {% else %}
-            <p style="text-align:center;">No bookings yet.</p>
-        {% endif %}
 
-    </div>
+        </div>
+    {% else %}
+        <p class="no-bookings">No bookings yet.</p>
+    {% endif %}
 
 </div>
 

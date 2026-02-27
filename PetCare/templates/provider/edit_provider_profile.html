@@ -4,38 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Profile | Pawsome Care</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/provider/edit_provider_profile.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="logo-wrapper">
+        <div class="logo">Pawsome<span>Care</span></div>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="{% url 'provider_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'services' provider.id %}">Services</a></li>
+        <li><a href="{% url 'bookings' provider.id %}">Bookings</a></li>
+    </ul>
+
+    <a href="{% url 'goback' %}" class="btn-secondary">Logout</a>
+</nav>
+
+<!-- ===== PAGE WRAPPER ===== -->
 <div class="page-wrapper">
 
-    <!-- PROFILE HEADER -->
-    <div class="profile-header">
-        <div class="profile-img-wrapper">
-            {% if provider.profile_photo %}
-                <img src="{{ provider.profile_photo.url }}" alt="Profile">
-            {% else %}
-                <img src="{% static 'images/default_profile.png' %}" alt="Profile">
-            {% endif %}
-            <label class="upload-btn">
-                Change Photo
-                <input type="file" name="profile_photo" hidden>
-            </label>
-        </div>
-
-        <div class="profile-basic">
-            <h2>{{ provider.full_name|default:"Your Name" }}</h2>
-            <p>{{ provider.city|default:"City" }}</p>
-            <span class="badge">
-                {{ provider.provider_type|title }}
-            </span>
-        </div>
+    <!-- PROFILE HEADER CARD -->
+    <div class="profile-header-card">
+        <h2>{{ provider.full_name|default:"Your Name" }}</h2>
+        <p>{{ provider.city|default:"City" }}</p>
+        <span class="badge">
+            {{ provider.provider_type|title }}
+        </span>
     </div>
 
     <!-- FORM CARD -->
-    <form method="post" enctype="multipart/form-data" class="form-card">
+    <form method="post" class="form-card">
         {% csrf_token %}
 
         <!-- BASIC INFO -->
@@ -93,34 +96,27 @@
             </div>
         </div>
 
+        <!-- SERVICES -->
         <div class="section">
-    <h3>Services & Price</h3>
+            <h3>Services & Price</h3>
 
-    <div id="services-container">
+            {% if provider.services %}
+                {% for service, price in provider.services.items %}
+                    <div class="service-row">
+                        <input type="text" name="service_name_{{ forloop.counter }}" value="{{ service }}">
+                        <input type="number" name="price_{{ forloop.counter }}" value="{{ price }}">
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-        {% if provider.services %}
-            {% for service, price in provider.services.items %}
-                <div class="service-row">
-                    <input type="text" 
-                           name="service_name_{{ forloop.counter }}" 
-                           value="{{ service }}" 
-                           placeholder="Service Name">
+            <!-- Extra empty row -->
+            <div class="service-row">
+                <input type="text" name="service_name_new" placeholder="New Service">
+                <input type="number" name="price_new" placeholder="Price">
+            </div>
+        </div>
 
-                    <input type="number" 
-                           name="price_{{ forloop.counter }}" 
-                           value="{{ price }}" 
-                           placeholder="Price">
-                </div>
-            {% endfor %}
-        {% endif %}
-
-    </div>
-
-    <button type="button" onclick="addService()">+ Add Service</button>
-</div>
-
-
-        <!-- SAVE -->
+        <!-- ACTION BUTTONS -->
         <div class="action-bar">
             <button type="submit" class="save-btn">Save Changes</button>
             <a href="{% url 'provider_home' %}" class="cancel-btn">Cancel</a>
@@ -129,25 +125,6 @@
     </form>
 
 </div>
-<script>
-    // let serviceCount = {{ service_count }};
-
-    function addService() {
-        serviceCount++;
-
-        const container = document.getElementById("services-container");
-
-        const div = document.createElement("div");
-        div.classList.add("service-row");
-
-        div.innerHTML = `
-            <input type="text" name="service_name_${serviceCount}" placeholder="Service Name">
-            <input type="number" name="price_${serviceCount}" placeholder="Price">
-        `;
-
-        container.appendChild(div);
-    }
-</script>
 
 </body>
 </html>

@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Bookings | Admin</title>
+    <link rel="stylesheet" href="{% static 'css/admin/view_bookings.css' %}">
+</head>
+<body>
+
+<nav class="admin-navbar">
+    <h2>PawsomeCare Admin</h2>
+    <a href="{% url 'admin_home' %}" class="back-btn">← Back</a>
+</nav>
+
+<div class="container">
+    <h1>All Service Bookings</h1>
+
+    {% if bookings %}
+    <table>
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Provider</th>
+                <th>Service</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.customer.fullname }}</td>
+                <td>{{ booking.provider.full_name }}</td>
+                <td>{{ booking.service_name }}</td>
+                <td>₹{{ booking.amount }}</td>
+                <td>
+                    <span class="status {{ booking.status }}">
+                        {{ booking.status }}
+                    </span>
+                </td>
+                <td>{{ booking.booking_date|date:"d M Y, h:i A" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="no-bookings">No bookings found.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
