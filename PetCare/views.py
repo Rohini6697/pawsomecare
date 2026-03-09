@@ -1105,145 +1105,47 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .chatbot.rule_engine import get_rule_based_response
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .chatbot.rule_engine import get_rule_based_response
+
+from django.http import JsonResponse
+from groq import Groq
+from django.views.decorators.csrf import csrf_exempt
+import os
+
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
 @csrf_exempt
 def chatbot_view(request):
+
     if request.method == "POST":
-        message = request.POST.get("message").lower().strip()
+        user_message = request.POST.get("message", "")
 
-        # Greeting
-        if any(word in message for word in ["hi", "hello", "hey"]):
-            reply = "Hi! Welcome to PetCare 🐾<br>How can I assist you today?"
+        if not user_message:
+            return JsonResponse({"reply": "Please type a message."})
 
-        # All Services
-        elif any(word in message for word in ["service", "services", "what do you provide"]):
-            reply = """We offer the following services:<br><br>
-🐕 Pet Walking<br>
-🏡 Pet Sitting<br>
-✂️ Grooming<br>
-🌞 Pet Daycare<br>
-🏨 Pet Boarding<br>
-🩺 Vet & Medical Care<br>
-🎓 Pet Training<br><br>
-Please tell me which service you'd like more details about 😊"""
+        try:
+            chat_completion = client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are PawsBot, a helpful pet care assistant."
+                    },
+                    {
+                        "role": "user",
+                        "content": user_message
+                    }
+                ],
+                model="llama-3.1-8b-instant"
+            )
 
-        # Pet Walking
-        elif "walking" in message:
-            reply = """🐕 Pet Walking includes:<br>
-✔ Verified walkers<br>
-✔ Real-time GPS tracking<br>
-✔ Walk photos<br>
-✔ Activity report"""
+            reply = chat_completion.choices[0].message.content
 
-        # Pet Sitting
-        elif "sitting" in message:
-            reply = """🏡 Pet Sitting includes:<br>
-✔ Feeding & medicine<br>
-✔ Litter cleaning<br>
-✔ Playtime<br>
-✔ Visit summary"""
-
-        # Grooming
-        elif "groom" in message:
-            reply = """✂️ Grooming includes:<br>
-✔ Bath & dry<br>
-✔ Haircut<br>
-✔ Nail trimming<br>
-✔ Ear cleaning"""
-
-        # Daycare
-        elif "daycare" in message:
-            reply = """🌞 Pet Daycare includes:<br>
-✔ Feeding & nap schedules<br>
-✔ Safe group play<br>
-✔ Photo updates<br>
-✔ Daily activity report"""
-
-        # Boarding
-        elif "boarding" in message:
-            reply = """🏨 Pet Boarding includes:<br>
-✔ AC & non-AC rooms<br>
-✔ Daily meals & hygiene<br>
-✔ Health monitoring<br>
-✔ Extra day billing"""
-
-        # Vet Care
-        elif any(word in message for word in ["vet", "doctor", "medical"]):
-            reply = """🩺 Vet & Medical Care includes:<br>
-✔ Online booking<br>
-✔ Prescription uploads<br>
-✔ Follow-up visits<br>
-✔ Medical history tracking"""
-
-        # Training
-        elif "training" in message:
-            reply = """🎓 Pet Training includes:<br>
-✔ Basic to advanced levels<br>
-✔ Weekly sessions<br>
-✔ Progress tracking<br>
-✔ Certified trainers"""
-
-        # Contact Details
-        elif any(word in message for word in ["contact", "phone", "number", "email", "reach"]):
-            reply = """📞 You can contact us through:<br><br>
-Phone: +91-9876543210<br>
-Email: support@petcare.com<br>
-Location: Your City, India<br><br>
-Our team is happy to assist you 🐾"""
-
-        # Shop / Product Queries
-        elif any(word in message for word in ["food", "dog food", "cat food", "pet food"]):
-            reply = """🍖 Pet Food includes:<br>
-✔ Dog Food<br>
-✔ Cat Food<br>
-✔ Treats<br>
-✔ Special Diets<br>
-Please visit our Products section for more details."""
-
-        elif "grooming products" in message or "shampoo" in message or "brush" in message:
-            reply = """✂️ Grooming Products include:<br>
-✔ Shampoos & Conditioners<br>
-✔ Brushes & Combs<br>
-✔ Nail Care<br>
-✔ Grooming Kits<br>
-Check our Products section to explore more."""
-
-        elif any(word in message for word in ["accessory","Accessories", "toy", "bed", "collar", "leash"]):
-            reply = """🧸 Pet Accessories include:<br>
-✔ Toys<br>
-✔ Beds & Crates<br>
-✔ Leashes & Collars<br>
-✔ Feeding Bowls<br>
-Visit our Products section to see the full range."""
-
-        elif any(word in message for word in ["health care", "medicine", "vet care", "supplements"]):
-            reply = """🩺 Pet Health Care includes:<br>
-✔ Vitamins & Supplements<br>
-✔ Medicines<br>
-✔ Vet Consultation<br>
-✔ Training Aids<br>
-Check our Health Care section for details."""
-
-        # Unknown Questions
-        else:
-            reply = """I'm here to help with PetCare services and products 🐾<br><br>
-You can ask me about:<br>
-• Pet Walking<br>
-• Pet Sitting<br>
-• Grooming & Grooming Products<br>
-• Pet Daycare<br>
-• Pet Boarding<br>
-• Vet & Health Care<br>
-• Pet Food & Accessories<br>
-• Contact Details<br><br>
-Please let me know how I can assist you 😊"""
+        except Exception as e:
+            reply = str(e)
 
         return JsonResponse({"reply": reply})
-
-
-
-
-
-
 
 
 

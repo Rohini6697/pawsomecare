@@ -132,7 +132,7 @@
     </div>
 
     <div class="chat-messages" id="messages">
-        <p><strong>Bot:</strong> Hi! How can I help you today?</p>
+        <div class="bot-msg">Hi! 👋 How can I help you today?</div>
     </div>
 
     <div class="chat-input">
@@ -151,16 +151,36 @@ function toggleChat() {
     box.style.display = box.style.display === "flex" ? "none" : "flex";
 }
 
+function addMessage(sender, message) {
+
+    const messagesDiv = document.getElementById("messages");
+
+    const msg = document.createElement("div");
+    msg.className = sender === "user" ? "user-msg" : "bot-msg";
+
+    // Convert line breaks
+    message = message.replace(/\n/g, "<br>");
+
+    // Convert numbered lists like "1. Tip"
+    message = message.replace(/(\d+\.\s)/g, "<br><strong>$1</strong>");
+
+    // Convert bullet lists
+    message = message.replace(/•/g, "<br>•");
+
+    msg.innerHTML = message;
+
+    messagesDiv.appendChild(msg);
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
 function sendMessage() {
+
     const input = document.getElementById("userInput");
     const message = input.value.trim();
 
     if (!message) return;
 
-    const messagesDiv = document.getElementById("messages");
-
-    // Show user message
-    messagesDiv.innerHTML += "<p><strong>You:</strong> " + message + "</p>";
+    addMessage("user", message);
 
     fetch("/chat/", {
         method: "POST",
@@ -171,12 +191,17 @@ function sendMessage() {
     })
     .then(response => response.json())
     .then(data => {
-        messagesDiv.innerHTML += "<p><strong>Bot:</strong> " + data.reply + "</p>";
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        addMessage("bot", data.reply);
     });
 
     input.value = "";
 }
+
+document.getElementById("userInput").addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        sendMessage();
+    }
+});
 </script>
 
 <!-- ================= END CHATBOT ================= -->
