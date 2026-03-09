@@ -1,0 +1,62 @@
+[33m5ff9da6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to 5ff9da6
+[33mde23b95[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{1}: commit: AI module without API key
+[33m5ff9da6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{2}: reset: moving to 5ff9da6
+[33m7ec5e0e[m HEAD@{3}: rebase (finish): returning to refs/heads/main
+[33m7ec5e0e[m HEAD@{4}: rebase (start): checkout 5ff9da6
+[33m7ec5e0e[m HEAD@{5}: commit: Removed API key and used environment variable
+[33m83bb0d2[m HEAD@{6}: reset: moving to HEAD~1
+[33mf6ba2cf[m HEAD@{7}: commit: ai
+[33m83bb0d2[m HEAD@{8}: commit: ai
+[33m5ff9da6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{9}: commit: deploy
+[33ma485fa5[m HEAD@{10}: commit: css changes
+[33m7b8e618[m HEAD@{11}: commit: css changes
+[33m6d72f75[m HEAD@{12}: commit: location
+[33ma743dff[m HEAD@{13}: commit: html part
+[33mf24ffed[m HEAD@{14}: commit: html part
+[33mb34f42d[m HEAD@{15}: commit: html part
+[33mb392f51[m HEAD@{16}: commit: html part
+[33m48dfa13[m HEAD@{17}: commit: ml part
+[33m9533120[m HEAD@{18}: commit: html part
+[33m913e836[m HEAD@{19}: commit: html part
+[33m56f184d[m HEAD@{20}: commit: html part
+[33m6f46448[m HEAD@{21}: commit: ml part
+[33mcb03d87[m HEAD@{22}: commit: ml part
+[33mfa691d4[m HEAD@{23}: commit: ml part
+[33m991da97[m HEAD@{24}: commit: ml part
+[33m6c07ebd[m HEAD@{25}: commit: commit
+[33mc43c56a[m HEAD@{26}: commit: ai part started
+[33md474140[m HEAD@{27}: commit: time slot added
+[33m308b150[m HEAD@{28}: commit: time slot added
+[33mdba5aa6[m HEAD@{29}: commit: listed services booked
+[33m0974182[m HEAD@{30}: commit: listed services booked
+[33m3625080[m HEAD@{31}: commit: time slot added
+[33mb5dd804[m HEAD@{32}: commit: time slot added
+[33mc1a3f5d[m HEAD@{33}: commit: listed services booked
+[33m0610031[m HEAD@{34}: commit: listed services booked
+[33ma916f13[m HEAD@{35}: commit: listed services booked
+[33m8f6139f[m HEAD@{36}: commit: listed services booked
+[33m7b1d89a[m HEAD@{37}: commit: payment have done
+[33m6b4a48e[m HEAD@{38}: commit: payment have done
+[33mbaff521[m HEAD@{39}: commit: payment have done
+[33m04bf5aa[m HEAD@{40}: commit: updated
+[33m8d2dab9[m HEAD@{41}: commit: updated petshop model
+[33m6993fc4[m HEAD@{42}: commit: changes made
+[33m8be1354[m HEAD@{43}: commit: changes made
+[33mc49cce1[m HEAD@{44}: commit: changes made
+[33m80d1ef7[m HEAD@{45}: commit: changes made
+[33m11dbfa1[m HEAD@{46}: commit: small changes
+[33m8678dbb[m HEAD@{47}: commit: created gitignore
+[33m2662fcd[m HEAD@{48}: commit: created gitignore
+[33m7443eec[m HEAD@{49}: commit: changes made
+[33mcb8bb62[m HEAD@{50}: commit: changes made
+[33m786b567[m HEAD@{51}: commit: changes made
+[33m0cb5d03[m HEAD@{52}: commit: changes made
+[33m1bdaaba[m HEAD@{53}: commit: changes made
+[33m866eefe[m HEAD@{54}: commit: changes made
+[33mfef63fa[m HEAD@{55}: commit: changes made
+[33m6d39b1f[m HEAD@{56}: commit: changes made
+[33m4057b29[m HEAD@{57}: commit: second commit
+[33mfa9f70e[m HEAD@{58}: commit: second commit
+[33m5f7eaf4[m HEAD@{59}: commit: second commit
+[33me7ddae1[m HEAD@{60}: Branch: renamed refs/heads/master to refs/heads/main
+[33me7ddae1[m HEAD@{62}: commit (initial): initial commit
