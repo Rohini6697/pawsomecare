@@ -422,3 +422,72 @@ footer {
 .chat-input button:hover {
     background: #8367FF;
 }
+.bot-msg{
+    background:white;
+    padding:14px 16px;
+    margin:10px 0;
+    border-radius:14px;
+    max-width:75%;
+    box-shadow:0 3px 8px rgba(0,0,0,0.08);
+    font-size:14px;
+    line-height:1.7;
+    color:#333;
+}
+
+/* Dark titles inside bot message */
+.bot-msg strong{
+    color:#222;
+    font-weight:600;
+}
+
+/* spacing between tips */
+.bot-msg br{
+    display:block;
+    margin-top:6px;
+}
+
+/* bullet styling */
+.bot-msg ul{
+    padding-left:18px;
+    margin-top:6px;
+}
+
+.bot-msg li{
+    margin-bottom:6px;
+}
+
+/* optional soft accent */
+.bot-msg{
+    border-left:4px solid #4CAF50;
+}
+.chat-messages{
+    height:250px;
+    overflow-y:auto;
+    padding:10px;
+    background:#f4f6f8;
+}
+
+.user-msg{
+    background:#4CAF50;
+    color:white;
+    padding:10px 14px;
+    margin:8px 0;
+    border-radius:15px;
+    max-width:75%;
+    margin-left:auto;
+    font-size:14px;
+}
+
+.bot-msg{
+    background:white;
+    padding:10px 14px;
+    margin:8px 0;
+    border-radius:15px;
+    max-width:75%;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    font-size:14px;
+}
+
+.bot-msg br{
+    line-height:1.7;
+}
